@@ -142,9 +142,12 @@ object Bookbinder:
       .map[BookEntry.SourceDescription](BookEntry.SourceDescription(_))
       .filter(_ => request.printSettings.addSourceDescriptions)
 
-    val criticalApparati: List[BookEntry.CriticalApparatus] = docs.toList
-      .filter(_.notes.comments.nonEmpty)
-      .map(d => BookEntry.CriticalApparatus(d.doc.id, d.notes))
+    val criticalApparati: List[BookEntry.CriticalApparatus] =
+      if request.printSettings.addCriticalApparatus then
+        docs.toList
+          .filter(_.notes.comments.nonEmpty)
+          .map(d => BookEntry.CriticalApparatus(d.doc.id, d.doc.dokumenten_id, d.notes))
+      else Nil
 
     val cover = customCover match
       case Some(cc) => cc

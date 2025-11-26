@@ -272,7 +272,7 @@ const getAttributesForPopup = (attributes: AttributeWithData[], view: viewType, 
     return switchOnKind(a, {
       "http://olyro.de/mondiview/number": (n) => <div key={a.attribute.uri}>{"" + n.data}</div>,
       "http://olyro.de/mondiview/string": (s) => <div key={a.attribute.uri}>{s.data}</div>,
-      "http://olyro.de/mondiview/pdf": (s) => <PDFViewer key={a.attribute.uri} file={getDownloadUrl(s)} />,
+      "http://olyro.de/mondiview/pdf": (s) => <PDFViewer key={a.attribute.uri} file={getDownloadUrl(s)} textAttributeUri={a.attribute.pdfTextAttribute} />,
       "http://olyro.de/mondiview/category": (s) => <div key={a.attribute.uri}>{s.data}</div>,
       "http://olyro.de/mondiview/imageCollection": (i) => {
         if (anyViewIsAvaialble(i.data)) {

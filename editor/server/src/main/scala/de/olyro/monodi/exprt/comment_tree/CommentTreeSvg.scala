@@ -216,15 +216,13 @@ object CommentTreeSvg extends zio.ZIOAppDefault:
         case t :: tail =>
           t match
             case TextToken(text) =>
-              style match
-                case None           =>
-                  italic(text) :: makeBoxes(tail, style)
-                case Some(Normal)   =>
-                  normal(text) :: makeBoxes(tail, style)
-                case Some(Caps)     =>
-                  caps(text) :: makeBoxes(tail, style)
-                case Some(Bordered) =>
-                  bordered(text) :: makeBoxes(tail, style)
+              val current = style match
+                case None           => italic(text)
+                case Some(Normal)   => normal(text)
+                case Some(Caps)     => caps(text)
+                case Some(Bordered) => bordered(text)
+
+              current :: makeBoxes(tail, style)
             case s: Style        =>
               val nextStyle = if style.contains(s) then None else Some(s)
               makeBoxes(tail, nextStyle)

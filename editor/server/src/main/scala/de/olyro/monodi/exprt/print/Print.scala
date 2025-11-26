@@ -9,6 +9,13 @@ import de.olyro.monodi.exprt.print.Size.*
 import de.olyro.monodi.exprt.print.markdown.Markdown
 import de.olyro.monodi.data.Source
 import H.TocEntityId
+import de.olyro.monodi.data.notes.CommentTree.CommentTreeUndecided
+import de.olyro.monodi.data.notes.CommentTree.CommentTreeLeaf
+import de.olyro.monodi.data.notes.CommentTree.CommentTreeGrid
+import de.olyro.monodi.data.notes.CommentTreeLeafContent.Text
+import de.olyro.monodi.data.notes.CommentTreeLeafContent.Bracket
+import de.olyro.monodi.data.notes.CommentTreeLeafContent.Notes
+import java.util.UUID
 
 final case class Print(
     svg: Svg,
@@ -44,13 +51,13 @@ final case class Print(
 
           case bookEntry :: todo =>
             bookEntry match
-              case BookEntry.MetaData(lines)                        => makeStage1Meta(accu, partialPage, todo, lines)
-              case BookEntry.Document(id, content)                  => makeStage1Document(accu, partialPage, todo, id, content)
-              case BookEntry.Cover(cover)                           => makeStage1Cover(accu, partialPage, todo, cover)
-              case BookEntry.TableOfContents(toc)                   => makeStage1Toc(accu, partialPage, todo, toc)
-              case BookEntry.SourceDescription(source)              => makeStage1SourceDescription(accu, partialPage, todo, source)
-              case BookEntry.CriticalApparatus(documentId, content) =>
-                makeStage1CriticalApparatus(accu, partialPage, todo, documentId, content)
+              case BookEntry.MetaData(lines)                                      => makeStage1Meta(accu, partialPage, todo, lines)
+              case BookEntry.Document(id, content)                                => makeStage1Document(accu, partialPage, todo, id, content)
+              case BookEntry.Cover(cover)                                         => makeStage1Cover(accu, partialPage, todo, cover)
+              case BookEntry.TableOfContents(toc)                                 => makeStage1Toc(accu, partialPage, todo, toc)
+              case BookEntry.SourceDescription(source)                            => makeStage1SourceDescription(accu, partialPage, todo, source)
+              case BookEntry.CriticalApparatus(documentId, dokumentenId, content) =>
+                makeStage1CriticalApparatus(accu, partialPage, todo, documentId, dokumentenId, content)
 
   private def makeStage1Meta(
       accu: PrintStage1,
@@ -153,8 +160,7 @@ final case class Print(
       accu
         .addPages(closed.toList)
         .addPages(Markdown.render(svg, source.beschreibung, contentStartY))
-        .registerSourceDesc(source.id, pageNr)
-        ,
+        .registerSourceDesc(source.id, pageNr),
       Nil,
       todo
     )
@@ -164,51 +170,126 @@ final case class Print(
       partialPage: List[BoundingBox],
       todo: List[BookEntry],
       documentId: String,
+      dokumentenId: String,
       content: RootContainer
   ): URIO[ProgressNotifier, PrintStage1] =
     val isFirstApparatus = !accu.tocInfo.keys.exists:
       case TocEntityId.CriticalApparatus(_) => true
       case _                                => false
 
+    val (closed, partial) = isFirstApparatus match
+      case false => (Vector.empty, partialPage)
+      case true  => if partialPage.isEmpty then (Vector.empty, Nil) else (Vector(makePage(partialPage)), Nil)
+
+    val sectionTitle =
+      if isFirstApparatus then
+        List(
+          normalText("Kritischer Apparat", 1.5.ofSFS)
+            .centerX(config.width / 2)
+            .widenX(config.width)
+            .widenY(normalText("X", 1.5.ofSFS).height * 1)
+        )
+      else Nil
+
+    val boxes       = sectionTitle ++ renderCriticalApparatusBoxes(dokumentenId, content)
+    val split       = splitDocumentOnPages(Vector.empty, partial, boxes, true, false)
+    val pageNr      = accu.pageCount + 1 + closed.size + (if split.partFitOnFirstPage then 0 else 1)
     val tocEntityId = TocEntityId.CriticalApparatus(documentId)
-    val pageNr      =
-      if isFirstApparatus then accu.pageCount + 1
-      else accu.pageCount + 2
 
-    if isFirstApparatus then
-      val closed = if partialPage.isEmpty then None else Some(makePage(partialPage))
-      val pages  = renderCriticalApparatus(documentId, content)
-      makeStage1(accu.addPages(closed.toList).addPages(pages).register(tocEntityId, pageNr), Nil, todo)
+    makeStage1(
+      accu.addPages(closed.toList).addPages(split.closedPages).register(tocEntityId, pageNr),
+      split.partial,
+      todo
+    )
+
+  private def renderCriticalApparatusBoxes(dokumentenId: String, content: RootContainer): List[BoundingBox] =
+    val titleBox = normalText(dokumentenId, 1.5.ofSFS)
+      .widenX(config.width)
+      .padTop(config.syllableFontSize)
+
+    // Filter to only valid comments with trees
+    val validComments = ViewModel
+      .getCommentData(content)
+      .flatMap: cd =>
+        cd.comment match
+          case Right(comment) => comment.tree.map(tree => (tree = tree, sig = cd.signatures, comment = comment))
+          case Left(_)        => None
+
+    if validComments.isEmpty then Nil
     else
-      val boxes = renderCriticalApparatusBoxes(documentId, content)
-      val split = splitDocumentOnPages(Vector.empty, partialPage, boxes, true, false)
-      makeStage1(accu.addPages(split.closedPages).register(tocEntityId, pageNr), split.partial, todo)
-
-  private def renderCriticalApparatus(documentId: String, content: RootContainer): Vector[BoundingBox] =
-    if content.comments.isEmpty then Vector.empty
-    else
-      val boxes = renderCriticalApparatusBoxes(documentId, content)
-      val split = splitDocumentOnPages(Vector.empty, Nil, boxes, true, false)
-      split.closedPages ++ Some(split.partial).filter(_.nonEmpty).map(makePage)
-
-  private def renderCriticalApparatusBoxes(documentId: String, content: RootContainer): List[BoundingBox] =
-    if content.comments.isEmpty then Nil
-    else
-      val title    = if documentId.isEmpty then "Critical Apparatus" else s"Critical Apparatus: $documentId"
-      val titleBox = normalText(title, 1.5.ofSFS)
-        .centerX(config.width / 2)
-        .widenX(config.width)
-        .widenY(normalText("X", 1.5.ofSFS).height * 2)
-
       val commentTreeSvg = new comment_tree.CommentTreeSvg(svg)
-      val commentBoxes   = content.comments.flatMap { comment =>
-        comment.tree.map { tree =>
-          val renderedTree = commentTreeSvg.draw(tree, Some(comment), content)
-          renderedTree.widenX(config.width)
-        }
-      }
+      val padding        = config.syllableFontSize * 1.5
+
+      // Draw all signature boxes
+      val withSignatureBoxes = validComments.map: vc =>
+        val sigBox = normalTextWithMarkers(vc.sig.mkString(""), 1.ofSFS)
+        (tree = vc.tree, sig = sigBox, comment = vc.comment)
+
+      // Find max signature width
+      val maxSigWidth = withSignatureBoxes.map(_.sig.width).max
+
+      // Draw trees and concatenate with aligned signatures
+      val commentBoxes = withSignatureBoxes.map: firstPass =>
+        val alignedSignatures = firstPass.sig.widenX(maxSigWidth)
+        val availableWidth    = config.width - maxSigWidth - padding
+
+        val renderedTree = commentTreeSvg.draw(firstPass.tree, Some(firstPass.comment), content)
+        val maybeBroken  = if renderedTree.width > availableWidth then
+          val brokenTree = breakAtRightBracket(firstPass.tree)
+          commentTreeSvg.draw(brokenTree, Some(firstPass.comment), content)
+        else renderedTree
+
+        BoundingBox
+          .concatXAlignByFunction(List(alignedSignatures, maybeBroken), padding, getCommentTreeBaseline)
+          .widenX(config.width)
 
       titleBox :: commentBoxes
+
+  private def getCommentTreeBaseline(bb: BoundingBox): Double =
+    bb.resolve("line-marker-32")
+      .map(_.y)
+      .minOption
+      .orElse(bb.resolve("baseline").map(_.y).minOption)
+      .getOrElse(0.0)
+
+  private def breakAtRightBracket(tree: CommentTree): CommentTree =
+    def isBracketLeaf(ct: CommentTree): Boolean =
+      ct match
+        case CommentTreeLeaf(_, Bracket(), _) => true
+        case _                                => false
+
+    def tryBreakRow(row: List[CommentTree]): Option[(CommentTree, CommentTree)] =
+      row.span(ct => !isBracketLeaf(ct)) match
+        case (_, Nil)                         => None
+        case (beforeBracket, bracketAndAfter) =>
+          val firstRow  = CommentTreeGrid(
+            id = UUID.randomUUID().toString,
+            items = List(beforeBracket),
+            justification = Some(Justification.Left)
+          )
+          val secondRow = CommentTreeGrid(
+            id = UUID.randomUUID().toString,
+            items = List(bracketAndAfter),
+            justification = Some(Justification.Left)
+          )
+          Some((firstRow, secondRow))
+
+    tree match
+      case ctu: CommentTreeUndecided                 => ctu
+      case ctl: CommentTreeLeaf                      => ctl
+      case CommentTreeGrid(id, items, justification) =>
+        val brokenChildren = items.map(_.map(breakAtRightBracket))
+        brokenChildren match
+          case singleRow :: Nil =>
+            tryBreakRow(singleRow) match
+              case None               => CommentTreeGrid(id, brokenChildren, justification)
+              case Some((row1, row2)) =>
+                CommentTreeGrid(
+                  id,
+                  List(row1 :: Nil, row2 :: Nil),
+                  Some(Justification.Left)
+                )
+          case _                => CommentTreeGrid(id, brokenChildren, justification)
 
   private def makeStage1Toc(
       accu: PrintStage1,
@@ -228,15 +309,22 @@ final case class Print(
       val leftPadding   = item.depth * 10
       val middlePadding = 10
       val leftText      = normalText(item.text, size = 1.2.ofSFS)
-      val rightText     = normalText(item.entityId.flatMap(entityToPageNr.get).fold("?")(_.toString), size = 1.2.ofSFS)
-      val middleSpace   = Math.max(0, config.width - leftPadding - leftText.width - rightText.width - 2 * middlePadding)
-      val middleText    = BoundingBox.repeatToWidth(normalText("."), middleSpace, 5)
-      BoundingBox
-        .concatX(
-          List(leftText, middleText, rightText),
-          middlePadding
-        )
-        .padLeft(leftPadding)
+      val pageNumber    = item.entityId.flatMap(entityToPageNr.get)
+
+      pageNumber match
+        case None         =>
+          leftText.padLeft(leftPadding)
+        case Some(pageNr) =>
+          val rightText   = normalText(pageNr.toString, size = 1.2.ofSFS)
+          val middleSpace =
+            Math.max(0, config.width - leftPadding - leftText.width - rightText.width - 2 * middlePadding)
+          val middleText  = BoundingBox.repeatToWidth(normalText("."), middleSpace, 5)
+          BoundingBox
+            .concatX(
+              List(leftText, middleText, rightText),
+              middlePadding
+            )
+            .padLeft(leftPadding)
     )
     val split = splitDocumentOnPages(Vector.empty, Nil, lines, true, false)
     split.closedPages ++ Some(split.partial).filter(_.nonEmpty).map(makePage)
@@ -286,6 +374,9 @@ final case class Print(
 
   private def normalText(text: String, size: Size = Size.sameAsSyllable): BoundingBox =
     TextBox.normal(text, config.useSystemFontNames, fontSize = Some(size.toDouble(svg)))
+
+  private def normalTextWithMarkers(text: String, size: Size = Size.sameAsSyllable): BoundingBox =
+    TextBox.normal(text, config.useSystemFontNames, fontSize = Some(size.toDouble(svg)), setMetricMarkers = true)
 
   private def italicText(text: String, size: Size = Size.sameAsSyllable): BoundingBox =
     TextBox.italic(text, config.useSystemFontNames, fontSize = Some(size.toDouble(svg)))
