@@ -1,0 +1,129 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{parskip}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,fit,backgrounds,patterns,fit}
+
+\def\stafflinemargin{0.2cm}
+\def\stafflinelength{2.5cm}
+\def\bracketYOffset{0.2cm}
+\def\textLineMargin{0.5cm}
+
+\begin{document}
+
+{
+  \Huge
+  \centering
+  \textbf{Layouting of the comment tree}
+}
+
+\vspace{2cm}
+
+\section{Introduction}
+
+This document describes how the layouting of he comment tree is done. A comment
+tree is a (possibly nested) tree of either text, bracket, note or grid nodes.
+
+In the following pictures, bounding boxes are drawn in green. Alignment lines
+are drawn in blue. Helper annotations are drawn in red. Hatched rectangles
+are objects that are handled as a black box, like sub grids.
+
+\section{Leafs}
+
+There are the terminal nodes of the comment tree. They don't have any
+subnodes.
+
+\subsection{Text}
+
+\input{text.tex}
+
+Text nodes have 3 main lines used for aligning them. The base line \texttt{B} is just
+the baseline of the text.
+
+The line \texttt{A} is the ascender of the text.
+
+The line \texttt{D} is the descender of the text.
+
+Text nodes bounding box is always as heigh and wide as the text.
+
+
+\subsection{Bracket}
+
+\input{bracket.tex}
+
+\texttt{BL} and \texttt{BH} denote the lowest and highest point of the bracket, respectively.
+
+Brackets always have the same width. Brackets don't have a fixed height but get
+their height based on their neighboring nodes in the same grid row. The
+neighbors request a height and the height requested ist always the height
+between \texttt{BIL} and \texttt{BIH}. There is a default margin between
+\texttt{BIH} and \texttt{BH}, as well as between \texttt{BIL} and \texttt{BL}.
+
+The baseline \texttt{B} is variable and depends on the neigbhours.
+
+\subsection{Notes}
+
+\input{notes.tex}
+
+The bounding box of the notes is the bounding box of all the text on the bottom as
+well as the top notes.
+
+There are three main lines used for alignment. The baseline \texttt{B} is always
+the second staff line from the bottom. The other two import lines are \texttt{SL}
+and \texttt{SH} which denote the lowest and highest staff line, respectively.
+
+\section{Grid}
+
+Grid nodes allow the layout of sub nodes. They can also themselves be the children of
+other grid nodes. In this case, they are handled as a black box with no special
+alignment lines.
+
+\subsection{Horizontal}
+
+The horizontal alignment of the grids is fairly simple. Their bouding box is used
+and centered on the column by default. If the node has a justification (i.e. left,
+center, right), the bounding box is shifted accordingly.
+
+\subsection{Vertical}
+
+The vertical alignment of nodes inside a row is harder. There are basically three cases
+which depend on what the dominating node in the row is.
+
+\subsubsection{Note dominated}
+
+If there are one or more note-nodes in the row, one of them will be the
+dominating node. It doesn't matter which one since all of them have the same
+alignment lines after they are themselves aligned via their baselines.
+
+All notes will be aligned according to the baseline of the dominating node. In
+this case, other notes will be aligned by their second staff lines. Text nodes
+will be aligned by their baseline. Opaque nodes like sub grids will be aligned
+by the vertical center of their respective bounding boxes. Brackets
+will be generated with the inner height (\texttt{BIL} to \texttt{BIH})
+set to \texttt{SL} to \texttt{SH}. The baseline will be set to one fourth the
+way between \texttt{BIL} and \texttt{BIH}.
+
+\input{notes-dominated.tex}
+
+\subsubsection{Text dominated}
+
+In case there are no note-nodes in the row, text nodes will be the dominating.
+Which one, again, doesn't matter, since they are aligned via baseline and
+then have the same ascender/descener lines after that.
+
+The layouting will work as above, only brackets are generated differently. The inner
+height of the bracket (\texttt{BIL} to \texttt{BIH}) will be set to the height
+of the text nodes in the row, i.e. to \texttt{D} to \texttt{A}. The baseline will
+be \( \frac{B - A}{D - A} \) the way between \texttt{BIL} and \texttt{BIH}.
+
+\input{text-dominated.tex}
+
+\subsubsection{Undominated}
+
+If only opqaue nodes are left in the row, they will all be aligned by
+their vertical center. Brackets will always have some default height, left
+as an implementation detail.
+
+\input{undominated.tex}
+
+\end{document}

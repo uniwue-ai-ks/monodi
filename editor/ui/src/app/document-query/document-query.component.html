@@ -1,0 +1,126 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+      <h3>Suchanfrage</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="fluid-form">
+        <ng-container *ngFor="let item of items">
+          <span>{{item}}</span>
+          <ng-container *ngTemplateOutlet="
+                                           item == Item.D_ID           ? did           :
+                                           item == Item.D_GATTUNG1     ? dgattung1     :
+                                           item == Item.D_GATTUNG2     ? dgattung2     :
+                                           item == Item.D_FESTTAG      ? dfesttag      :
+                                           item == Item.D_FEIER        ? dfeier        :
+                                           item == Item.D_INITIUM      ? dinitum       :
+                                           item == Item.D_BIBLIOREF    ? dbiblioref    :
+                                           item == Item.D_DRUCKAUSGABE ? ddruckausgabe :
+                                           item == Item.D_ZEILENSTART  ? dzeilenstart  :
+                                           item == Item.D_FOLIOSTART   ? dfoliostart   :
+                                           item == Item.D_KOMMENTAR    ? dkommentar    :
+                                           error;context: { '$implicit': item }
+            "></ng-container>
+        </ng-container>
+        <ng-container *ngIf="itemsLeft().length > 0">
+          <span>Neues Kriterium</span>
+          <select [(ngModel)]="newItem" (ngModelChange)="addItem($event)" class="form-control">
+            <option *ngFor="let item of itemsLeft()">{{item}}</option>
+          </select>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button (click)="search()" class="btn btn-outline-primary">Search</button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <th> Dokumenten ID </th>
+            <th> Gattung 1 </th>
+            <th> Gattung 2 </th>
+            <th> Kommentar 2 </th>
+            <th> Link </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of results">
+            <td> {{d.dokumenten_id}} </td>
+            <td> {{d.gattung1}} </td>
+            <td> {{d.gattung2}} </td>
+            <td> {{d.kommentar}} </td>
+            <td> <a [routerLink]="['/document', d.quelle_id, d.id]">link</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #error>
+  <div class="bg-warning">Nicht gefundener Menüpunkt</div>
+  <div class="bg-warning">Nicht gefundener Menüpunkt</div>
+</ng-template>
+
+<ng-template #did let-item>
+  <span><input class="form-control" [(ngModel)]="query.dokumenten_id"></span>
+  <span (click)="query.dokumenten_id = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dgattung1 let-item>
+  <span><app-sselect [(input)]="query.gattung1" [dropdown]="gattung1"></app-sselect></span> 
+  <span (click)="query.gattung1 = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dgattung2 let-item>
+  <span><app-sselect [(input)]="query.gattung2" [dropdown]="gattung2"></app-sselect></span>
+  <span (click)="query.gattung2 = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dfesttag let-item>
+  <span><app-sselect [(input)]="query.festtag"  [dropdown]="fest"></app-sselect></span> 
+  <span (click)="query.festtag = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dfeier let-item>
+  <span><input class="form-control" [(ngModel)]="query.feier"></span>
+  <span (click)="query.feier = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dinitum let-item>
+  <span><input class="form-control" [(ngModel)]="query.textinitium"></span> 
+  <span (click)="query.textinitium = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dbiblioref let-item>
+  <span><input class="form-control" [(ngModel)]="query.bibliographischerverweis"> </span>
+  <span (click)="query.bibliographischerverweis = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #ddruckausgabe let-item>
+  <span><input class="form-control" [(ngModel)]="query.druckausgabe"></span> 
+  <span (click)="query.druckausgabe = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dzeilenstart let-item>
+  <span><input class="form-control" [(ngModel)]="query.zeilenstart"></span>
+  <span (click)="query.zeilenstart = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dfoliostart let-item>
+  <span><input class="form-control" [(ngModel)]="query.foliostart"></span> 
+  <span (click)="query.foliostart = undefined; remove(item);">X</span>
+</ng-template>
+
+<ng-template #dkommentar let-item>
+  <span><input class="form-control" [(ngModel)]="query.kommentar"></span>
+  <span (click)="query.kommentar = undefined; remove(item);">X</span>
+</ng-template>

@@ -1,0 +1,22 @@
+.fluid-form {
+    display: grid;
+    grid-column-gap: 20px;
+    grid-template-columns: 200px 1fr 10px 200px 1fr 10px;
+    grid-row-gap: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.fluid-form span:nth-child(3n + 1) {
+    text-align: right;
+}
+
+.fluid-form span:nth-child(3n) {
+    user-select: none;
+}
+
+.fluid-form span:nth-child(3n):hover {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 120%;
+}

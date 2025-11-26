@@ -1,0 +1,39 @@
+.project-main {
+  padding: var(--main-v-indent) var(--main-h-indent);
+  display: grid;
+  grid-template-columns: 300px 42em;
+  grid-gap: 5em;
+
+  >img {
+    width: 100%;
+  }
+
+  .content {
+    padding-bottom: var(--main-v-indent);
+  }
+}
+
+.content {
+  p {
+    line-height: 1.6em;
+  }
+
+  a {
+    color: #333;
+  }
+
+  .alert {
+    color: indianred;
+  }
+
+}
+
+.left img {
+  width: 100%;
+  padding: 0 0 2em 0;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}

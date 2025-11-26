@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Kommentare</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <app-comment-info />
+  <div *ngFor="let comment of activeComments(); index as i" class="note-comment">
+    <label>Kommentar<img (click)="deleteComment(comment)" src="assets/icons/delete.svg" /></label>
+    <textarea [(ngModel)]="comment.text"></textarea>
+    <label for="emendation">Emendation</label>
+    <input type="checkbox" [(ngModel)]="comment.emendation" id="emendation" name="emendation" />
+    <div *ngIf="comment.lines">
+      <label>Lemma</label>
+      <div class="original">
+        <app-zeile-section [documentType]="'Gesang'" [readOnly]="false" [data]="getOriginal(i)" [comments]="[]"
+          [zipper]="[0]"></app-zeile-section>
+        <div class="hider"></div>
+      </div>
+      <label>Lesart</label>
+      <div *ngFor="let line of comment.lines; index as j" class="line-comment">
+        <app-zeile-section #sub [documentType]="documentType" [readOnly]="false" (onEvent)="handleEvent($event, i, j)"
+          *ngIf="line.kind === 'ZeileContainer'" [data]="line" [comments]="[]" [zipper]="[0]"></app-zeile-section>
+        <app-paratext-section #sub [documentType]="documentType" [readOnly]="false"
+          (onEvent)="handleEvent($event, i, j)" *ngIf="line.kind === 'ParatextContainer'" [data]="line" [comments]="[]"
+          [zipper]="[0]"></app-paratext-section>
+      </div>
+    </div>
+    <button *ngIf="!comment.lines" type="button" class="btn btn-outline-secondary" (click)="addLine(comment)">
+      Zeile hinzufügen
+    </button>
+
+    <div *ngIf="comment.tree">
+      <app-comment-tree [tree]="comment.tree" (treeEvent)="handleCommentTreeEvent($event, comment)"
+        [originalCreator]="originalCreator(comment)" />
+    </div>
+    <button *ngIf="!comment.tree" type="button" class="btn btn-outline-secondary" (click)="addTree(comment)">
+      Gitter hinzufügen
+    </button>
+    <button *ngIf="comment.lines" type="button" class="btn btn-outline-secondary" (click)="removeLine(comment)">
+      Zeilen entfernen
+    </button>
+  </div>
+  <div *ngIf="comments.length > 0">
+    <button type="button" class="btn btn-primary" (click)="onSave()">
+      Übernehmen
+    </button>
+  </div>
+  <div *ngIf="comments.length === 0">
+    Es sind keine Kommentare zu dieser Note vorhanden.
+    <button type="button" class="btn btn-primary" (click)="onExit()">Ok</button>
+  </div>
+</div>

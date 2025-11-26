@@ -1,0 +1,19 @@
+:80 {
+
+	# Enable the static file server.
+	handle_path /resources* {
+		file_server {
+			browse
+			root /srv
+		}
+	}
+
+
+	handle_path /fuseki/* {
+		reverse_proxy fuseki:3030
+	}
+
+	handle {
+		reverse_proxy viewer:3000
+	}
+}

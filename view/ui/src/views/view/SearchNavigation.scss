@@ -1,0 +1,41 @@
+@import "../app/App.scss";
+
+.searchNavHeader {
+  padding: 0 0 0.9em 2em;
+  //display: flex;
+  //flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background: #f1f1f1;
+  display: grid;
+  grid-template-columns: 20% 40% auto;
+
+  .searchNavLabel {
+    margin: 0.5em;
+  }
+
+  .searchNavFilter {
+    margin: 0.5em;
+    margin-left: 2em;
+  }
+
+  .searchNav {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+
+    button {
+      margin: 0 0.4em 0 0.4em;
+    }
+  }
+
+  .selected-filters {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.7);
+
+    >*:nth-child(2) {
+      font-variant: small-caps;
+    }
+  }
+}

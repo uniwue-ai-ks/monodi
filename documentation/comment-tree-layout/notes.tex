@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+  \coordinate (ZLA0S) at (0,0);
+  \coordinate (ZLA0E) at ($ (ZLA0S) + (\stafflinelength,0) $);
+  \coordinate (ZLA1S) at ($ (ZLA0S) + (0,\stafflinemargin) $);
+  \coordinate (ZLA1E) at ($ (ZLA1S) + (\stafflinelength,0) $);
+  \coordinate (ZLA2S) at ($ (ZLA0S) + (0,2*\stafflinemargin) $);
+  \coordinate (ZLA2E) at ($ (ZLA2S) + (\stafflinelength,0) $);
+  \coordinate (ZLA3S) at ($ (ZLA0S) + (0,3*\stafflinemargin) $);
+  \coordinate (ZLA3E) at ($ (ZLA3S) + (\stafflinelength,0) $);
+  \coordinate (ZLA4S) at ($ (ZLA0S) + (0,4*\stafflinemargin) $);
+  \coordinate (ZLA4E) at ($ (ZLA4S) + (\stafflinelength,0) $);
+
+  \draw (ZLA0S) -- (ZLA0E);
+  \draw (ZLA1S) -- (ZLA1E);
+  \draw (ZLA2S) -- (ZLA2E);
+  \draw (ZLA3S) -- (ZLA3E);
+  \draw (ZLA4S) -- (ZLA4E);
+
+  \draw[fill] ($ (ZLA0S) + (0.2*\stafflinelength, 0*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.4*\stafflinelength, 2*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.6*\stafflinelength, 4*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.8*\stafflinelength, 6*\stafflinemargin) $) circle (0.1cm) node (ND) {};
+
+  \node[anchor=north west] (ZA-text) at ($ (ZLA0S) - (0, \textLineMargin) $) {Ha- bi- tus};
+
+  \begin{pgfonlayer}{background}
+    \node[ultra thick,inner sep=0, fit={(ZA-text.south west) (ZLA0E) (ND)},draw=green!20] {};
+    \draw[thick,blue!20] ($ (ZLA1S) - (1.2cm, 0) $)   node[anchor=east] (B)  {B}  -- ++(4.7cm, 0);
+    \draw[thick,blue!20] ($ (ZLA0S) - (0.5cm, 0) $)   node[anchor=east] (SH) {SH} -- ++(4cm, 0);
+    \draw[thick,blue!20] ($ (ZLA4S) - (0.5cm, 0) $)   node[anchor=east] (SL) {SL} -- ++(4cm, 0);
+  \end{pgfonlayer}
+
+\end{tikzpicture}

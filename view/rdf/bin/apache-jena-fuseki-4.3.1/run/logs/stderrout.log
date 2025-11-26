@@ -1,0 +1,10 @@
+09:54:44 INFO  Server          :: Apache Jena Fuseki 4.3.1
+09:54:44 INFO  Config          :: FUSEKI_HOME=/home/reed/git/monodi/monodi/view/rdf/bin/apache-jena-fuseki-4.3.1
+09:54:44 INFO  Config          :: FUSEKI_BASE=/home/reed/git/monodi/monodi/view/rdf/bin/apache-jena-fuseki-4.3.1/run
+09:54:45 INFO  Config          :: Shiro file: file:///home/reed/git/monodi/monodi/view/rdf/bin/apache-jena-fuseki-4.3.1/run/shiro.ini
+09:54:45 INFO  Server          :: System
+09:54:45 INFO  Server          ::   Memory: 1.5 GiB
+09:54:45 INFO  Server          ::   Java:   11.0.11
+09:54:45 INFO  Server          ::   OS:     Linux 5.10.16.3-microsoft-standard-WSL2 amd64
+09:54:45 INFO  Server          ::   PID:    335
+09:54:45 INFO  Server          :: Started 2021/12/15 09:54:45 CET on port 3030

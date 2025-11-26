@@ -1,0 +1,1 @@
+ALTER TABLE quelle ADD COLUMN beschreibung TEXT NOT NULL DEFAULT '';

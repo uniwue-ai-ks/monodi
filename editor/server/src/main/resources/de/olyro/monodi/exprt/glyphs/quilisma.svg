@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="11.85672"
+   height="7.1968908"
+   viewBox="0 0 11.85672 7.1968908"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="quilisma.svg">
+  <defs
+     id="defs3793" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="6.033978"
+     inkscape:cx="-102.27203"
+     inkscape:cy="-9.0422756"
+     inkscape:document-units="px"
+     inkscape:current-layer="SVGRoot"
+     showgrid="false"
+     inkscape:window-width="3834"
+     inkscape:window-height="2103"
+     inkscape:window-x="3840"
+     inkscape:window-y="51"
+     inkscape:window-maximized="1"
+     inkscape:lockguides="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <sodipodi:guide
+       position="-18.145137,26.846701"
+       orientation="1,0"
+       id="guide3806"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-81.370426,29.995535"
+       orientation="0,1"
+       id="guide3808"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-38.902588,35.008811"
+       orientation="0,1"
+       id="guide3810"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-39.399772,25.02369"
+       orientation="0,1"
+       id="guide3812"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-26.14152,47.231261"
+       orientation="1,0"
+       id="guide3895"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1.825106,53.28034"
+       orientation="1,0"
+       id="guide3897"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-10.107322,50.090072"
+       orientation="1,0"
+       id="guide3901"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3796">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer8"
+     inkscape:label="Ebene 2"
+  <path
+     d="m 0,2.9367831 c 0,-0.688503 1.807319,-2.56036805 2.388243,-2.56036805 0.559409,0 2.366727,2.71097805 3.012197,2.71097805 0.666988,0 4.905581,-2.25914905 6.002881,-2.99068205 0.537892,-0.365766 0.580926,0.387283 0.215157,0.90365905 -1.032753,1.463069 -6.519256,6.196521 -7.810199,6.196521 C 3.098261,7.1968911 0,3.6683181 0,2.9367831 Z"
+     id="path1479"
+     inkscape:connector-curvature="0"
+     style="stroke-width:0.0215157" />
+</svg>

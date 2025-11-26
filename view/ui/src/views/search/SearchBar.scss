@@ -1,0 +1,121 @@
+.searchBar {
+  display: grid;
+  width: 100%;
+  box-sizing: border-box;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  font-family: Lato, sans-serif;
+  padding: 0px var(--main-h-indent);
+
+  .parameters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    select {
+      margin: 0.5em 1.2em 0.5em 0em;
+    }
+
+    .searchQueryInput {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-column-gap: 5px;
+      padding: 0.4em 0.8em;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      justify-content: center;
+      align-items: center;
+      margin: 0.5em 1.2em;
+
+      .searchLabel {
+        font-size: 0.9em;
+        color: var(--textLevel4);
+        margin-right: 0.8em;
+
+        .intersectionToggle {
+          display: block;
+          margin: 1em auto 0px;
+          cursor: pointer;
+          border: none;
+        }
+      }
+
+      .logicSymbol {
+        font-size: 1.4em;
+        color: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+      }
+
+      .searchValues {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        align-items: center;
+      }
+
+      input {
+        padding: 0.2em;
+        font-size: 1.1em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        outline: none;
+        text-overflow: ellipsis;
+      }
+
+      input:read-only {
+        color: var(--textDisabledGrey);
+        border-bottom: none;
+      }
+
+      .searchClose {
+        margin-left: 0.2em;
+        padding: 0.2em;
+        cursor: pointer;
+        font-weight: bolder;
+      }
+    }
+  }
+
+  .button-column {
+    display: flex;
+    flex-direction: column;
+
+    .button-row {
+      button {
+        margin: none !important;
+      }
+
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5em;
+
+      .mode-description {
+        grid-column: 1/-1;
+        padding: 0.5em;
+        font-style: italic;
+      }
+    }
+
+    button {
+      background-color: #bd5649;
+      font-size: 1em;
+      border: 1px solid var(--foregroundLightGrey);
+      padding: 0.5em 2.2em 0.7em;
+      margin: 0.4em 0.0em 0.0em 0;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.03s ease-in;
+
+      &:disabled {
+        background-color: var(--foregroundLightGrey) !important;
+      }
+
+      &.main-mode-button {
+        text-decoration: underline;
+      }
+    }
+  }
+}

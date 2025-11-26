@@ -1,0 +1,2205 @@
+{
+  "items": [
+    {
+      "key": "search",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Suchen"
+        },
+        {
+          "language": "en",
+          "translation": "Search"
+        },
+        {
+          "language": "fr",
+          "translation": "Chercher"
+        }
+      ]
+    },
+    {
+      "key": "project",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Projekt"
+        },
+        {
+          "language": "en",
+          "translation": "Project"
+        },
+        {
+          "language": "fr",
+          "translation": "Projet"
+        }
+      ]
+    },
+    {
+      "key": "team",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Team"
+        },
+        {
+          "language": "en",
+          "translation": "Team"
+        },
+        {
+          "language": "fr",
+          "translation": "disparue"
+        }
+      ]
+    },
+    {
+      "key": "board",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Beirat"
+        },
+        {
+          "language": "en",
+          "translation": "Advisory Board"
+        },
+        {
+          "language": "fr",
+          "translation": "Conseil consultatif"
+        }
+      ]
+    },
+    {
+      "key": "video",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Video"
+        },
+        {
+          "language": "en",
+          "translation": "Video"
+        },
+        {
+          "language": "fr",
+          "translation": "Missing"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_prestage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "DIW BERLIN"
+        },
+        {
+          "language": "en",
+          "translation": "DIW BERLIN"
+        },
+        {
+          "language": "fr",
+          "translation": "DIW BERLIN"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_1",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Wirtschaftsberichte"
+        },
+        {
+          "language": "en",
+          "translation": "Wirtschaftsberichte"
+        },
+        {
+          "language": "fr",
+          "translation": "Wirtschaftsberichte"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_2",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Untertitel hier"
+        },
+        {
+          "language": "en",
+          "translation": "Subcaption here"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_3",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Digitale Ausgabe | Beta-Version 1.0 | 2024"
+        },
+        {
+          "language": "en",
+          "translation": "Digital Edition | Beta version 1.0 | 2024"
+        },
+        {
+          "language": "fr",
+          "translation": "Version numérique "
+        }
+      ]
+    },
+    {
+      "key": "cm_main_herausgeber_1",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Herausgebertext hier"
+        },
+        {
+          "language": "en",
+          "translation": "Herausgebertext hier"
+        },
+        {
+          "language": "fr",
+          "translation": "Missing"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_herausgeber_2",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "am Lehrstuhl für Informatik VI der Universität Würzburg"
+        },
+        {
+          "language": "en",
+          "translation": "at the Chair in Computer Science VI of the University of Würzburg"
+        },
+        {
+          "language": "fr",
+          "translation": "Missing"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_ver_space_1",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "unter Leitung von"
+        },
+        {
+          "language": "en",
+          "translation": "under the direction of"
+        },
+        {
+          "language": "fr",
+          "translation": "Missing"
+        }
+      ]
+    },
+    {
+      "key": "and",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "und"
+        },
+        {
+          "language": "en",
+          "translation": "and"
+        },
+        {
+          "language": "fr",
+          "translation": "et"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_ver_space_2",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "herausgegeben von"
+        },
+        {
+          "language": "en",
+          "translation": "edited by"
+        },
+        {
+          "language": "fr",
+          "translation": "publié par"
+        }
+      ]
+    },
+    {
+      "key": "cm_main_ver_space_3",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Datenmodellierung und Forschungsdatenmanagement"
+        },
+        {
+          "language": "en",
+          "translation": "Data modeling and research data management"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "reference",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Benutzerhinweise"
+        },
+        {
+          "language": "en",
+          "translation": "User instructions"
+        },
+        {
+          "language": "fr",
+          "translation": "Instruction"
+        }
+      ]
+    },
+    {
+      "key": "statistic",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Statistik"
+        },
+        {
+          "language": "en",
+          "translation": "Statistik"
+        },
+        {
+          "language": "fr",
+          "translation": "Statistiques"
+        }
+      ]
+    },
+    {
+      "key": "edition",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Edition"
+        },
+        {
+          "language": "en",
+          "translation": "Edition"
+        },
+        {
+          "language": "fr",
+          "translation": "Edition"
+        }
+      ]
+    },
+    {
+      "key": "catalog",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Katalog"
+        },
+        {
+          "language": "en",
+          "translation": "Catalog"
+        },
+        {
+          "language": "fr",
+          "translation": "Catalogue"
+        }
+      ]
+    },
+    {
+      "key": "partner",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Partner"
+        },
+        {
+          "language": "en",
+          "translation": "Partner"
+        },
+        {
+          "language": "fr",
+          "translation": "Partner"
+        }
+      ]
+    },
+    {
+      "key": "sources",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Quellen"
+        },
+        {
+          "language": "en",
+          "translation": "Sources"
+        },
+        {
+          "language": "fr",
+          "translation": "Sources"
+        }
+      ]
+    },
+    {
+      "key": "no_Page_data",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Keine Daten vorhanden für diese Seite"
+        },
+        {
+          "language": "en",
+          "translation": "No data available for this page"
+        },
+        {
+          "language": "fr",
+          "translation": "Aucune donnée disponible pour cette page"
+        }
+      ]
+    },
+    {
+      "key": "back",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zurück"
+        },
+        {
+          "language": "en",
+          "translation": "Back"
+        },
+        {
+          "language": "fr",
+          "translation": "Dos"
+        }
+      ]
+    },
+    {
+      "key": "next",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Weiter"
+        },
+        {
+          "language": "en",
+          "translation": "Next"
+        },
+        {
+          "language": "fr",
+          "translation": "Suivant"
+        }
+      ]
+    },
+    {
+      "key": "enhance",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Vergrößern"
+        },
+        {
+          "language": "en",
+          "translation": "Zoom in"
+        },
+        {
+          "language": "fr",
+          "translation": "Agrandir"
+        }
+      ]
+    },
+    {
+      "key": "shrink",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Verkleinern"
+        },
+        {
+          "language": "en",
+          "translation": "Zoom out"
+        },
+        {
+          "language": "fr",
+          "translation": "Rétractation"
+        }
+      ]
+    },
+    {
+      "key": "max",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Vollbild"
+        },
+        {
+          "language": "en",
+          "translation": "Full Screen"
+        },
+        {
+          "language": "fr",
+          "translation": "Plein écran"
+        }
+      ]
+    },
+    {
+      "key": "close",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Schließen"
+        },
+        {
+          "language": "en",
+          "translation": "Close"
+        },
+        {
+          "language": "fr",
+          "translation": "Fermer"
+        }
+      ]
+    },
+    {
+      "key": "queryWait",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Die Spezifikation für die Suche ist noch nicht geladen. Wenn sie nicht innerhalb weniger Sekunden geladen wird, handelt es sich wahrscheinlich um einen Fehler. In diesem Fall benachrichtigen Sie bitte einen Administrator."
+        },
+        {
+          "language": "en",
+          "translation": "The specification for the search is not yet loaded. If it doesn't load within a few seconds, this is probably a bug. In this case, please notify an administrator."
+        },
+        {
+          "language": "fr",
+          "translation": "La spécification de la recherche n'est pas encore chargée. Si elle n'est pas chargée au bout de quelques secondes, il s'agit probablement d'un bug. Dans ce cas, veuillez en informer un administrateur."
+        }
+      ]
+    },
+    {
+      "key": "compare",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Vergleichen"
+        },
+        {
+          "language": "en",
+          "translation": "Compare"
+        },
+        {
+          "language": "fr",
+          "translation": "Comparez"
+        }
+      ]
+    },
+    {
+      "key": "cancel",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Abbrechen"
+        },
+        {
+          "language": "en",
+          "translation": "Cancel"
+        },
+        {
+          "language": "fr",
+          "translation": "Annuler"
+        }
+      ]
+    },
+    {
+      "key": "combine_documents",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Druck bearbeiten"
+        },
+        {
+          "language": "en",
+          "translation": "Edit print"
+        },
+        {
+          "language": "fr",
+          "translation": "Modifier l'impression"
+        }
+      ]
+    },
+    {
+      "key": "print_document",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Drucken"
+        },
+        {
+          "language": "en",
+          "translation": "Print"
+        },
+        {
+          "language": "fr",
+          "translation": "Imprimer"
+        }
+      ]
+    },
+    {
+      "key": "synopsis_mode_description",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokumente auswählen, dann auf \"Vergleichen\" klicken"
+        },
+        {
+          "language": "en",
+          "translation": "Select documents, then click on \"Compare\""
+        },
+        {
+          "language": "fr",
+          "translation": "Sélectionnez des documents, puis cliquez sur \"Comparer\""
+        }
+      ]
+    },
+    {
+      "key": "print_mode_description",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokumente auswählen, dann auf \"Drucken\" klicken"
+        },
+        {
+          "language": "en",
+          "translation": "Select documents, then click on \"Print\""
+        },
+        {
+          "language": "fr",
+          "translation": "Sélectionnez des documents, puis cliquez sur \"Imprimer\""
+        }
+      ]
+    },
+    {
+      "key": "zoom_factor",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zoomfaktor"
+        },
+        {
+          "language": "en",
+          "translation": "Zoom Factor"
+        },
+        {
+          "language": "fr",
+          "translation": "Facteur de zoom"
+        }
+      ]
+    },
+    {
+      "key": "create",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Erstellen"
+        },
+        {
+          "language": "en",
+          "translation": "Create"
+        },
+        {
+          "language": "fr",
+          "translation": "Créer"
+        }
+      ]
+    },
+    {
+      "key": "compare_version",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Versionen vergleichen"
+        },
+        {
+          "language": "en",
+          "translation": "Compare versions"
+        },
+        {
+          "language": "fr",
+          "translation": "Comparer les versions"
+        }
+      ]
+    },
+    {
+      "key": "search_criteria",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Suchkriterium hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "Add search criteria"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "doc_link",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Permalink zum Viewer"
+        },
+        {
+          "language": "en",
+          "translation": "short link"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "foldin",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Einklappen"
+        },
+        {
+          "language": "en",
+          "translation": "Fold in"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "foldout",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Ausklappen"
+        },
+        {
+          "language": "en",
+          "translation": "Fold out"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "copy",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kopieren"
+        },
+        {
+          "language": "en",
+          "translation": "Copy"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "copy_link",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kopieren"
+        },
+        {
+          "language": "en",
+          "translation": "Copy"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "go_to",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Gehe zu"
+        },
+        {
+          "language": "en",
+          "translation": "Go to"
+        },
+        {
+          "language": "fr",
+          "translation": "MISSING"
+        }
+      ]
+    },
+    {
+      "key": "footer",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Akademie der Wissenschaften und der Literatur Mainz"
+        },
+        {
+          "language": "en",
+          "translation": "Akademie der Wissenschaften und der Literatur Mainz"
+        },
+        {
+          "language": "fr",
+          "translation": "Akademie der Wissenschaften und der Literatur Mainz"
+        }
+      ]
+    },
+    {
+      "key": "imprint",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Impressum"
+        },
+        {
+          "language": "en",
+          "translation": "Imprint"
+        },
+        {
+          "language": "fr",
+          "translation": "Impressum"
+        }
+      ]
+    },
+    {
+      "key": "funding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Fördervermerk"
+        },
+        {
+          "language": "en",
+          "translation": "Sponsorship"
+        },
+        {
+          "language": "fr",
+          "translation": "Fördervermerk"
+        }
+      ]
+    },
+    {
+      "key": "privacy",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Datenschutz"
+        },
+        {
+          "language": "en",
+          "translation": "Privacy statement"
+        },
+        {
+          "language": "fr",
+          "translation": "Datenschutz"
+        }
+      ]
+    },
+    {
+      "key": "feedback",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Feedback"
+        },
+        {
+          "language": "en",
+          "translation": "Feedback"
+        },
+        {
+          "language": "fr",
+          "translation": "Feedback"
+        }
+      ]
+    },
+    {
+      "key": "introSearch",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Wenn Sie Dokumente in der Synopse vergleichen wollen, klicken Sie hier. Sie können die Dokumente zum Vergleichen dann in der Tabelle wählen."
+        },
+        {
+          "language": "en",
+          "translation": "translation Missing"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "introSearch2",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Hier können Sie neue Suchkriterien hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "translation missing"
+        },
+        {
+          "language": "fr",
+          "translation": "translation missing"
+        }
+      ]
+    },
+    {
+      "key": "introSearch3",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "und hier können Sie die Suche starten"
+        },
+        {
+          "language": "en",
+          "translation": "translation missing"
+        },
+        {
+          "language": "fr",
+          "translation": "translation missing"
+        }
+      ]
+    },
+    {
+      "key": "introTable",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Hier können Sie die Suchergebnisse durchschalten. Die doppelten Pfeile bringen Sie zur ersten beziehungsweise letzten Seite, die einfachen eine Seite vor oder zurück."
+        },
+        {
+          "language": "en",
+          "translation": "translation missing"
+        },
+        {
+          "language": "fr",
+          "translation": "translation missing"
+        }
+      ]
+    },
+    {
+      "key": "backToPage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zurück zur Seitenansicht"
+        },
+        {
+          "language": "en",
+          "translation": "translation missing"
+        },
+        {
+          "language": "fr",
+          "translation": "translation missing"
+        }
+      ]
+    },
+    {
+      "key": "page",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seite"
+        },
+        {
+          "language": "en",
+          "translation": "Page"
+        },
+        {
+          "language": "fr",
+          "translation": "Page"
+        }
+      ]
+    },
+    {
+      "key": "of",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "von"
+        },
+        {
+          "language": "en",
+          "translation": "of"
+        },
+        {
+          "language": "fr",
+          "translation": "de"
+        }
+      ]
+    },
+    {
+      "key": "all",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Alle"
+        },
+        {
+          "language": "en",
+          "translation": "All"
+        },
+        {
+          "language": "fr",
+          "translation": "Tous"
+        }
+      ]
+    },
+    {
+      "key": "foundDocs",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokumente gefunden"
+        },
+        {
+          "language": "en",
+          "translation": "documents found"
+        },
+        {
+          "language": "fr",
+          "translation": "Documents trouvés"
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokumente"
+        },
+        {
+          "language": "en",
+          "translation": "documents"
+        },
+        {
+          "language": "fr",
+          "translation": "Documents"
+        }
+      ]
+    },
+    {
+      "key": "goTo",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Aktion"
+        },
+        {
+          "language": "en",
+          "translation": "Action"
+        },
+        {
+          "language": "fr",
+          "translation": "Action"
+        }
+      ]
+    },
+    {
+      "key": "goToSynopsisMode",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Auswahl zu vergleichender Dokumente"
+        },
+        {
+          "language": "en",
+          "translation": "Selection of documents to compare"
+        },
+        {
+          "language": "fr",
+          "translation": "Sélection de documents à comparer"
+        }
+      ]
+    },
+    {
+      "key": "goToPrintMode",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Auswahl zu druckender Dokumente"
+        },
+        {
+          "language": "en",
+          "translation": "Selection of documents to print"
+        },
+        {
+          "language": "fr",
+          "translation": "Sélection de documents à imprimer"
+        }
+      ]
+    },
+    {
+      "key": "description",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Beschreibung"
+        },
+        {
+          "language": "en",
+          "translation": "Description"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "document",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokument"
+        },
+        {
+          "language": "en",
+          "translation": "Document"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "filterHelp1",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Filtern nach Signatur oder Text."
+        },
+        {
+          "language": "en",
+          "translation": "Filter by shelf mark or text"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "filterHelp2",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Trennen Sie Signaturen mit Semikolon."
+        },
+        {
+          "language": "en",
+          "translation": "Separate shelf marks with semikolon."
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "wrongInput",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Falsche Eingabe"
+        },
+        {
+          "language": "en",
+          "translation": "Wrong Input"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "loading",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Laden"
+        },
+        {
+          "language": "en",
+          "translation": "Load"
+        },
+        {
+          "language": "fr",
+          "translation": "translation Missing"
+        }
+      ]
+    },
+    {
+      "key": "edit",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "bearbeiten"
+        },
+        {
+          "language": "en",
+          "translation": "edit"
+        },
+        {
+          "language": "fr",
+          "translation": "modifier"
+        }
+      ]
+    },
+    {
+      "key": "searchNav",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "In Suchergebnis blättern"
+        },
+        {
+          "language": "en",
+          "translation": "Navigate in search"
+        },
+        {
+          "language": "fr",
+          "translation": "Naviguez sur"
+        }
+      ]
+    },
+    {
+      "key": "externalSource",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dieses Bild wird von einem externen Server geladen, auf dessen Erreichbarkeit wir keinen Einfluss haben"
+        },
+        {
+          "language": "en",
+          "translation": "This image is loaded from an external server over whose accessibility we have no control"
+        },
+        {
+          "language": "fr",
+          "translation": "Cette image est chargée depuis un serveur externe sur la disponibilité duquel nous n'avons aucun contrôle."
+        }
+      ]
+    },
+    {
+      "key": "printView",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Druckansicht"
+        },
+        {
+          "language": "en",
+          "translation": "Print view"
+        },
+        {
+          "language": "fr",
+          "translation": "Imprimer"
+        }
+      ]
+    },
+    {
+      "key": "printButton",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "PDF anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Show PDF"
+        },
+        {
+          "language": "fr",
+          "translation": "Afficher le PDF"
+        }
+      ]
+    },
+    {
+      "key": "filter",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Filtern"
+        },
+        {
+          "language": "en",
+          "translation": "Filter"
+        },
+        {
+          "language": "fr",
+          "translation": "Filter"
+        }
+      ]
+    },
+    {
+      "key": "singleLine",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Synopse in einer Zeile anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Display synopsis in one line"
+        }
+      ]
+    },
+    {
+      "key": "textInLastDocOnly",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Nur Text aus dem letzten Dokument anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Show text from last document only"
+        }
+      ]
+    },
+    {
+      "key": "clearAll",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Löschen"
+        },
+        {
+          "language": "en",
+          "translation": "Clear all"
+        },
+        {
+          "language": "fr",
+          "translation": "Tout supprimer"
+        }
+      ]
+    },
+    {
+      "key": "addToBook",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Druckauswahl"
+        },
+        {
+          "language": "en",
+          "translation": "Select for Print"
+        },
+        {
+          "language": "fr",
+          "translation": "Sélection pour impression"
+        }
+      ]
+    },
+    {
+      "key": "printBook",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Folgende Dokumente können als PDF exportiert werden"
+        },
+        {
+          "language": "en",
+          "translation": "The following documents can be exported as PDF"
+        },
+        {
+          "language": "fr",
+          "translation": "Les documents suivants peuvent être exportés au format PDF"
+        }
+      ]
+    },
+    {
+      "key": "addAllToPrint",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Alle zum Druck hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "Add all to print"
+        },
+        {
+          "language": "fr",
+          "translation": "Ajouter tout à l'impression"
+        }
+      ]
+    },
+    {
+      "key": "removeAllFromPrint",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Alle vom Druck entfernen"
+        },
+        {
+          "language": "en",
+          "translation": "Remove all from print"
+        },
+        {
+          "language": "fr",
+          "translation": "Supprimer tout de l'impression"
+        }
+      ]
+    },
+    {
+      "key": "clearOldPrint",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Alte Druckauswahl löschen"
+        },
+        {
+          "language": "en",
+          "translation": "Clear old print selection"
+        },
+        {
+          "language": "fr",
+          "translation": "Effacer l'ancienne sélection d'impression"
+        }
+      ]
+    },
+    {
+      "key": "apply",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Übernehmen"
+        },
+        {
+          "language": "en",
+          "translation": "Apply"
+        },
+        {
+          "language": "fr",
+          "translation": "Appliquer"
+        }
+      ]
+    },
+    {
+      "key": "restore",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Einstellungen zurücksetzen"
+        },
+        {
+          "language": "en",
+          "translation": "Restore Defaults"
+        },
+        {
+          "language": "fr",
+          "translation": "Réinitialiser les paramètres"
+        }
+      ]
+    },
+    {
+      "key": "spanFrom",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "von"
+        },
+        {
+          "language": "en",
+          "translation": "from"
+        }
+      ]
+    },
+    {
+      "key": "spanTo",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "bis"
+        },
+        {
+          "language": "en",
+          "translation": "to"
+        }
+      ]
+    },
+    {
+      "key": "from_to",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "von ... bis"
+        },
+        {
+          "language": "en",
+          "translation": "from ... to"
+        }
+      ]
+    },
+    {
+      "key": "page-setup",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seite einrichten"
+        },
+        {
+          "language": "en",
+          "translation": "Page settings"
+        },
+        {
+          "language": "fr",
+          "translation": "Mise en page"
+        }
+      ]
+    },
+    {
+      "key": "page",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seite"
+        },
+        {
+          "language": "en",
+          "translation": "Page"
+        },
+        {
+          "language": "fr",
+          "translation": "Page"
+        }
+      ]
+    },
+    {
+      "key": "matchedPage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Suchtreffer"
+        },
+        {
+          "language": "en",
+          "translation": "Search match"
+        }
+      ]
+    },
+    {
+      "key": "noMatchHere",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Hier kein Suchtreffer"
+        },
+        {
+          "language": "en",
+          "translation": "No search match here"
+        }
+      ]
+    },
+    {
+      "key": "viewPages",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seitenansicht"
+        },
+        {
+          "language": "en",
+          "translation": "Page view"
+        }
+      ]
+    },
+    {
+      "key": "page-width",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seitenbreite"
+        },
+        {
+          "language": "en",
+          "translation": "Page Width"
+        },
+        {
+          "language": "fr",
+          "translation": "Largeur de la page"
+        }
+      ]
+    },
+    {
+      "key": "syllable-font-size",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Silbentextgröße"
+        },
+        {
+          "language": "en",
+          "translation": "Syllalble Font Size"
+        },
+        {
+          "language": "fr",
+          "translation": "Taille de police des syllabes"
+        }
+      ]
+    },
+    {
+      "key": "font-sizes",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Textgrößen"
+        },
+        {
+          "language": "en",
+          "translation": "Font Sizes"
+        },
+        {
+          "language": "fr",
+          "translation": "Tailles de police"
+        }
+      ]
+    },
+    {
+      "key": "viewImage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Bilderansicht"
+        },
+        {
+          "language": "en",
+          "translation": "Image view"
+        }
+      ]
+    },
+    {
+      "key": "page-height",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seitenhöhe"
+        },
+        {
+          "language": "en",
+          "translation": "Page Height"
+        },
+        {
+          "language": "fr",
+          "translation": "Hauteur de la page"
+        }
+      ]
+    },
+    {
+      "key": "viewPagesWithImage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kombinierte Ansicht"
+        },
+        {
+          "language": "en",
+          "translation": "Combined view"
+        }
+      ]
+    },
+    {
+      "key": "spacing",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Abstände"
+        },
+        {
+          "language": "en",
+          "translation": "Spacing"
+        },
+        {
+          "language": "fr",
+          "translation": "distances"
+        }
+      ]
+    },
+    {
+      "key": "paratextWordPadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Paratextabstände"
+        },
+        {
+          "language": "en",
+          "translation": "Paratext Word Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Paratext Word Padding"
+        }
+      ]
+    },
+    {
+      "key": "paratextLinePadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Paratextzeilenabstände"
+        },
+        {
+          "language": "en",
+          "translation": "Paratext Line Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Paratext Word Padding"
+        }
+      ]
+    },
+    {
+      "key": "lineContinuationIndent",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zeilenfortsetzungseinrückung"
+        },
+        {
+          "language": "en",
+          "translation": "Line Continuation Indent"
+        },
+        {
+          "language": "fr",
+          "translation": "Line Continuation Indent"
+        }
+      ]
+    },
+    {
+      "key": "linePartPadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zeilentailabstände"
+        },
+        {
+          "language": "en",
+          "translation": "Line Part Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Line Part Padding"
+        }
+      ]
+    },
+    {
+      "key": "linePadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zeilenabstände"
+        },
+        {
+          "language": "en",
+          "translation": "Line Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Line Padding"
+        }
+      ]
+    },
+    {
+      "key": "liquescentScale",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Liquescent Faktor"
+        },
+        {
+          "language": "en",
+          "translation": "Liquescent Scale"
+        },
+        {
+          "language": "fr",
+          "translation": "Liquescent Scale"
+        }
+      ]
+    },
+    {
+      "key": "noteLineJutLeft",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Notenzeilenüberhang links"
+        },
+        {
+          "language": "en",
+          "translation": "Note Line Jut left"
+        },
+        {
+          "language": "fr",
+          "translation": "Note Line Jut left"
+        }
+      ]
+    },
+    {
+      "key": "noteLineJutRight",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Notenzeilenüberhang rechts"
+        },
+        {
+          "language": "en",
+          "translation": "Note Line Jut right"
+        },
+        {
+          "language": "fr",
+          "translation": "Note Line Jut right"
+        }
+      ]
+    },
+    {
+      "key": "endDocumentPadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Dokumentabstand unten"
+        },
+        {
+          "language": "en",
+          "translation": "Document End Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Document End Padding"
+        }
+      ]
+    },
+    {
+      "key": "containerLevelPadding",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zusätlicher Containerabstand"
+        },
+        {
+          "language": "en",
+          "translation": "Additional Container Padding"
+        },
+        {
+          "language": "fr",
+          "translation": "Additional Container Padding"
+        }
+      ]
+    },
+    {
+      "key": "signatureWidth",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Signaturbreite"
+        },
+        {
+          "language": "en",
+          "translation": "Signature Width"
+        },
+        {
+          "language": "fr",
+          "translation": "Signature Width"
+        }
+      ]
+    },
+    {
+      "key": "folioTextWidth",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Foliotextbreite"
+        },
+        {
+          "language": "en",
+          "translation": "folioTextWidth"
+        },
+        {
+          "language": "fr",
+          "translation": "folioTextWidth"
+        }
+      ]
+    },
+    {
+      "key": "comments",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kommentare"
+        },
+        {
+          "language": "en",
+          "translation": "Comments"
+        },
+        {
+          "language": "fr",
+          "translation": "Commentaires"
+        }
+      ]
+    },
+    {
+      "key": "drawComments",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kommentarzeichen anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Show comment marks"
+        },
+        {
+          "language": "fr",
+          "translation": "Dessiner des marques de commentaires"
+        }
+      ]
+    },
+    {
+      "key": "commentOffsetX",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kommentarzeichen horizontale Verschiebung"
+        },
+        {
+          "language": "en",
+          "translation": "Comment Marker X Offset"
+        },
+        {
+          "language": "fr",
+          "translation": "Comment Marker X Offset"
+        }
+      ]
+    },
+    {
+      "key": "commentOffsetY",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kommentarzeichen vertikale Verschiebung"
+        },
+        {
+          "language": "en",
+          "translation": "Comment Marker Y Offset"
+        },
+        {
+          "language": "fr",
+          "translation": "Comment Marker Y Offset"
+        }
+      ]
+    },
+    {
+      "key": "viewPDF",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "PDF-Ansicht"
+        },
+        {
+          "language": "en",
+          "translation": "PDF view"
+        }
+      ]
+    },
+    {
+      "key": "pdfNextPage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Nächste Seite"
+        },
+        {
+          "language": "en",
+          "translation": "Next page"
+        }
+      ]
+    },
+    {
+      "key": "pdfPrevPage",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Vorherige Seite"
+        },
+        {
+          "language": "en",
+          "translation": "Previous page"
+        }
+      ]
+    },
+    {
+      "key": "pdfNextPageMatch",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Nächster Treffer"
+        },
+        {
+          "language": "en",
+          "translation": "Next match"
+        }
+      ]
+    },
+    {
+      "key": "pdfPrevPageMatch",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Vorheriger Treffer"
+        },
+        {
+          "language": "en",
+          "translation": "Previous match"
+        }
+      ]
+    },
+    {
+      "key": "downloads",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Anhänge"
+        },
+        {
+          "language": "en",
+          "translation": "Downloads"
+        }
+      ]
+    },
+    {
+      "key": "paperMargin",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Papier Rand"
+        },
+        {
+          "language": "en",
+          "translation": "Paper Margin"
+        }
+      ]
+    },
+    {
+      "key": "marginTopInMm",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Oberer Rand in mm"
+        },
+        {
+          "language": "en",
+          "translation": "Top Margin in mm"
+        }
+      ]
+    },
+    {
+      "key": "marginRightInMm",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Rechter Rand in mm"
+        },
+        {
+          "language": "en",
+          "translation": "Right Margin in mm"
+        }
+      ]
+    },
+    {
+      "key": "marginBottomInMm",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Unterer Rand in mm"
+        },
+        {
+          "language": "en",
+          "translation": "Bottom Margin in mm"
+        }
+      ]
+    },
+    {
+      "key": "marginLeftInMm",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Linker Rand in mm"
+        },
+        {
+          "language": "en",
+          "translation": "Left Margin in mm"
+        }
+      ]
+    },
+    {
+      "key": "drawPageNumbers",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Seitenzahlen anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Show page numbers"
+        }
+      ]
+    },
+    {
+      "key": "drawTableOfContents",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Inhaltsverzeichnis anzeigen"
+        },
+        {
+          "language": "en",
+          "translation": "Show table of contents"
+        }
+      ]
+    },
+    {
+      "key": "addSourceDescriptions",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Quellenbeschreibungen hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "Add source descriptions"
+        }
+      ]
+    },
+    {
+      "key": "addCriticalApparatus",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Kritischen Apparat hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "Add critical apparatus"
+        }
+      ]
+    },
+    {
+      "key": "supplementarySettings",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zusätzliche Einstellungen"
+        },
+        {
+          "language": "en",
+          "translation": "Supplementary Settings"
+        }
+      ]
+    },
+    {
+      "key": "backToSearch",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zurück zur Suche"
+        },
+        {
+          "language": "en",
+          "translation": "Back to search"
+        }
+      ]
+    },
+    {
+      "key": "selectedFilters",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Filter"
+        },
+        {
+          "language": "en",
+          "translation": "Filters"
+        }
+      ]
+    },
+    {
+      "key": "pdf_zoom_reset",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "100%"
+        },
+        {
+          "language": "en",
+          "translation": "100%"
+        }
+      ]
+    },
+    {
+      "key": "allOf",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Und"
+        },
+        {
+          "language": "en",
+          "translation": "And"
+        }
+      ]
+    },
+    {
+      "key": "anyOf",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Oder"
+        },
+        {
+          "language": "en",
+          "translation": "Or"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+FROM openjdk:11.0.4-jdk-stretch
+
+RUN mkdir /fuseki
+
+ADD rdf/bin/apache-jena-3.13.1/ /fuseki/binJena
+ADD entrypointFuseki.sh /fuseki/entrypoint.sh
+ADD rdf/bin/apache-jena-fuseki-3.13.1/ /fuseki/bin
+ADD rdf/data.ttl /fuseki/data.ttl
+ADD rdf/fuseki.ttl /fuseki/fuseki.ttl
+
+WORKDIR /fuseki
+
+EXPOSE 3030
+
+ENTRYPOINT [ "./entrypoint.sh" ]

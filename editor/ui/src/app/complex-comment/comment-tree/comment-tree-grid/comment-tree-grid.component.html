@@ -1,0 +1,17 @@
+<div [ngClass]="{'grid-entry': true, 'first-row': entry.row == 0, 'first-col': entry.col == 0}"
+  *ngFor=" let entry of entries(); trackBy:identifyEntry">
+  <div class="dummy"></div>
+  <div (click)="delCol(entry.col)" class="del-col">-</div>
+  <div (click)="delRow(entry.row)" class="del-row">-</div>
+  <app-comment-tree-undecided *ngIf="entry.sub.kind == 'CommentTreeUndecided'" [path]="entry.path"
+    (treeEvent)="treeEvent.emit($event)" [data]="entry.sub" [originalCreator]="originalCreator" />
+  <app-comment-tree-leaf *ngIf="entry.sub.kind == 'CommentTreeLeaf'" [path]="entry.path"
+    (treeEvent)="treeEvent.emit($event)" [data]="entry.sub" />
+  <app-comment-tree-grid *ngIf="entry.sub.kind == 'CommentTreeGrid'" [path]="entry.path"
+    (treeEvent)="treeEvent.emit($event)" [data]="entry.sub" [originalCreator]="originalCreator" />
+</div>
+
+<div (click)="addRow()" class="add-row">+</div>
+<div (click)="addCol()" class="add-col">+</div>
+<app-comment-tree-action-dot [supportsSettingContext]="false" [data]="data" [path]="path"
+  (treeEvent)="treeEvent.emit($event)" />

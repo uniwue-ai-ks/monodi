@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+      <h3>Quellenübersicht</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <app-smart-table
+        (onDelete)="delete()"
+        (onRowClick)="goToSource($event)"
+        [canDelete]="true"
+        [headers]="headers"
+        [objects]="sources"
+      ></app-smart-table>
+    </div>
+  </div>
+</div>

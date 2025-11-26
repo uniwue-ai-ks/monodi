@@ -1,0 +1,143 @@
+@prefix :     <http://olyro.de/mondiview/> .
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+############################################################################################################
+# Defining the model
+############################################################################################################
+
+# Define a class per type of document
+data:document
+    a rdfs:Class;
+    # Name of the class, used as link to the search in the top navigation bar
+    # Strings should be language tagged
+    rdfs:label "Dokument"@de,"Document"@en;
+    # prefix for short links
+    :shortUrlTag "d" ;
+    # Only required, if some data should be shown in the popup view
+    :openPopupText "Original Anzeigen"@de,"Show original"@en;
+    # Only required, if IIIF image viewer is used (e.g for viewing original scans)
+    :openIIIFText "Original Anzeigen"@de,"Show original"@en.
+
+
+# Define properties of the class
+data:documentSource
+    a rdf:Property ;
+    rdfs:label  "Quelle"@de,"Source"@en;
+    # set the class this property belongs to
+    rdfs:domain data:document;
+    # range is the datatype of the property. Here we use a simple string
+    rdfs:range  :string;
+
+    # If :headerOrder is present, the property will be shown in search result
+    # tables as a column. Columns are sorted by the numbers given here.
+    :headerOrder 0;
+    # If :searchOrder is present, the property will be available as a search
+    # criterion.
+    :searchOrder 0;
+		# If :initialSearch is set to true, the search field for this property will
+		# be shown by default.
+		:initialSearch true;
+
+    # Specify, where the property should be visible. All properties with a
+    # position in the same space are displayed ordered by the assigned value.
+    :documentPosition [
+        # e.g show the documentSource in the header as first element and in the sidebar as third element
+        :header 0;
+        :right 2;
+        # possible positions are
+        # :main           the central space in the document view
+        # :priority       overrides main if present, useful for adding a fallback
+        # :sticky         split main view into two columns with the right one being sticky (non-scrolling)
+        # :header         the bar above the search navigation in the document view
+        # :right          the collapsible sidebar
+        # :popup          a popup window, openable with a button
+        # :download       a download, shown as a button in the right sidebar
+        # :docNavigation  shown in the navigation area directly above the main view, intended for inter-document links
+        # :synopsis       the synopsis view, propably not useful for non Corpus Monodicum projects currently
+        # :synopsisId     see above
+    ].
+
+data:documentYear
+    a rdf:Property;
+    rdfs:label "Jahr"@de,"Year"@en;
+    rdfs:domain data:diwDocument;
+    rdfs:range :number;
+    :headerOrder 1;
+    :searchOrder 1;
+    # some options are specific to properties with a specific range
+    # e.g. :searchSpan true; would enable a search for a range of years here, which only works with :number properties
+    :searchSpan true;
+    :documentPosition [ :header 0 ; :right 0 ].
+
+
+data:documentTitle
+    a rdf:Property;
+    rdfs:label "Titel"@de,"Title"@en;
+    rdfs:domain data:diwDocument;
+    # :category properties can define a list of possible values, see below.
+    rdfs:range :category;
+    :headerOrder 3;
+    :searchOrder 3;
+    :documentPosition [ :header 0 ; :synopsis 0 ].
+
+# Define some possible values for the data:documentTitle property, as it is a :category
+# These are not actually enforced, but are used for search suggestions. Search is still freetext, so you may specify
+# parts of actual values here, e.g. to suggest keywords.
+data:documentTitle
+    :hasPossibleValue [ :value "Erster Titel" ];
+    :hasPossibleValue [ :value "Zweiter Titel" ];
+    :hasPossibleValue [ :value "Noch ein Titel" ].
+
+data:documentContent
+    a rdf:Property;
+    rdfs:label "Inhalt"@de,"Content"@en;
+    rdfs:domain data:diwDocument;
+    # :htmlContent is mostly useful for the main view. Its value should be a string containing HTML, which will be
+    # rendered in the main view.
+    rdfs:range :htmlContent;
+    :documentPosition [ :main 0 ].
+
+data:documentContentText
+    a rdf:Property;
+    rdfs:label "Volltext"@de,"Text content"@en;
+    rdfs:domain data:diwDocument;
+    # For providing fulltext search over documents, it is useful to provide a property, which is only used for searching
+    # (as the main displayed document may contain html tags, which may disrupt search)
+    :searchOrder 2;
+    # Note that we don't specify a :headerOrder, the fulltext would be to big for the result table
+    rdfs:range :string.
+
+data:documentRelated
+    a rdf:Property;
+    rdfs:label "siehe auch"@de,"see also"@en;
+    rdfs:domain data:page;
+    # :entity is used for linking to other documents, should contain the id of another instance (of any defined class)
+    rdfs:range :entity;
+    # displaying as link is currently only implemented for :right, others are still TODO
+    :documentPosition [ :right 0 ].
+
+
+# Other datatypes exist for working with images or pdfs, these aren't documented yet.
+
+############################################################################################################
+# Defining the data
+############################################################################################################
+
+# The instances of our classes have to be defined under the data: base url. Each instance should have a unique id.
+
+#     ↓ This is the id of the document
+data:document1
+    # specify the class of the instance
+    a data:document;
+    data:documentSource "Quelle 1";
+    data:documentYear 1345;
+    data:documentTitle "My first Title";
+    # document with formatting for viewing
+    data:documentContent "<h1>My first Title</h1><p>This is the content of the document</p>";
+    # plain text for searching
+    data:documentContentText "My first Title This is the content of the document".
+
+# repeat for more documents, remember to create unique ids

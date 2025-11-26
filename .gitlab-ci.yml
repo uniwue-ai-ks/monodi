@@ -1,0 +1,11 @@
+publish_dev:
+ script:
+  - sudo /root/ci/publish_to.sh dev dev dev devapi https://devapi.corpus-monodicum.de/tdb2-database/query?query= https://devapi.corpus-monodicum.de/tdb2-databasei/query?query= https://devdata.corpus-monodicum.de/
+ only:
+  - dev
+
+publish_stage:
+ script:
+  - sudo /root/ci/publish_to.sh stage stage stage stageapi,editor,synopsis https://stageapi.corpus-monodicum.de/tdb2-database/query?query= https://stageapi.corpus-monodicum.de/tdb2-databasei/query?query= https://stagedata.corpus-monodicum.de/
+ only:
+  - stage

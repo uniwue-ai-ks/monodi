@@ -1,0 +1,46 @@
+canvas {
+    display: none;
+}
+
+svg {
+    width: 0;
+}
+
+.navbar {
+    background-color: #89bdd3 !important;
+}
+
+.monodi-tool-bar {
+    background-color: #9ad3de;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 45px);
+    justify-items: center;
+    justify-content: center;
+}
+
+.monodi-tool-bar > img {
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+}
+
+.monodi-tool-bar > img:hover {
+    background-color: #7ac3ce;
+}
+
+.source-sigle {
+    white-space: nowrap;
+    font-size: 1.25rem;
+}
+
+@media print {
+
+    .monodi-tool-bar {
+        display: none;
+    }
+
+    app-route {
+        overflow: hidden;
+        height: unset;
+    }
+}

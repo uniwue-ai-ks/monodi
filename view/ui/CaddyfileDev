@@ -1,0 +1,28 @@
+{
+    debug
+    log {
+        level DEBUG
+        output stdout
+    }
+}
+
+
+:8080 {
+	handle_path /fuseki/* {
+		reverse_proxy localhost:3030
+	}
+	handle_path /resources/pdf/* {
+		root * /home/norbert/share2/camerarius_export/exp2/pdfout_new
+		file_server
+	}
+	handle {
+		file_server {
+			browse
+			root ./dist
+		}
+		@to-index {
+			not path /fuseki/* /static/* /resources/* /manifest.json /favicon.ico /assets/*
+		}
+		rewrite @to-index /index.html
+	}
+}

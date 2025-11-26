@@ -1,0 +1,2 @@
+ALTER TABLE quelle ALTER COLUMN foliooffset TYPE TEXT;
+ALTER TABLE quelle ALTER COLUMN foliooffset DROP DEFAULT;

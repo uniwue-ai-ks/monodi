@@ -1,0 +1,612 @@
+@prefix :     <http://olyro.de/mondiview/> .
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+data:source
+   a          rdfs:Class ;
+   :shortUrlTag "q" ;
+   rdfs:label "Quellen"@de,"Sources"@en,"source"@fr ;
+   :orderBy "4" ;
+   :disablePrintColumn true .
+
+data:sourceQuellensigle
+   a           rdf:Property   ;
+   :headerOrder 0 ;
+   :searchOrder 0 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Quellensigle"@de,"Source siglum"@en,"disparue"@fr ;
+   rdfs:domain data:source    ;
+   rdfs:range  :category        .
+
+data:sourceHerkunftsregion
+   a           rdf:Property      ;
+   :searchOrder 1 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Herkunftsregion"@de,"Region of origin"@en,"disparue"@fr ;
+   rdfs:domain data:source       ;
+   rdfs:range  :category           .
+
+data:sourceHerkunftsort
+   a           rdf:Property   ;
+   :headerOrder 2 ;
+   :searchOrder 2 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Herkunftsort"@de,"Place of origin"@en,"disparue"@fr ;
+   rdfs:domain data:source    ;
+   rdfs:range  :category        .
+
+data:sourceHerkunftsinstitution
+   a           rdf:Property           ;
+   :headerOrder 3 ;
+   :searchOrder 3 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Herkunftsinstitution"@de,"Institution of origin"@en,"disparue"@fr ;
+   rdfs:domain data:source            ;
+   rdfs:range  :category                .
+
+data:sourceOrdenstradition
+   a           rdf:Property      ;
+   :documentPosition [
+    ];
+   rdfs:label  "Ordenstradition"@de,"Monastic tradition"@en,"disparue"@fr ;
+   rdfs:domain data:source       ;
+   rdfs:range  :string           .
+
+data:sourceQuellentyp
+   a           rdf:Property ;
+   :searchOrder 5 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Quellentyp"@de,"Type of source"@en,"disparue"@fr ;
+   rdfs:domain data:source  ;
+   rdfs:range  :category      .
+
+data:sourceBibliotheksort
+   a           rdf:Property     ;
+   :headerOrder 6 ;
+   :searchOrder 6 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Bibliotheksort"@de,"Location of library"@en,"disparue"@fr ;
+   rdfs:domain data:source      ;
+   rdfs:range  :category          .
+
+data:sourceBibliothek
+   a           rdf:Property  ;
+   :headerOrder 7 ;
+   :searchOrder 7 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Bibliothek"@de,"Library"@en,"disparue"@fr  ;
+   rdfs:domain data:source   ;
+   rdfs:range  :category       .
+
+data:sourceBibliothessignatur
+   a           rdf:Property         ;
+   :headerOrder 8 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Bibliothekssignatur"@de,"Library shelf mark"@en,"disparue"@fr ;
+   rdfs:domain data:source          ;
+   rdfs:range  :string              .
+
+data:sourceDatierung
+   a           rdf:Property ;
+   :headerOrder 4 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Datierung"@de,"Date"@en,"disparue"@fr  ;
+   rdfs:domain data:source  ;
+   rdfs:range  :category      .
+
+data:sourceJahrhundert
+   a           rdf:Property ;
+   :searchOrder 9 ;
+   :documentPosition [
+    ];
+   rdfs:label  "Jahrhundert"@de,"Century"@en,"disparue"@fr  ;
+   rdfs:domain data:source  ;
+   rdfs:range  :category      .
+
+data:sourceJahrhundert
+   :hasPossibleValue
+      [ :value "11."; rdfs:label "11. Jahrhundert"@de,"11th century"@en,"disparue"@fr],
+      [ :value "12."; rdfs:label "12. Jahrhundert"@de,"12th century"@en,"disparue"@fr],
+      [ :value "13."; rdfs:label "13. Jahrhundert"@de,"13th century"@en,"disparue"@fr],
+      [ :value "14."; rdfs:label "14. Jahrhundert"@de,"14th century"@en,"disparue"@fr],
+      [ :value "15."; rdfs:label "15. Jahrhundert"@de,"15th century"@en,"disparue"@fr].
+
+data:sourceKommentar
+   a           rdf:Property ;
+   :documentPosition [
+    ];
+   rdfs:label  "Kommentar"@de,"Comment"@en,"disparue"@fr  ;
+   rdfs:domain data:source  ;
+   rdfs:range  :string      .
+
+data:sourceEditierteGattungen
+   a                 rdf:Property       ;
+   :searchOrder      10                 ;
+   :documentPosition [ ]                ;
+   rdfs:label        "Edierte Gattungen"@de,"Edited genres"@en,"disparue"@fr;
+   rdfs:domain       data:source        ;
+   rdfs:range        :category          .
+
+data:sourceBeschreibung
+   a                 rdf:Property        ;
+   :documentPosition [ :main 1]          ;
+   rdfs:label        "Beschreibung"@de,"Description"@en,"disparue"@fr      ;
+   rdfs:domain       data:source         ;
+   rdfs:range        :htmlContent        .
+
+data:document
+   a          rdfs:Class ;
+   rdfs:label "Kumulatives Korpus"@de,"Cumulative Corpus"@en,"Corpus cumulatif"@fr ;
+   :referenceAttribute data:documentQuelle;
+   :referenceClass     data:source;
+   :referenceLabel     "Dokumente anzigen"@de,"Show documents"@en,"disparue"@fr ;
+   :shortUrlTag "d" ;
+   :comparableInSynopsis [];
+   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openIIIFText "Original Anzeigen"@de,"missing"@en,"disparue"@fr ;
+   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
+   :orderBy "3";
+   :conditionalOpenText [
+        :property data:publish;
+        :check [
+                :order 0;
+                :value "meta-only";
+                :result "anzeigen"
+        ];
+        :defaultResult "anzeigen"
+   ].
+
+data:documentEdiert
+   a          rdfs:Class ;
+   rdfs:label "Edition (ED)"@de,"Edition (ED)"@en,"Edition (ED)"@fr ;
+   :referenceAttribute data:documentQuelle;
+   :referenceClass     data:source;
+   :comparableInSynopsis [];
+   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
+   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"ediert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
+   :orderBy "0";
+   :conditionalOpenText [
+        :property data:publish;
+        :check [
+                :order 0;
+                :value "meta-only";
+                :result "anzeigen"
+        ];
+        :defaultResult "anzeigen"
+   ].
+
+data:documentTranskribiert
+   a          rdfs:Class ;
+   rdfs:label "Transkriptionen (TR)"@de,"Transcriptions (TR)"@en,"Transcriptions (TR)"@fr ;
+   :referenceAttribute data:documentQuelle;
+   :referenceClass     data:source;
+   :comparableInSynopsis [];
+   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
+   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"transkribiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
+   :orderBy "1";
+   :conditionalOpenText [
+        :property data:publish;
+        :check [
+                :order 0;
+                :value "meta-only";
+                :result "anzeigen"
+        ];
+        :defaultResult "anzeigen"
+   ].
+
+data:documentZitiert
+   a          rdfs:Class ;
+   rdfs:label "Graduale Synopticum (GS)"@de,"Graduale Synopticum (GS)"@en,"Graduale Synopticum (GS)"@fr ;
+   :referenceAttribute data:documentQuelle;
+   :referenceClass     data:source;
+   :comparableInSynopsis [];
+   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
+   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"zitiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
+   :orderBy "2";
+   :conditionalOpenText [
+        :property data:publish;
+        :check [
+                :order 0;
+                :value "meta-only";
+                :result "anzeigen"
+        ];
+        :defaultResult "anzeigen"
+   ].
+
+data:documentQuelle
+    a           rdf:Property ;
+    rdfs:label  "Aus Quelle"@de,"From Source"@en,"De la source"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+      
+data:documentQuelle_id
+    a           rdf:Property ;
+    :searchOrder 5 ;
+    :documentRightOrder 2 ;
+    rdfs:label  "Quellensigle"@de,"Source siglum"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+      
+data:documentDokumenten_id
+    a           rdf:Property ;
+    :headerOrder 0 ;
+    :searchOrder 0 ;
+    :documentPosition [
+       :header 4 ;
+       :synopsisId 1
+    ];
+    :alternativeSortAttribute data:documentDokumenten_idA;
+    rdfs:label  "Quelle - Folio - Zeile"@de,"Source - Folio - Line"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+      
+
+data:documentGattung1
+    a           rdf:Property ;
+    :headerOrder 1 ;
+    :searchOrder 1 ;
+    :documentPosition [
+       :right 0 ;
+       :header 1
+    ];
+    rdfs:label  "Gattung"@de,"Genre"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+      
+data:documentGattung2
+    a           rdf:Property ;
+    :documentPosition [
+       :right 1
+    ];
+    rdfs:label  "2. Gattung"@de,"2. Genre"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+      
+data:documentFesttag
+    a           rdf:Property ;
+    :headerOrder 2 ;
+    :searchOrder 2 ;
+    rdfs:label  "Festtag"@de,"Feast day"@en,"disparue"@fr  ;
+    :documentPosition [
+       :right 3 ;
+    ];
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+      
+data:documentFeier
+    a           rdf:Property ;
+    rdfs:label  "Feier"@de,"Service"@en,"disparue"@fr  ;
+    :documentPosition [
+       :right 4 ;
+    ];
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+
+data:documentTextinitium
+    a           rdf:Property ;
+    :headerOrder 0 ;
+    :searchOrder 0 ;
+    :documentPosition [
+       :header 0 ;
+       :synopsis 0
+    ];
+    rdfs:label  "Textinitium"@de,"Text incipit"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+
+data:documentBibliographischerverweis
+    a           rdf:Property ;
+    :headerOrder 3 ;
+    :searchOrder 3 ;
+    rdfs:label  "Nachweis Text"@de,"Reference, text"@en,"disparue"@fr  ;
+    :alternativeSortAttribute data:documentBibliographischerverweisA;
+    :documentPosition [
+       :header 2;
+       :synopsis: 1
+    ];
+    rdfs:domain data:document  ;
+    rdfs:range  :category      .
+
+data:documentDruckausgabe
+    a           rdf:Property ;
+    rdfs:label  "Druckausgabe"@de,"Print volume"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+
+data:documentZeilenstart
+    a           rdf:Property ;
+    rdfs:label  "Zeilenstart"@de,"missing"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+
+data:documentFoliostart
+    a           rdf:Property ;
+    rdfs:label  "Foliostart"@de,"missing"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+      
+data:documentKommentar
+    a           rdf:Property ;
+    rdfs:label  "Kommentar"@de,"Comment"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :string      .
+
+data:documentNotes
+    a           rdf:Property ;
+    :documentPosition [
+       :main 0
+    ];
+    rdfs:label  "Noten"@de,"Pitches"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    rdfs:range  :imageCollection.
+
+data:documentEditionsstatus
+    a                 rdf:Property ;
+    rdfs:label        "Status"@de,"Status"@en,"disparue"@fr  ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :category    ;
+    :searchOrder      5 ;
+    :headerOrder      11;
+    :documentPosition [ ] ;
+    :hasPossibleValue
+       [ :value "ediert"; rdfs:label "Edition"@de,"Edition"@en,"disparue"@fr],
+       [ :value "zitiert"; rdfs:label "Graduale Synopticum"@de,"Graduale Synopticum"@en,"Graduale Synopticum"@fr],
+       [ :value "transkribiert"; rdfs:label "Transkription"@de,"Transcription"@en,"transcribed"@fr];
+    :mapValues 
+       [ :value "ediert"; rdfs:label "ED"@de,"ED"@en,"ED"@fr],
+       [ :value "zitiert"; rdfs:label "GS"@de,"GS"@en,"GS"@fr],
+       [ :value "transkribiert"; rdfs:label "TR"@de,"TR"@en,"TR"@fr].
+
+data:documentCriticalApparatus
+    a                 rdf:Property ;
+    rdfs:label        "Kritischer Apparat"@de,"Critical Apparatus"@en,"disparue"@fr  ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :htmlImageCollection ;
+    :documentPosition [
+       :popup 1
+    ].
+
+data:fullText
+    a              rdf:Property ;
+    rdfs:label     "Volltext"@de,"Complete text"@en,"disparue"@fr  ;
+    :searchOrder   6 ;
+    rdfs:domain    data:document  ;
+    :searchPreview [
+        :label "Volltext"@de,"Complete text"@en,"disparue"@fr;
+        :config [
+            :contextKind "words";
+            :contextCount 5;
+            :maxDistanceRatio 0.5;
+        ]
+    ];
+    :normalization [
+        :attribute data:fullTextNormalized;
+        :normalizer """value => value.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/\\s+/g, "").replace(/-/g, "")"""
+    ];
+    rdfs:range     :string.
+
+data:fullTextNormalized
+    a                 rdf:Property ;
+    rdfs:label        "Volltext (normalizisiert)"@de,"Complete text (normalizied)"@en,"Complete text (normalizied)"@fr  ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :string.
+
+data:pitches
+    a                 rdf:Property ;
+    rdfs:label        "Tonhöhen"@de,"Pitches"@en,"disparue"@fr  ;
+    :searchOrder      7 ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :substringSearchText.
+
+data:intervals
+    a                 rdf:Property ;
+    rdfs:label        "Intervalle"@de,"Intervals"@en,"disparue"@fr  ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :substringSearchText.
+
+data:directions
+    a                 rdf:Property ;
+    rdfs:label        "Richtungen"@de,"Contours"@en,"disparue"@fr  ;
+    rdfs:domain       data:document  ;
+    rdfs:range        :substringSearchText.
+
+
+data:Melodiennummer_Katalog
+   a rdf:Property ;
+   rdfs:label "Nachweis Melodie"@de,"Reference, melody"@en,"disparue"@fr ;
+    :alternativeSortAttribute data:Melodiennummer_KatalogA;
+   :searchOrder 4;
+   :headerOrder 4;
+    :documentPosition [
+       :header 3
+    ];
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Bezugsgesang
+   a rdf:Property ;
+   rdfs:label "Bezugsgesang"@de,"Reference, chant"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Melodie_Standard
+   a rdf:Property ;
+   rdfs:label "Melodiename"@de,"Melody name"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   :searchOrder      11 ;
+   rdfs:range :category.
+
+data:Endseite
+   a rdf:Property ;
+   rdfs:label "Endseite"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Startposition
+   a rdf:Property ;
+   rdfs:label "Startposition"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Zusatz_zu_Textinitium
+   a rdf:Property ;
+   rdfs:label "Zusatz zu Textinitium"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Referenz_auf_Spiel
+   a rdf:Property ;
+   rdfs:label "Referenz auf Spiel"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Endzeile
+   a rdf:Property ;
+   rdfs:label "Endzeile"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Nachtragsschicht
+   a rdf:Property ;
+   rdfs:label "Nachtragsschicht"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:%C3%9Cberlieferungszustand
+   a rdf:Property ;
+   rdfs:label "Überlieferungszustand"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Melodie_Quelle
+   a rdf:Property ;
+   rdfs:label "Melodie Quelle"@de,"missing"@en,"disparue"@fr ;
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+data:Editor
+   a rdf:Property ;
+   rdfs:label "Editor"@de,"Editor"@en,"disparue"@fr ;
+   :searchOrder      10 ;
+    :documentPosition [
+       :header 5
+    ];
+   rdfs:domain data:document;
+   rdfs:range :category.
+
+
+data:rSourceQuellensigle
+   a   rdf:Property ;
+   rdfs:label "Quellensigle"@de,"Source siglum"@en,"disparue"@fr ;
+   :documentPosition [
+      :right 5 
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceQuellensigle .
+
+data:rSourceBibliotheksorta
+   a rdf:Property ;
+   rdfs:label "Bibliotheksort"@de,"Location of library"@en,"disparue"@fr ;
+   :documentPosition [
+      :right 6 ;
+      :synopsis 5
+   ]  ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceBibliotheksort .
+
+data:rSourceBibliothek             a   rdf:Property ;
+   rdfs:label "Bibliothek"@de,"Library"@en,"disparue"@fr           ;
+   :documentPosition [
+      :right 7 ;
+      :synopsis 6
+   ]  ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceBibliothek .
+
+data:rSourceBibliothessignatur
+   a rdf:Property ;
+   rdfs:label "bibliothekssignatur"@de,"Library shelf mark"@en,"disparue"@fr  ;
+   :documentPosition [
+      :right 8 ;
+      :synopsis 7
+   ]  ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceBibliothessignatur .
+
+data:rSourceQuellentyp
+   a rdf:Property ;
+   rdfs:label "Quellentyp"@de,"Type of source"@en,"disparue"@fr           ;
+   :documentPosition [
+      :right 9
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceQuellentyp .
+
+data:rSourceHerkunftsort 
+   a rdf:Property ;
+   rdfs:label "Herkunftsort"@de,"Place of origin"@en,"disparue"@fr         ;
+   :searchOrder 15 ;
+   :headerOrder 10;
+   :documentPosition [
+      :right 10;
+      :synopsis 2
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceHerkunftsort .
+
+data:rSourceHerkunftsinstitution 
+   a rdf:Property ;
+   rdfs:label "Herkunftsinstitution"@de,"Institution of origin"@en,"disparue"@fr ;
+   :documentPosition [
+      :right 11;
+      :synopsis 3
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceHerkunftsinstitution .
+
+data:rSourceDatierung
+   a rdf:Property ;
+   rdfs:label "Datierung"@de,"Date"@en,"disparue"@fr ;
+   :headerOrder 9;
+   :searchOrder 15 ;
+   :documentPosition [
+      :right 12;
+      :synopsis 4
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceDatierung .
+
+data:rSourceHerkunftsregion
+   a rdf:Property ;
+   rdfs:label "Herkunftsregion"@de,"Region of origin"@en,"disparue"@fr ;
+   :searchOrder 16 ;
+   :documentPosition [
+      :right 13
+   ] ;
+   rdfs:domain data:document ;
+   rdfs:range :reference ;
+   :referenceField data:sourceHerkunftsregion .
+
+data:version a rdf:Property .

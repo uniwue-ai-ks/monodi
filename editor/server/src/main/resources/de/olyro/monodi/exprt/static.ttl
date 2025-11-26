@@ -1,0 +1,127 @@
+@prefix :     <http://olyro.de/mondiview/>
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#>.
+
+:infoButtonLink :hasContent
+        "/about#benutzerhinweise"@de,
+        "/about#benutzerhinweise"@en,
+        "/about#benutzerhinweise"@fr.
+
+:tabTitle :hasContent "CM digital"@de, "CM digital"@en.
+:headerTitle :hasContent "CM digital"@de, "CM digital"@en.
+:copyright :hasContent
+        "© 2020-2024 Corpus Monodicum"@de,
+        "© 2020-2024 Corpus Monodicum"@en,
+        "© 2020-2024 Corpus Monodicum"@fr.
+
+:footer :hasContent
+        "Akademie der Wissenschaften und der Literatur Mainz"@de,
+        "Akademie der Wissenschaften und der Literatur Mainz"@en,
+        "Akademie der Wissenschaften und der Literatur Mainz"@fr.
+
+:mainPagePreSearches :hasContent 
+        """
+        <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
+        <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
+        <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
+        <h3 class="cm-main_h3">Digitale Ausgabe | Beta-Version 1.0 | 2024</h3>
+        <p class="cm-main_herausgeber">
+                Im Auftrag der Akademie der Wissenschaften und der Literatur | Mainz<br>
+                am Zentrum für Philologie und Digitalität der Universität Würzburg<br>
+                <span class="cm-main_ver-space">unter Leitung von</span><br>Andreas Haug und Frank Puppe<br>
+                <span class="cm-main_ver-space">herausgegeben von</span><br>
+                Charles M. Atkinson • Gunilla Björkvall • Gionata Brusa • David Catalunya • Maria Dorofeev • Jasmin Hartmann-Strauß • Elaine
+                Stratton-Hild<br>Isabel Kraft • Michael Klaper • Salah Eddin Maraqa • Andreas Pfisterer • Anna Sanda • Konstantin Voigt • Hanna Zühlke<br>
+                <span class="cm-main_ver-space">Datenmodellierung und Forschungsdatenmanagement: Tim Eipert</span>
+        </p>
+        """@de,
+        """
+        <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
+        <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
+        <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
+        <h3 class="cm-main_h3">Digital Edition | Beta version 1.0 | 2024</h3>
+        <p class="cm-main_herausgeber">
+                Commissioned by the Akademie der Wissenschaften und der Literatur | Mainz<br>
+                at the Center for Philology and Digitality of the University of Würzburg<br>
+                <span class="cm-main_ver-space">under the direction of</span><br>Andreas Haug and Frank Puppe<br>
+                <span class="cm-main_ver-space">edited by</span><br>
+                Charles M. Atkinson • Gunilla Björkvall • Gionata Brusa • David Catalunya • Maria Dorofeev • Jasmin Hartmann-Strauß • Elaine
+                Stratton-Hild<br>Isabel Kraft • Michael Klaper • Salah Eddin Maraqa • Andreas Pfisterer • Anna Sanda • Konstantin Voigt • Hanna Zühlke<br>
+                <span class="cm-main_ver-space">Data modeling and research data management: Tim Eipert</span>
+        </p>
+        """@en.
+
+:mainPagePostSearches :hasContent
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@de,
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@en,
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@fr.
+
+:customJavascript :hasContent """
+window.addEventListener("message", ev => {
+
+  if (typeof ev.data !== "string") return;
+
+  const [type, data] = ev.data.split(":", 2);
+
+  if (type !== "monodi-open-popup") return;
+
+  const popupButton = document.querySelector("button.open-popup");
+  if (!popupButton) return;
+
+  popupButton.click();
+  setTimeout(() => {
+    const all = document.querySelectorAll("[id^='popup__autoopen__']");
+    const current = document.getElementById("popup__autoopen__" + data);
+
+    for (const el of all) {
+      el.closest(".monodi-comment-block")?.classList.remove("active");
+    }
+
+    current?.closest(".monodi-comment-block")?.classList.add("active");
+    current?.closest(".monodi-comment-block")?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, 100);
+});
+""".
+
+data:about
+   :position [ :right 0; ];
+   :hasTitle "Über uns"@de, "About us"@en, "À propos"@fr;
+   :hasRoute "about".
+
+data:impressum
+   :position [ :footer 1; ];
+   :hasTitle "Impressum"@de, "Imprint"@en, "Impressum"@fr;
+   :hasRoute "impressum".
+
+data:foerdervermerk
+   :position [ :footer 2; ];
+   :hasTitle "Fördervermerk"@de, "Sponsorship"@en, "Fördervermerk"@fr;
+   :hasRoute "foerdervermerk".
+
+data:datenschutz
+   :position [ :footer 3; ];
+   :hasTitle "Datenschutz"@de, "Privacy statement"@en, "Datenschutz"@fr;
+   :hasRoute "datenschutz".
+
+data:feedback
+   :position [ :footer 4; ];
+   :hasTitle "Feedback"@de, "Feedback"@en, "Feedback"@fr;
+   :hasRoute "feedback".

@@ -1,0 +1,146 @@
+<input style="display: none" type="file" id="document-upload" (change)="handleFile()" />
+<div class="container">
+  <div class="row mt-5" *ngIf="!document">
+    <div class="col">
+      Das Dokument lädt. Wenn es nicht innerhalb einiger weniger Sekunden geladen ist, hat vermutlich jemand das
+      Dokumente gelöscht.
+    </div>
+  </div>
+  <div class="mt-5" *ngIf="document">
+    <div class="row mt-5">
+      <div class="col">
+        <h3>
+          Dokument -
+          {{document.textinitium}} -
+          {{document.dokumenten_id}}
+        </h3>
+      </div>
+    </div>
+    <div class="row internal-id-row">
+      <div class="col">
+        <span>Intere Id:</span>
+        <input [readOnly]="true" id="document-id-input" [attr.value]="document.id" />
+        <button (click)="copyIdToClipboard()" class="btn btn-outline-secondary">Kopieren</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-outline-secondary" type="button" (click)="collapseMetadata = !collapseMetadata">
+          Metadaten verstecken/anzeigen
+        </button>
+        <div id="document-data" [ngbCollapse]="collapseMetadata">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td> Quelle ID </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.quelle_id"> </td>
+              </tr>
+              <tr>
+                <td> Dokumenten ID </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.dokumenten_id"> </td>
+              </tr>
+              <tr>
+                <td> Gattung1 </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.gattung1"> </td>
+              </tr>
+              <tr>
+                <td> Gattung2 </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.gattung2"> </td>
+              </tr>
+              <tr>
+                <td> Festtag </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.festtag"> </td>
+              </tr>
+              <tr>
+                <td> Feier </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.feier"> </td>
+              </tr>
+              <tr>
+                <td> Textinitium </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.textinitium"> </td>
+              </tr>
+              <tr>
+                <td> Bibliographischerverweis </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.bibliographischerverweis"> </td>
+              </tr>
+              <tr>
+                <td> Druckausgabe </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.druckausgabe"> </td>
+              </tr>
+              <tr>
+                <td> Zeilenstart </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.zeilenstart"
+                    (ngModelChange)="recalcId()"> </td>
+              </tr>
+              <tr>
+                <td> Foliostart </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.foliostart"
+                    (ngModelChange)="recalcId()"> </td>
+              </tr>
+              <tr>
+                <td> Kommentar </td>
+                <td> <input class="disabled-input" disabled=true [(ngModel)]="document.kommentar"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <h3>Noten</h3>
+        <!--<app-root-container *ngIf="document" [data]="cont"></app-root-container>-->
+        <app-root-section [zipper]="[]" [readOnly]="readOnly" *ngIf="cont" [data]="cont" [comments]="cont.comments"
+          [documentType]="cont.documentType"></app-root-section>
+      </div>
+    </div>
+    <div class="bottom-padding">
+    </div>
+  </div>
+</div>
+
+<ng-template #textImport let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Text importieren</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <select class="form-control" [(ngModel)]="importType">
+      <option *ngFor="let it of importTypes">{{it}}</option>
+    </select>
+    <div>
+      <textarea class="w-100" [(ngModel)]="importText"></textarea>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="doImport()">Importieren</button>
+    </div>
+    <div *ngIf="textImportErrors.length > 0" class="import-errors">
+      <ul>
+        <li *ngFor="let error of this.textImportErrors">{{error}}</li>
+      </ul>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #globalComment let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Globaler Kommentar</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="cont.globalComment">
+      <p>
+        <button class="btn btn-outline-secondary" (click)="deleteGlobalComment()">Löschen</button>
+      </p>
+      <app-comment-tree [tree]="cont.globalComment" (treeEvent)="handleGlobalCommentTreeEvent($event)"
+        [originalCreator]="createNewZeileContainerForTreeComment" />
+    </div>
+    <div *ngIf="!cont.globalComment">
+      <button class="btn btn-primary" (click)="createGlobalComment()">Erstellen</button>
+    </div>
+  </div>
+</ng-template>

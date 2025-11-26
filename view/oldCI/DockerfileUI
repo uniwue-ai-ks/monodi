@@ -1,0 +1,13 @@
+FROM node:13.7.0-stretch
+
+RUN mkdir /ui
+
+ADD ui/build/ /ui
+ADD entrypointUI.sh /ui/entrypoint.sh
+
+WORKDIR /ui
+
+EXPOSE 3000
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+

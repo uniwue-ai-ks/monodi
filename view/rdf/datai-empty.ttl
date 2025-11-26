@@ -1,0 +1,90 @@
+@prefix :     <http://olyro.de/mondiview/> .
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+data:diwDocument
+   a rdfs:Class;
+   :shortUrlTag "diwd";
+   rdfs:label "Dokument"@de,"Document"@en.
+
+
+data:diwArticleType
+   a rdf:Property;
+   rdfs:label "Artikeltyp"@de,"Article type"@en;
+   :headerOrder 0 ;
+   :searchOrder 0 ;
+   :documentPosition [ ];
+   rdfs:domain data:diwDocument;
+   rdfs:range :category.
+
+data:diwRegion
+   a rdf:Property;
+   rdfs:label "Region"@de,"Region"@en;
+   :headerOrder 1 ;
+   :searchOrder 1 ;
+   :documentPosition [ ];
+   rdfs:domain data:diwDocument;
+   rdfs:range :category.
+
+data:diwAbroad
+   a rdf:Property;
+   rdfs:label "Land"@de,"Land"@en;
+   :headerOrder 2 ;
+   :searchOrder 2 ;
+   :documentPosition [ ];
+   rdfs:domain data:diwDocument;
+   rdfs:range :category.
+
+data:diwTitle
+   a rdf:Property ;
+   :headerOrder 3 ;
+   :searchOrder 3 ;
+   :documentPosition [
+      :header 0 ;
+      :synopsis 0
+   ];
+   rdfs:label "Titel"@de,"Title"@en;
+   rdfs:domain data:diwDocument  ;
+   rdfs:range :category      .
+
+data:diwYear
+   a rdf:Property ;
+   :headerOrder 4 ;
+   :searchOrder 4 ;
+   :searchSpan true ;
+   :documentPosition [
+      :header 0 ;
+      :synopsis 0
+   ];
+   rdfs:label "Jahr"@de,"Year"@en;
+   rdfs:domain data:diwDocument  ;
+   rdfs:range :number      .
+
+data:diwDocumentContent
+   a rdf:Property;
+   :documentPosition [ :main 1];
+   rdfs:label "Inhalt"@de,"Content"@en;
+   rdfs:domain data:diwDocument;
+   rdfs:range :htmlContent.
+
+data:diwDocumentText
+   a rdf:Property;
+   :searchOrder 5;
+   rdfs:label "Volltext"@de,"Full text"@en;
+   rdfs:domain data:diwDocument;
+   rdfs:range :string.
+
+data:diwDocumentPages
+    a           rdf:Property ;
+    :documentPosition [
+       :main 0
+    ];
+    rdfs:label  "Seiten"@de,"Pages"@en;
+    rdfs:domain data:diwDocument  ;
+    rdfs:range  :imageCollection.
+
+
+data:version a rdf:Property .
+data:version rdfs:label """2022-11-25T14:47:22.473Z""".

@@ -1,0 +1,9 @@
+server/.idea/
+server/project/project/
+server/project/target/
+server/target/
+server/.bloop/
+server/project/.bloop/
+server/.metals/
+target/
+.idea/

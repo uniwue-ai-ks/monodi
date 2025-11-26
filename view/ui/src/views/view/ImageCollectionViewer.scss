@@ -1,0 +1,30 @@
+@import "../app/App.scss";
+
+.iifViewer {
+  height: 100%;
+
+  .dragon {
+    padding-top: 2em;
+    top: 0;
+    position: sticky;
+  }
+
+  #openseadragon1 {
+    height: 800px;
+  }
+}
+
+.document-pages-image {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.document-pages {
+  display: grid;
+  grid-template-columns: 100%;
+}
+
+.document-image {
+  display: grid;
+  grid-template-columns: 100%;
+}

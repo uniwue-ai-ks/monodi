@@ -1,0 +1,13 @@
+build:
+  script:
+    - cd ui && npm install && react_app_svg_url="https://olyro.de/files/svgs/" react_app_fuseki_url="https://monodiviewerfuseki.olyro.de/tdb2-database/query?query=" npm run-script build && cd ..
+    - docker build -f dockerfileui -t monodiviewer:$ci_commit_sha .
+    - docker build -f dockerfilefuseki -t monodiviewerfuseki:$ci_commit_sha .
+    - docker kill monodiviewer || true
+    - docker kill monodiviewerfuseki || true
+    - docker rm monodiviewer || true
+    - docker rm monodiviewerfuseki || true
+    - docker run -d -t -p 10050:3000 --restart=always --name monodiviewer monodiviewer:$ci_commit_sha
+    - docker run -d -t -p 10040:3030 --restart=always --name monodiviewerfuseki monodiviewerfuseki:$ci_commit_sha
+  only:
+    - master

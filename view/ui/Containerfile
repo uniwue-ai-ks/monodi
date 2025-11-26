@@ -1,0 +1,31 @@
+# pull official base image
+FROM node:22-alpine AS builder
+
+# set working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent && npm install react-scripts@3.4.1 -g --silent
+# add app
+COPY public/ /app/public
+COPY src/ /app/src
+COPY tsconfig.json /app/
+COPY index.html /app/index.html
+RUN VITE_FUSEKI_URL="/fuseki/tdb2-database/query?query=" VITE_PDF_URL="/resources/pdf/" VITE_SVG_URL="/resources/svg/" npm run build
+
+FROM caddy:2-alpine
+
+RUN apk add gettext-envsubst
+COPY --from=builder /app/dist/ /srv
+RUN mv /srv/index.html /srv/index.html.template
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY entrypoint.sh /bin/entrypoint.sh
+ENV HTML_TITLE="Monodi viewer"
+
+ENTRYPOINT ["/bin/entrypoint.sh"]
+CMD [ "caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile" ]

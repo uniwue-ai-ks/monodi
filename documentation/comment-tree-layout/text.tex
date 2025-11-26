@@ -1,0 +1,6 @@
+\begin{tikzpicture}
+\node[inner sep=0,draw=green,thick] (text) {Some Texty};
+\draw[-,blue!20] ($ (text.base west) - (0.5cm, 0) $) node[anchor=east] {B} -- ++(3cm, 0);
+\draw[-,blue!20] ($ (text.base west) - (1.0cm, 0.2\baselineskip) $) node[anchor=east] {D} -- ++(3cm, 0);
+\draw[-,blue!20] ($ (text.base west) - (1.0cm, -0.6\baselineskip) $) node[anchor=east] {A} -- ++(3cm, 0);
+\end{tikzpicture}

@@ -1,0 +1,7 @@
+#!/bin/sh
+# Example script using pass to auto-login. Copy to login.sh to enable
+harbor_pass_path="websites/harbor-ls6.informatik.uni-wuerzburg.de"
+
+pass_entry="$(pass $harbor_pass_path)"
+user="$(echo "$pass_entry" | grep -oP '(?<=user: ).*')"
+echo "$pass_entry" | head -n 1 | podman login harbor-ls6.informatik.uni-wuerzburg.de --username $user --password-stdin

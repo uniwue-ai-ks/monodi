@@ -1,0 +1,26 @@
+.pdf-pagination {
+  display: flex;
+  justify-content: center;
+
+  button,
+  span {
+    margin: 0.5em;
+  }
+
+  button:disabled {
+    visibility: hidden;
+  }
+}
+
+.pdfviewer {
+  overflow: auto;
+
+  mark.search-result {
+    color: transparent;
+    opacity: 0.3;
+  }
+}
+
+.pdf-zoomcontrols {
+  padding-left: 2em;
+}

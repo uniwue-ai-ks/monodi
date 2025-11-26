@@ -1,0 +1,70 @@
+.custom-cover-component {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid gray;
+    padding: 0.5em;
+
+    button {
+      background-color: #bd5649;
+      font-size: 1em;
+      border: 1px solid var(--foregroundLightGrey);
+      padding: 0.5em 2.2em 0.7em;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.03s ease-in;
+    }
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1rem;
+  }
+
+  .text-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 1rem;
+  }
+
+  .v-skip-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+
+    >*:nth-child(2) {
+      grid-column: 3 / 4;
+    }
+  }
+
+  .errors {
+    max-height: 10em;
+    padding: 0.5em;
+    color: red;
+  }
+
+  .size {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    justify-content: flex-end;
+
+    input {
+      width: 5em;
+    }
+
+    select {
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      border: 1px solid var(--foregroundLightGrey);
+      font-size: 1em;
+    }
+  }
+}

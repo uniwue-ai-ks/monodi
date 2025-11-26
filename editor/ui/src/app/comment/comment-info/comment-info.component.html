@@ -1,0 +1,77 @@
+<div class="info-box" [ngClass]="{'open': isOpen }">
+  <div class="content btn btn-outline-secondary toggle" (click)="toggleOpen()">Info</div>
+  <div class="info-box-content">
+
+    <div class="part">Alte und neue Kommentare</div>
+    <p>
+      Hier können Sie Kommentare zu den Noten eingeben. Diese bestehen aus 4 Teilen:
+    </p>
+
+    <ul>
+      <li>Einem Kommentar</li>
+      <li>Der Emendation</li>
+      <li>Einer Zeile</li>
+      <li>Einem Gitter</li>
+    </ul>
+
+    <p>
+      Der Kommentar, die Emendation und die Zeile bilden den alten Teil.
+      Die Emendation und das Gitter bilden den neuen Teil.
+    </p>
+
+    <p>
+      Für neue Kommentare nutzen Sie also bitte nur die Emendation und das Gitter.
+      Die alten Kommentarteile können bestehen bleiben, müssen also nicht entfernt werden.
+      Der Endnutzer auf der Corpus-Monodicum Webseite sieht den alten Teil nur, wenn ein
+      neuer nicht existiert.
+    </p>
+
+    <div class="part">Aufbau neuer Kommentar</div>
+    <p>
+      Der neue Kommentar besteht aus einer Reihe an (möglicherweise geschachtelten) Elementen.
+      Die möglichen Elemente sind:
+    </p>
+
+    <ul>
+      <li>Ein Gitter, um andere Elemente anzuorden</li>
+      <li>Ein Text, bei dem Sie Freitext eingeben können</li>
+      <li>Einer eckigen Klammer</li>
+      <li>Einer Notenzeile</li>
+    </ul>
+
+    <div class="part">Beispiel für einen neuen Kommentar</div>
+
+    <p>
+      Wenn Sie zum Beispiel einen Kommentar erstellen wollen, der Links die original Noten hat,
+      dann eine Klammer und dann eine korrigierte Notenzeile, dann können Sie das so machen:
+    </p>
+
+    <ol>
+      <li>Klicken Sie auf "Gitter hinzufügen".</li>
+      <li>Weil Sie nun 3 Unterlemente anordnen wollen, klicken Sie auf "Gitter".</li>
+      <li>Fügen Sie dem Gitter dann über den "+"-Button drei neue Spalten hinzu.</li>
+      <li>Klicken Sie in der ersten Spalte auf "Noten". Die Originalzeile wird automatisch eingefügt.</li>
+      <li>Klicken Sie in der zweiten Spalte auf Klammer.</li>
+      <li>Klicken Sie in der dritten Spalte auf "Noten".</li>
+      <li>Die rechte Notenzeile können Sie nun nach belieben editieren.</li>
+    </ol>
+
+    <p>
+      Fertig. Sie könnten die Kommentardialog nun schließen und das Dokument speichern.
+    </p>
+
+    <div class="part">Textformatierung</div>
+    <p>
+      In Textblöcken können Sie nicht nur normalen Text eingeben, sondern mit einer
+      Markdown-ähnlichen Syntax ihren Text auch formatieren. Der Text den Sie eingeben wird dem
+      Endnutzer auf der veröffentlichten Seite standardmäßig in Italics angezeigt. Sie können
+      aber auch andere Formatierungen wählen:
+    </p>
+
+    <ul>
+      <li>Normaler (nicht italic) Text: Packen Sie den Text in <code>((</code> und <code>))</code> ein.</li>
+      <li>Kapitälchen Text: Packen Sie den Text in <code>[[</code> und <code>]]</code> ein.</li>
+      <li>Text mit einem Ramen: Packen Sie den Text in <code>{{</code> und <code>}}</code> ein.</li>
+    </ul>
+  </div>
+</div>

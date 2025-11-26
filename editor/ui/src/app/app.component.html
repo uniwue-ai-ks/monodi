@@ -1,0 +1,39 @@
+<div class="sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img height="40px" src="assets/logo.svg"/></a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"> <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['sources']">Quellen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['search-source']" >Quellensuche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['search']" >Dokumentensuche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['users']" >Nutzer</a>
+                </li>
+            </ul>
+            <div class="navbar-nav">
+                <a *ngIf="user !== null" class="nav-link" (click)="logout()" [routerLink]="">Logout</a>
+                <a *ngIf="user === null" class="nav-link" [routerLink]="['login']">Login</a>
+            </div>
+        </div>
+    </nav>
+    <div *ngIf="tools && tools.tools.length > 0" class="monodi-tool-bar">
+        <img *ngIf="toolHasParent" (click)="toolsBack()" title="Zurück" src="assets/icons/back.svg"/>
+        <ng-container *ngFor="let tool of tools.tools">
+            <ng-container *ngIf="tool.icon; else other">
+                <img (click)="tool.callback()" [attr.title]="tool.title" [attr.src]="'assets/icons/' + tool.icon + '.svg'"/>
+            </ng-container>
+            <ng-template #other>
+                <span class="source-sigle">{{tool.title}}</span>
+            </ng-template>
+        </ng-container>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+<canvas id="canvas"></canvas>

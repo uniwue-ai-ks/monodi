@@ -1,0 +1,9 @@
+<ng-container [ngSwitch]="data.content.kind">
+  <app-comment-tree-text *ngSwitchCase="'Text'" [data]="data.content" [path]="path"
+    (treeEvent)="treeEvent.emit($event)" />
+  <app-comment-tree-bracket *ngSwitchCase="'Bracket'" />
+  <app-comment-tree-notes *ngSwitchCase="'Notes'" [data]="data.content" [path]="path"
+    (treeEvent)="treeEvent.emit($event)" />
+</ng-container>
+<app-comment-tree-action-dot [supportsSettingContext]="supportsSettingContext()" [path]="path" [data]="data"
+  (treeEvent)="treeEvent.emit($event)" />

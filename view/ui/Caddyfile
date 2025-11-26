@@ -1,0 +1,16 @@
+:80 {
+	handle_path /fuseki/* {
+		reverse_proxy fuseki:3030
+	}
+
+	handle {
+		file_server {
+			browse
+			root /srv
+		}
+		@to-index {
+			not path /fuseki/* /static/* /resources/* /manifest.json /favicon.ico /assets/*
+		}
+		rewrite @to-index /index.html
+	}
+}

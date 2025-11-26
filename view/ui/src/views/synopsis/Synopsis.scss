@@ -1,0 +1,154 @@
+@import "../app/App.scss";
+
+.synopsis-main {
+  margin: var(--main-v-indent) var(--main-h-indent);
+  color: var(--textLevel1);
+
+  pre {
+    margin: 1em;
+    background-color: orange;
+  }
+
+  .tmpdiv {
+    width: 100%;
+    overflow: scroll;
+  }
+
+  .attributes {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1em;
+
+    .entity {
+      flex-shrink: 0;
+      margin: 0 1em;
+
+      &:first-child {
+        margin-left: 0px;
+      }
+
+      &:last-child {
+        margin-right: 0px;
+      }
+
+      max-width: 25em;
+      background-color: var(--backgroundLightGrey);
+
+      .header {
+        background-color: var(--backgroundDark);
+        color: var(--foregroundAccentLight);
+        font-weight: bold;
+        font-size: 120%;
+        text-align: center;
+        padding: 0.2em 0;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+      }
+    }
+  }
+
+  .row-content {
+    overflow-x: auto;
+    display: grid;
+    grid-template-columns: max-content minmax(max-content, 1fr);
+    border-left: 0.5em solid rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.7em;
+    /* padding-left: 0.5em; */
+
+    /* should always display the scrollbar on ios */
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 7px;
+      height: 7px;
+    }
+
+    .identifier {
+      background-color: white;
+      overflow: hidden;
+      text-align: center;
+      padding: 0.2em;
+      position: sticky;
+      left: 0px;
+      display: grid;
+      align-content: center;
+    }
+
+    .content {
+      padding: 0.2em 0.2em 0.2em 2em;
+      margin: 0px;
+
+      object {
+        display: block;
+      }
+
+      &.empty {
+        height: 2em;
+      }
+    }
+  }
+
+  .filter {
+    width: 400px;
+    margin: auto;
+
+    .filter-input-box {
+      //width: 100%;
+      height: 1rem;
+      width: 20rem;
+    }
+
+    .filter-help-text {
+      font-size: 0.8em;
+      color: var(--textLevel4);
+      text-align: center;
+      display: block;
+    }
+
+    .filter-input {
+      display: flex;
+      //margin-bottom: 0.5em;
+      font-size: 10px;
+    }
+
+    .filterButton {
+      background-color: #bd5649;
+      font-size: 1em;
+      border: 1px solid var(--foregroundLightGrey);
+      padding: 0.5em 1.2em 0.5em;
+      margin-left: 0.5em;
+      //margin: 0.4em 0.7em 0.4em 0.4em;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.03s ease-in;
+    }
+  }
+
+  .checkboxes {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .navigation {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    width: 200px;
+    margin: auto;
+    font-size: 150%;
+
+    >* {
+      &:hover {
+        background-color: var(--backgroundLightGrey);
+        cursor: pointer;
+      }
+    }
+  }
+}

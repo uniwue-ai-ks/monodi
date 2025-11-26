@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+
+\node[anchor=base] (TA) {Some texty};
+\coordinate (TAA) at ($ (TA.base west) - (0, -0.6 *\baselineskip) $);
+\coordinate (TAD) at ($ (TA.base west) - (0, 0.2 *\baselineskip) $);
+
+\node[anchor=base west] at ($ (TA.base east) + (0.8cm, 0) $) (TB) {Other texty};
+\coordinate (TBA) at ($ (TB.base west) - (0, -0.6 *\baselineskip) $);
+\coordinate (TBD) at ($ (TB.base west) - (0, 0.2 *\baselineskip) $);
+
+\draw[-,thick] ($ (TBA) - (0.5cm, -\stafflinemargin) $) coordinate (BracketA)
+  -- ++ (0.3cm,0) coordinate (BracketB)
+  -- ($ (TBD) - (0.2cm, \stafflinemargin) $) coordinate (BracketC)
+  -- ++(-0.3cm, 0) coordinate (BracketD)
+;
+
+\node[
+    draw,
+    minimum width=2cm,
+    minimum height=4cm,
+    anchor=west,
+    pattern=north east lines
+  ] (sub grid) at ($ (TB.base east) + (0.5cm, 0) $) {};
+
+  \draw[red,<->] ($ (sub grid.north east) +(0.1cm, 0) $)
+    -- ($ (sub grid.north east)!0.5!(sub grid.south east) + (0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+  \draw[red,<->] ($ (sub grid.north east)!0.5!(sub grid.south east) + (0.1cm, 0) $)
+    -- ($ (sub grid.south east) +(0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+
+\begin{scope}[on background layer]
+  \draw[thick,blue!20] ($ (TA.base west) - (1.5cm, 0) $) node[anchor=east] (B)  {B}  -- ++(9.7cm, 0);
+  \draw[thick,blue!20] ($ (TA.base west) - (0.5cm, -0.6 *\baselineskip) $) -- ++(9.7cm, 0) node[anchor=west] {A};
+  \draw[thick,blue!20] ($ (TA.base west) - (0.5cm, 0.2 *\baselineskip) $) -- ++(9.7cm, 0)  node[anchor=west] {D};
+  \draw[thick,blue!20] (B.east |- BracketA) node[anchor=east] (BH) {BH} -- ++(9.7cm, 0);
+  \draw[thick,blue!20] (B.east |- BracketD) node[anchor=east] (BL) {BL} -- ++(9.7cm, 0);
+\end{scope}
+
+\end{tikzpicture}

@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+      <h3>Suchanfrage</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="table">
+        <span>Quellensigle</span>         <app-sselect [(input)]="query.quellensigle" [dropdown]="siglaDropdown"></app-sselect>
+        <span>Herkunftsregion</span>      <app-sselect [(input)]="query.herkunftsregion" [dropdown]="regionDropdown"></app-sselect>
+        <span>Herkunftsort</span>         <app-sselect [(input)]="query.herkunftsort" [dropdown]="ortDropdown"></app-sselect>
+        <span>Herkunftsinstitution</span> <app-sselect [(input)]="query.herkunftsinstitution" [dropdown]="institutDropdown"></app-sselect>
+        <span>Ordenstradition</span>      <input class="form-control"  [(ngModel)]="query.ordenstradition">
+        <span>Quellentyp</span>           <app-sselect [(input)]="query.quellentyp" [dropdown]="sourceTypeDropdown"></app-sselect>
+        <span>Bibliotheksort</span>       <app-sselect [(input)]="query.bibliotheksort" [dropdown]="bibliotheksortDropdown"></app-sselect>
+        <span>Bibliothek</span>           <app-sselect [(input)]="query.bibliothek" [dropdown]="bibliothekDropdown"></app-sselect>
+        <span>Bibliothekssignatur</span>  <app-sselect [(input)]="query.bibliothekssignatur" [dropdown]="bibliothekssignaturDropdown"></app-sselect>
+        <span>Datierung</span>            <app-sselect [(input)]="query.datierung" [dropdown]="datesDropdown"></app-sselect>
+        <span>Kommentar</span>            <input class="form-control"  [(ngModel)]="query.kommentar"> 
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button (click)="search()" class="btn btn-outline-primary">Search</button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <app-smart-table (onRowClick)="goToSource($event)" [headers]="headers" [objects]="results"></app-smart-table>
+    </div>
+  </div>
+</div>

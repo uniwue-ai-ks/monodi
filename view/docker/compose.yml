@@ -1,0 +1,36 @@
+name: monodi-viewer
+services:
+  fuseki:
+    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi-fuseki:latest
+    restart: always
+    volumes:
+      # directory with ttl files. all files in this volume will be used.
+      - ./rdf/:/data/:z
+    networks:
+      - backend
+
+  frontend:
+    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi:latest
+    restart: always
+    ports:
+      - "3000:80"
+    volumes:
+      - ./static:/srv/resources:z
+      - caddy_data:/data:z
+      - caddy_config:/config:z
+    networks:
+      - backend
+      - frontend
+
+    environment:
+      HTML_TITLE: "Project Name"
+      HTML_HEAD_EXTRA: "<meta name=\"description\" content=\"Project description\"/>"
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
+
+networks:
+  backend:
+  frontend:

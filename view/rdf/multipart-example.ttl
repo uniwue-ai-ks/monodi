@@ -1,0 +1,470 @@
+@prefix : <http://olyro.de/mondiview/> .
+@prefix data: <http://monodicum/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+data:version  a rdf:Property.
+
+data:version  rdfs:label rdf:2024-03-05T14:00:37.068686939Z.
+
+# The book class stores information about a whole book
+# This includes the title, an id number, year, a PDF, and HTML representation of
+# the book, as well as the full plaintext.
+data:book
+  a rdfs:Class;
+  rdfs:label "Bücher"@de,"Books"@en;
+  :shortUrlTag "book";
+  :disablePrintColumn true;
+  :openIIIFText "Original Anzeigen"@de,"Show original"@en.
+
+data:bookOcNumber
+  a rdf:Property;
+  rdfs:label "OC-Nummer"@de,"OC-Number"@en;
+  rdfs:domain data:book;
+  rdfs:range :string;
+  :headerOrder 0;
+  :searchOrder 0;
+  :documentPosition [ :header 0; :synopsis 0; :right 0 ].
+
+data:bookExternalLink
+  a rdf:Property;
+  rdfs:label "Wiki-Link"@de,"Wiki-Link"@en;
+  rdfs:domain data:book;
+  rdfs:range :htmlContent;
+  :documentPosition [ :right 8 ].
+
+data:bookTitle
+  a rdf:Property;
+  rdfs:label "Titel"@de,"Title"@en;
+  rdfs:domain data:book;
+  rdfs:range :string;
+  :headerOrder 1;
+  :searchOrder 1;
+  :documentPosition [ :header 1 ; :synopsis 1 ].
+
+data:bookYear
+  a rdf:Property;
+  rdfs:label "Jahr"@de,"Year"@en;
+  rdfs:domain data:book;
+  rdfs:range :number;
+  :headerOrder 2;
+  :searchOrder 2;
+  :searchSpan true;
+  :documentPosition [ :header 2 ; :synopsis 2 ; :right 2 ].
+
+data:bookAuthor
+  a rdf:Property;
+  rdfs:label "Autor"@de,"Author"@en;
+  rdfs:domain data:book;
+  rdfs:range :string;
+  :headerOrder 3;
+  :searchOrder 3;
+  :documentPosition [ :header 3 ; :synopsis 3 ].
+
+data:bookPDF
+  a rdf:Property;
+  rdfs:label "PDF"@de,"PDF"@en;
+  rdfs:domain data:book;
+  rdfs:range :pdf;
+  :documentPosition [ :priority 0 ].
+
+data:bookContent
+  a rdf:Property;
+  rdfs:label "Inhalt"@de,"Content"@en;
+  rdfs:domain data:book;
+  rdfs:range :htmlContent;
+  :documentPosition [ :main 0 ].
+
+# The fulltext is used for searching, so we don't give a :documentPosition
+# Also, we don't want to show the fulltext in the search results, so we don't
+# specify a :headerOrder
+data:bookFulltext
+  a rdf:Property;
+  rdfs:label "Inhalt"@de,"Content"@en;
+  rdfs:domain data:book;
+  :searchOrder 3;
+  # If set, a column with the given string as header is shown, containing a
+  # preview of the context of the first search match.
+  :searchPreview "Erster Treffer"@de, "First match"@en;
+  rdfs:range :string.
+
+
+# The page class stores information about a single page. As a page is always
+# part of a book, we specify this relation:
+data:page
+  a rdfs:Class;
+  rdfs:label "Seiten"@de,"Pages"@en;
+  # this specifies, that a data:page is part of a data:book
+  :referenceClass     data:book;
+  # in this attribute, a page will specify the URI of the book it belongs to
+  :referenceAttribute data:pageBook;
+   # When a :referenceLabel is given, the superclass search will have a link to
+   # the subclass search, e.g. each book in a search result will link to the
+   # pages search, restricted to pages from the selected book
+  :referenceLabel "Seiten durchsuchen"@de, "Seiten durchsuchen"@en;
+  :disablePrintColumn true;
+  :openIIIFText "Original Anzeigen"@de,"Show original"@en.
+
+# the reference attribute, which will contain book URIs. rdfs:range may be
+# entity, or, for legacy reasons, :string. If no locations for displaying it are
+# specified, both are equivalent. When displaying, an :entity may be rendered as
+# a link to the document.
+data:pageBook
+  a rdf:Property;
+  rdfs:label "aus Buch"@de,"from book"@en;
+  rdfs:domain data:page;
+  rdfs:range :entity.
+
+# a :reference attribute is used to display data from the referenced class.
+# Instances should not specify values for attributes of this type, instead
+# monodi will use the value from the :referenceAttribute to look up an instance
+# of the :referenceClass and display the value of the :referenceField attribute
+# for that instance (see below for concrete example)
+data:pageRefBook
+  a rdf:Property;
+  rdfs:domain data:page;
+  rdfs:label "Buchtitel"@de,"Book title"@en;
+  :headerOrder 0;
+  :searchOrder 0;
+  rdfs:range :reference;
+  :referenceField data:bookTitle;
+  :documentPosition [ :header 0; :synopsis 0; :right 0 ].
+
+data:pageNext
+  a rdf:Property;
+  rdfs:label "nächste Buchseite"@de,"Next book page"@en;
+  rdfs:domain data:page;
+  rdfs:range :entity;
+  :documentPosition [ :right 7; :docNavigation 2 ].
+
+data:pagePrev
+  a rdf:Property;
+  rdfs:label "vorherige Buchseite"@de,"Previous book page"@en;
+  rdfs:domain data:page;
+  rdfs:range :entity;
+  :documentPosition [ :right 6; :docNavigation 0 ].
+
+data:pageRefAuthor
+  a rdf:Property;
+  rdfs:domain data:page;
+  rdfs:label "Autor"@de,"Author"@en;
+  :headerOrder 1;
+  :searchOrder 1;
+  rdfs:range :reference;
+  :referenceField data:bookAuthor;
+  :documentPosition [ :header 1; :synopsis 1; :right 1 ].
+
+# A page can still have additional normal attributes
+data:pageNumber
+  a rdf:Property;
+  rdfs:label "Seite"@de,"Page"@en;
+  rdfs:domain data:page;
+  rdfs:range :number;
+  :headerOrder 2;
+  :searchOrder 2;
+  :searchSpan true;
+  :documentPosition [ :header 2 ; :synopsis 2 ; :right 2; :docNavigation 1 ].
+
+# A single page PDF, so we don't have to load the whole book
+data:pagePDF
+  a rdf:Property;
+  rdfs:label "Seite als PDF"@de,"Page as PDF"@en;
+  rdfs:domain data:page;
+  rdfs:range :pdf;
+  :documentPosition [ :priority 0 ].
+
+# Fallback to html representation if there is no pdf
+data:pageContent
+  a rdf:Property;
+  rdfs:label "Inhalt"@de,"Content"@en;
+  rdfs:domain data:page;
+  rdfs:range :htmlContent;
+  :documentPosition [ :main 0 ].
+
+# Text of the single page for searching pages with specific content
+data:pageText
+  a rdf:Property;
+  rdfs:label "Seitentext"@de,"Page text"@en;
+  rdfs:domain data:page;
+  rdfs:range :string;
+  # a property in a subclass can define a corresponding property in the
+  # referenced class, even if it isn't a :reference type property. In this case,
+  # it isn't used to retrieve content from the superclass, but to match
+  # searches. In this example, if a user searches the data:book class by
+  # filtering for data:bookFulltext, jumping to the subclass search will prefill
+  # the data:pageText field with the search term used for data:bookFulltext.
+  :referenceSearch data:bookFulltext;
+  :searchPreview "Erster Treffer"@de, "First match"@en;
+  :searchOrder 6.
+
+# The full book pdf isn't displayed for a single page, but offered as a download
+# link
+data:pageFullBookDownload
+  a rdf:Property;
+  rdfs:label "PDF herunterladen"@de,"PDF herunterladen"@en;
+  rdfs:domain data:page;
+  rdfs:range :reference;
+  :referenceField data:bookPDF;
+  :documentPosition [ :download 0 ].
+
+
+data:camoc0007 a data:book; data:bookOcNumber "oc0006"; data:bookTitle "FOoo"; data:bookYear 1524; data:bookAuthor "Camerarius, Joachim"; data:bookPDF "camoc0006.pdf"; data:bookFulltext """OLYNTHIACA""".
+data:camoc0008 a data:book; data:bookOcNumber "oc0006"; data:bookTitle "Ast"; data:bookYear 1524; data:bookAuthor "Camerarius, Joachim"; data:bookPDF "camoc0006.pdf"; data:bookFulltext """OLYNTHIACA""".
+data:camoc0009 a data:book; data:bookOcNumber "oc0006"; data:bookTitle "as"; data:bookYear 1524; data:bookAuthor "Camerarius, Joachim"; data:bookPDF "camoc0006.pdf"; data:bookFulltext """OLYNTHIACA""".
+data:camoc00010 a data:book; data:bookOcNumber "oc0006"; data:bookTitle "ZZ"; data:bookYear 1524; data:bookAuthor "Camerarius, Joachim"; data:bookPDF "camoc0006.pdf"; data:bookFulltext """OLYNTHIACA""".
+data:camoc00011 a data:book; data:bookOcNumber "oc0006"; data:bookTitle "qOoo"; data:bookYear 1524; data:bookAuthor "Camerarius, Joachim"; data:bookPDF "camoc0006.pdf"; data:bookFulltext """OLYNTHIACA""".
+# The full book specifies the whole text for searching, as well as bookwide
+# metadata like the title.
+data:camoc0006
+  a data:book;
+  data:bookOcNumber "oc0006";
+  data:bookTitle "Demosthenis Olynthiaca prima (lat.)";
+  data:bookYear 1524;
+  data:bookAuthor "Camerarius^2, Joachim";
+  data:bookExternalLink """<a href="https://de.wikipedia.org/wiki/Joachim_Camerarius_der_%C3%84ltere">Wikipedia</a>""";
+  data:bookPDF "camoc0006.pdf";
+  data:bookFulltext """OLYNTHIACA
+dinem negocij in ſe compleens. Sed nunc audi-
+amus ipſum Demohenē conantem latine loqui.
+DEMOSTHE↵
+NIS ORATORIS ATHENIEN↵
+SIS OLYNTHIACA
+PRIMA ORATIO,
+Ioachimo Camer.
+interprete
+GO IN EA SVM OPI↵
+E
+nione Ciues, præ immenſis
+uos opibus laturos eū qui
+tuendæ ſalutis publicæ, de
+quo in præſentia cōſultatis
+rationē demonret. Quod
+cū ita ſe habeat, par e ut
+æquis animis audiatis qui conſulendi caua adſunt.
+Ne
+
+
+
+PRIMA
+Ne enim, quo fortunæ eis, eo tantum qui me-
+ditatus ad dicēdum uenerit, Conſultore ſitis uſuri,
+uerum ij etiam qui imparati ſubijcere aliquid uo-
+lent, non ſunt uobis adernandi, quo ex multis
+& uarijs ſententijs in medium propoſitis, utiliſs.
+eligendi uobis copia fieri poit. Tempus profeo
+Ciues ipſum iam modo non uoce edita clamat, ue-
+litis tandem rerum uerarum curam ſuſcipere, ſi
+quidem non funditus exſcindi malitis. Nos uero
+equidem neſcio, quo pao erga ipſas aﬀei uidea↵
+mur. Proinde, meo quidem iudicio, auxilia decer↵
+nenda, quan primum hinc mittenda ſunt, cauen-
+dum e ne hic quo ut ſæpe ante noræ ſocordiæ
+pœnas demus. Deinde hæc legatis miis fidis ho↵
+minibus denuncianda ſunt, qui omnibus ipſi rebus
+& interſint & præſint. Nam metus haud paruus
+eﬆ, ne ſceleus ille & uerſutus, ac callidus occaſio↵
+num auceps, interdum ſires poſcat concedens de
+ſuo paululum, mox interminans (eﬆ enim pro-
+feo eﬆ cur huic fides habeatur) dein & noras
+uires eleuans, de ſumma rerum nonnihil detrahat.
+Veruntamen Ciues, quod ad nos oppugnandū
+ualidiſs. in hoe ee uidemus, id maxime pro no-
+bis facere putare debetis. Nam quod ipſe unus
+B iij
+
+
+
+PRIMA
+omnia per phas & nephas tenet, moderatur, regit
+uerſat, quod nuſꝗᷓ ab exercitu diſcedit, ad gerēdi
+bellum tempus & celeritatem plurimū ſane habet
+momenti. Atqui hoc ipſum fœderi quod oppido
+quàm lubens cū Olynthijs faceret, multo aduerſiſs.
+e. Liquido enim norunt Olynthij ſe iam non
+de opinione ſua aut regionis particula, ſed ut ua-
+ationem ac ſeruitutem à patria depellant, bellige-
+rari, ſciunt quem ſeſe erga Amphipolitas, qui ſe
+ſuam ipſi urbem dediderunt, quen erga Pyd↵
+næos qui in urbem receperūt, hic geerit. Quid
+multa? Modis omnibus, ſed præcipue cū uicina loca
+tenent, formidabiles ciuitatibus ſunt Tyranni. Hæc
+igitur cum nemo uerū ſit cui non ualde perea
+cui non alia quæ res fert cogitata ſint, nunc de-
+mum & ſi quando unꝗᷓ cenſeo uobis ea quorum
+ad bellum adminirandum uſus eget, uehementer
+& ardentibus animis aggredienda, ut uel pro ſe
+quis pecunias contribuat, uel ipſe in expeditionē
+proficiſcatur, ac nihil publicorum onerum ullus
+detreet.
+Ne enim caua ulla aut ratio uobis relia eﬆ
+cur quisꝗᷓ in rebus necearijs operā ſuam requiri
+patiatur
+
+
+
+OLYNTHIACA
+patiatur. Nūc enim quod uulgo prædicabatis, eße
+è Republica Olynthios à Philippo alienari, id ul-
+tro euenit, at ita euenit, quemadmodum uobis
+max. fuit utile. Etenim ſi eo à nobis addui forēt
+Olynthij, ut nora uoluntate bellum ſuſciperēt, mi↵
+nime firmos ſocios ſed aliquouſ ſalem norarū
+partium habituros erandū eet. Iam uero poꝗᷓ
+maleficijs ſuis ut ſe oderint meritus e Philipp. nō
+poteﬆ cuiꝗᷓ ee dubiū, quin graues & permanentes
+inimicitiæ his cum eo intercedant, quē timent &
+à quo ſunt aﬀlii. Qua de re Ciues, haud decet uos
+tantam occaſionem uobis oentatam amittere, ac
+potius dare operā ut uera diligētia quæ ſæpe ma-
+la plurima eis pai, nūc eﬀugiatis. Nam ſi quo
+tempore Euboenſibus auxilio uenimus, cū præo
+eent hoc adeo in loco Hierax et Stratocles Legati
+Amphipolitarum, & nos ad occupandā ſuam ip-
+ſorum ciuitatē inuitarent, ſi inꝗᷓ tam nori cura ꝗᷓ
+Euboenſium ſalutis nobis fuiet, teneretis iam Am↵
+phipolim, & laboribus quoſcū poea pertuliis
+careretis. Rurſum cum Pydna, Potidæa, Metho-
+ne, Pagaſæ, alia multa oppida, ne ſingillatim recen↵
+ſendo longū faciam, ab hoibus obſideri nunciaren↵
+tur, ſi tum opem cuipiam ex iis principi promptis
+B iij""".
+
+# Each page specifies the book it belongs to, as well as per page data, like
+# content, page number and a PDF representation of the page.
+data:camoc0006_page001
+  a data:page;
+  data:pageBook data:camoc0006;
+  data:pageNumber 1;
+  data:pagePDF "camoc0006-001.pdf";
+  data:pageNext data:camoc0006_page002;
+  data:pageText """OLYNTHIACA
+dinem negocij in ſe compleens. Sed nunc audi-
+amus ipſum Demohenē conantem latine loqui.
+DEMOSTHE↵
+NIS ORATORIS ATHENIEN↵
+SIS OLYNTHIACA
+PRIMA ORATIO,
+Ioachimo Camer.
+interprete
+GO IN EA SVM OPI↵
+E
+nione Ciues, præ immenſis
+uos opibus laturos eū qui
+tuendæ ſalutis publicæ, de
+quo in præſentia cōſultatis
+rationē demonret. Quod
+cū ita ſe habeat, par e ut
+æquis animis audiatis qui conſulendi caua adſunt.
+Ne
+patiatur. Nūc enim quod uulgo prædicabatis, eße
+è Republica Olynthios à Philippo alienari, id ul-
+""".
+
+data:camoc0006_page002
+  a data:page;
+  data:pageBook data:camoc0006;
+  data:pageNumber 2;
+  data:pagePDF "camoc0006-002.pdf";
+  data:pagePrev data:camoc0006_page001;
+  data:pageNext data:camoc0006_page003;
+  data:pageText """PRIMA
+Ne enim, quo fortunæ eis, eo tantum qui me-
+ditatus ad dicēdum uenerit, Conſultore ſitis uſuri,
+uerum ij etiam qui imparati ſubijcere aliquid uo-
+lent, non ſunt uobis adernandi, quo ex multis
+& uarijs ſententijs in medium propoſitis, utiliſs.
+eligendi uobis copia fieri poit. Tempus profeo
+Ciues ipſum iam modo non uoce edita clamat, ue-
+litis tandem rerum uerarum curam ſuſcipere, ſi
+quidem non funditus exſcindi malitis. Nos uero
+equidem neſcio, quo pao erga ipſas aﬀei uidea↵
+mur. Proinde, meo quidem iudicio, auxilia decer↵
+nenda, quan primum hinc mittenda ſunt, cauen-
+dum e ne hic quo ut ſæpe ante noræ ſocordiæ
+pœnas demus. Deinde hæc legatis miis fidis ho↵
+minibus denuncianda ſunt, qui omnibus ipſi rebus
+& interſint & præſint. Nam metus haud paruus
+eﬆ, ne ſceleus ille & uerſutus, ac callidus occaſio↵
+num auceps, interdum ſires poſcat concedens de
+ſuo paululum, mox interminans (eﬆ enim pro-
+feo eﬆ cur huic fides habeatur) dein & noras
+uires eleuans, de ſumma rerum nonnihil detrahat.
+Veruntamen Ciues, quod ad nos oppugnandū
+ualidiſs. in hoe ee uidemus, id maxime pro no-
+bis facere putare debetis. Nam quod ipſe unus
+B iij""".
+
+data:camoc0006_page003
+  a data:page;
+  data:pageBook data:camoc0006;
+  data:pageNumber 3;
+  data:pagePDF "camoc0006-003.pdf";
+  data:pagePrev data:camoc0006_page002;
+  data:pageNext data:camoc0006_page004;
+  data:pageText """PRIMA
+omnia per phas & nephas tenet, moderatur, regit
+uerſat, quod nuſꝗᷓ ab exercitu diſcedit, ad gerēdi
+bellum tempus & celeritatem plurimū ſane habet
+momenti. Atqui hoc ipſum fœderi quod oppido
+quàm lubens cū Olynthijs faceret, multo aduerſiſs.
+e. Liquido enim norunt Olynthij ſe iam non
+de opinione ſua aut regionis particula, ſed ut ua-
+ationem ac ſeruitutem à patria depellant, bellige-
+rari, ſciunt quem ſeſe erga Amphipolitas, qui ſe
+ſuam ipſi urbem dediderunt, quen erga Pyd↵
+næos qui in urbem receperūt, hic geerit. Quid
+multa? Modis omnibus, ſed præcipue cū uicina loca
+tenent, formidabiles ciuitatibus ſunt Tyranni. Hæc
+igitur cum nemo uerū ſit cui non ualde perea
+cui non alia quæ res fert cogitata ſint, nunc de-
+mum & ſi quando unꝗᷓ cenſeo uobis ea quorum
+ad bellum adminirandum uſus eget, uehementer
+& ardentibus animis aggredienda, ut uel pro ſe
+quis pecunias contribuat, uel ipſe in expeditionē
+proficiſcatur, ac nihil publicorum onerum ullus
+detreet.
+Ne enim caua ulla aut ratio uobis relia eﬆ
+cur quisꝗᷓ in rebus necearijs operā ſuam requiri
+patiatur""".
+
+data:camoc0006_page004
+  a data:page;
+  data:pageBook data:camoc0006;
+  data:pageNumber 4;
+  data:pagePDF "camoc0006-004.pdf";
+  data:pagePrev data:camoc0006_page003;
+  data:pageNext data:camoc0006_page005;
+  data:pageText """OLYNTHIACA
+patiatur. Nūc enim quod uulgo prædicabatis, eße
+è Republica Olynthios à Philippo alienari, id ul-
+tro euenit, at ita euenit, quemadmodum uobis
+max. fuit utile. Etenim ſi eo à nobis addui forēt
+Olynthij, ut nora uoluntate bellum ſuſciperēt, mi↵
+nime firmos ſocios ſed aliquouſ ſalem norarū
+partium habituros erandū eet. Iam uero poꝗᷓ
+maleficijs ſuis ut ſe oderint meritus e Philipp. nō
+poteﬆ cuiꝗᷓ ee dubiū, quin graues & permanentes
+inimicitiæ his cum eo intercedant, quē timent &
+à quo ſunt aﬀlii. Qua de re Ciues, haud decet uos
+tantam occaſionem uobis oentatam amittere, ac
+potius dare operā ut uera diligētia quæ ſæpe ma-
+la plurima eis pai, nūc eﬀugiatis. Nam ſi quo
+tempore Euboenſibus auxilio uenimus, cū præo
+eent hoc adeo in loco Hierax et Stratocles Legati
+Amphipolitarum, & nos ad occupandā ſuam ip-
+ſorum ciuitatē inuitarent, ſi inꝗᷓ tam nori cura ꝗᷓ
+Euboenſium ſalutis nobis fuiet, teneretis iam Am↵
+phipolim, & laboribus quoſcū poea pertuliis
+careretis. Rurſum cum Pydna, Potidæa, Metho-
+ne, Pagaſæ, alia multa oppida, ne ſingillatim recen↵
+ſendo longū faciam, ab hoibus obſideri nunciaren↵
+tur, ſi tum opem cuipiam ex iis principi promptis
+B iij""".
+
+data:camoc0006_page005 a data:page; data:pageBook data:camoc0006; data:pageNumber 5; data:pagePDF "camoc0006-005.pdf"; data:pageNext data:camoc0006_page006; data:pagePrev data:camoc0006_page004; data:pageText """OLYNTHIACA""".
+data:camoc0006_page006 a data:page; data:pageBook data:camoc0006; data:pageNumber 6; data:pagePDF "camoc0006-006.pdf"; data:pageNext data:camoc0006_page007; data:pagePrev data:camoc0006_page005; data:pageText """OLYNTHIACA""".
+data:camoc0006_page007 a data:page; data:pageBook data:camoc0006; data:pageNumber 7; data:pagePDF "camoc0006-007.pdf"; data:pageNext data:camoc0006_page008; data:pagePrev data:camoc0006_page006; data:pageText """OLYNTHIACA""".
+data:camoc0006_page008 a data:page; data:pageBook data:camoc0006; data:pageNumber 8; data:pagePDF "camoc0006-008.pdf"; data:pageNext data:camoc0006_page009; data:pagePrev data:camoc0006_page007; data:pageText """OLYNTHIACA""".
+data:camoc0006_page009 a data:page; data:pageBook data:camoc0006; data:pageNumber 9; data:pagePDF "camoc0006-009.pdf"; data:pageNext data:camoc0006_page010; data:pagePrev data:camoc0006_page008; data:pageText """OLYNTHIACA""".
+data:camoc0006_page010 a data:page; data:pageBook data:camoc0006; data:pageNumber 10; data:pagePDF "camoc0006-010.pdf"; data:pageNext data:camoc0006_page011; data:pagePrev data:camoc0006_page009; data:pageText """OLYNTHIACA""".
+data:camoc0006_page011 a data:page; data:pageBook data:camoc0006; data:pageNumber 11; data:pagePDF "camoc0006-011.pdf"; data:pagePrev data:camoc0006_page010; data:pageText """OLYNTHIACA""".

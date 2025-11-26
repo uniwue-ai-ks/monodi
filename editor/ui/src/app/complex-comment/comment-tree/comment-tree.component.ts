@@ -1,0 +1,13 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as M from './../../types/model';
+
+@Component({
+  selector: 'app-comment-tree',
+  templateUrl: './comment-tree.component.html',
+  styleUrls: ['./comment-tree.component.css']
+})
+export class CommentTreeComponent {
+  @Input() originalCreator?: () => M.ZeileContainer;
+  @Input() tree!: M.CommentTree;
+  @Output() treeEvent = new EventEmitter<M.CommentTreeEvent>();
+}

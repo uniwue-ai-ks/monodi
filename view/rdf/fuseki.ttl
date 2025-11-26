@@ -1,0 +1,54 @@
+PREFIX :        <#>
+PREFIX fuseki:  <http://jena.apache.org/fuseki#>
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX tdb2:    <http://jena.apache.org/2016/tdb#>
+PREFIX ja:      <http://jena.hpl.hp.com/2005/11/Assembler#>
+
+[] rdf:type fuseki:Server ;
+   fuseki:services (
+     <#service_tdb2>
+   ) .
+
+<#service_tdb2> rdf:type fuseki:Service ;
+    rdfs:label                      "TDB2 Service (RO)" ;
+    fuseki:name                     "tdb2-database" ;
+    fuseki:serviceQuery             "query" ;
+    fuseki:serviceQuery             "sparql" ;
+    fuseki:dataset                  :text_dataset;
+    .
+
+<#tdb_dataset_readonly> rdf:type      tdb2:DatasetTDB2 ;
+    tdb2:location "db" ;
+    ## This is supported: tdb2:unionDefaultGraph true ;
+        .
+
+## Initialize text query
+[] ja:loadClass "org.apache.jena.query.text.TextQuery" . # A TextDataset is a regular dataset with a text index.
+
+text:TextDataset rdfs:subClassOf ja:RDFDataset .# Lucene index
+text:TextIndexLucene rdfs:subClassOf text:TextIndex .
+
+:text_dataset rdf:type text:TextDataset ;
+text:dataset <#tdb_dataset_readonly> ;
+text:index <#indexLucene> ;
+.
+
+<#indexLucene> a text:TextIndexLucene ;
+   text:directory <file:run/luceneIndexing> ; #path where index will #be created
+   text:entityMap <#entMap> ;
+.
+
+<#entMap> a text:EntityMap ;
+   text:defaultField "text" ;
+   text:entityField "uri" ;
+   text:map (
+      #RDF label abstracts
+      [
+         text:field "text" ;
+         text:predicate <http://olyro.de/mondiview/lemmas> ;
+         text:analyzer [ a text:StandardAnalyzer ]
+      ]
+   )
+.

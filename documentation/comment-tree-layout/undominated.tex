@@ -1,0 +1,54 @@
+\begin{tikzpicture}
+
+\node[
+    draw,
+    minimum width=2cm,
+    minimum height=4cm,
+    anchor=west,
+    pattern=north east lines
+  ] (SG1) at (0, 0) {};
+
+  \draw[red,<->] ($ (SG1.north east) +(0.1cm, 0) $)
+    -- ($ (SG1.north east)!0.5!(SG1.south east) + (0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+  \draw[red,<->] ($ (SG1.north east)!0.5!(SG1.south east) + (0.1cm, 0) $)
+    -- ($ (SG1.south east) +(0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+
+
+\node[
+    draw,
+    minimum width=2cm,
+    minimum height=2cm,
+    anchor=west,
+    pattern=north east lines
+  ] (SG2) at ($ (SG1.east) + (0.8cm, 0) $) {};
+
+  \draw[red,<->] ($ (SG2.north east) +(0.1cm, 0) $)
+    -- ($ (SG2.north east)!0.5!(SG2.south east) + (0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+  \draw[red,<->] ($ (SG2.north east)!0.5!(SG2.south east) + (0.1cm, 0) $)
+    -- ($ (SG2.south east) +(0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+
+
+\node[
+    draw,
+    minimum width=2cm,
+    minimum height=5cm,
+    anchor=west,
+    pattern=north east lines
+  ] (SG3) at ($ (SG2.east) + (0.8cm, 0) $) {};
+
+  \draw[red,<->] ($ (SG3.north east) +(0.1cm, 0) $)
+    -- ($ (SG3.north east)!0.5!(SG3.south east) + (0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+  \draw[red,<->] ($ (SG3.north east)!0.5!(SG3.south east) + (0.1cm, 0) $)
+    -- ($ (SG3.south east) +(0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+
+\begin{scope}[on background layer]
+  \draw[thick,blue!20] ($ (SG1.west) - (0.5cm, 0) $) node[anchor=east] (B)  {B}  -- ++(10.0cm, 0);
+\end{scope}
+
+\end{tikzpicture}

@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row mt-5" *ngIf="!source">
+    <div class="col">
+      Die Quelle lädt. Wenn Sie nicht innerhalb einiger weniger Sekunden geladen ist, hat vermutlich jemand die Quelle gelöscht.
+    </div>
+  </div>
+  <div class="mt-5" *ngIf="source">
+    <div class="row mt-5">
+      <div class="col">
+        <h3>Quelle</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+          <button class="btn btn-outline-secondary" type="button" (click)="collapseMetadata = !collapseMetadata">
+              Metadaten verstecken/anzeigen
+            </button>
+          <div id="document-data" [ngbCollapse]="!collapseMetadata">
+          <table class="table">
+            <tbody>
+              <tr> <td> Quellensigle         </td> <td> <input class="disabled-input" [(ngModel)]="source.quellensigle"         disabled=true /> </td> </tr>
+              <tr> <td> Herkunftsregion      </td> <td> <input class="disabled-input" [(ngModel)]="source.herkunftsregion"      disabled=true /> </td> </tr>
+              <tr> <td> Herkunftsort         </td> <td> <input class="disabled-input" [(ngModel)]="source.herkunftsort"         disabled=true /> </td> </tr>
+              <tr> <td> Herkunftsinstitution </td> <td> <input class="disabled-input" [(ngModel)]="source.herkunftsinstitution" disabled=true /> </td> </tr>
+              <tr> <td> Ordenstradition      </td> <td> <input class="disabled-input" [(ngModel)]="source.ordenstradition"      disabled=true /> </td> </tr>
+              <tr> <td> Quellentyp           </td> <td> <input class="disabled-input" [(ngModel)]="source.quellentyp"           disabled=true /> </td> </tr>
+              <tr> <td> Bibliotheksort       </td> <td> <input class="disabled-input" [(ngModel)]="source.bibliotheksort"       disabled=true /> </td> </tr>
+              <tr> <td> Bibliothek           </td> <td> <input class="disabled-input" [(ngModel)]="source.bibliothek"           disabled=true /> </td> </tr>
+              <tr> <td> Bibliothekssignatur  </td> <td> <input class="disabled-input" [(ngModel)]="source.bibliothekssignatur"  disabled=true /> </td> </tr>
+              <tr> <td> Datierung            </td> <td> <input class="disabled-input" [(ngModel)]="source.datierung"            disabled=true /> </td> </tr>
+              <tr> <td> Kommentar            </td> <td> <input class="disabled-input" [(ngModel)]="source.kommentar"            disabled=true /> </td> </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <h3>Dokumente zur Quelle</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <table class="table">
+          <thead>
+            <tr>
+              <th> Dokumenten ID </th>
+              <th> Textinitium </th>
+              <th> Gattung 1 </th>
+              <th> Gattung 2 </th>
+              <th> Kommentar 2 </th>
+              <th> Link </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of documents">
+              <td> {{d.dokumenten_id}} </td>
+              <td> {{d.textinitium}} </td>
+              <td> {{d.gattung1}} </td>
+              <td> {{d.gattung2}} </td>
+              <td> {{d.kommentar}} </td>
+              <td> <a [routerLink]="['/document', d.quelle_id, d.id]">link</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

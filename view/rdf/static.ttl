@@ -1,0 +1,2532 @@
+@prefix :     <http://olyro.de/mondiview/>
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#>.
+
+:tabTitle :hasContent "DIW Berichte"@de, "DIW Reports"@en.
+:headerTitle :hasContent "DIW Berichte"@de, "DIW Reports"@en.
+@prefix :     <http://olyro.de/mondiview/>.
+@prefix :     <http://olyro.de/mondiview/>.
+@prefix :     <http://olyro.de/mondiview/>.
+@prefix data: <http://monodicum/> .
+@prefix text: <http://jena.apache.org/text#>.
+
+
+:copyright :hasContent
+        "© 2020-2024 Corpus Monodicum"@de,
+        "© 2020-2024 Corpus Monodicum"@en,
+        "© 2020-2024 Corpus Monodicum"@fr.
+
+:footer :hasContent
+        "Akademie der Wissenschaften und der Literatur Mainz"@de,
+        "Akademie der Wissenschaften und der Literatur Mainz"@en,
+        "Akademie der Wissenschaften und der Literatur Mainz"@fr.
+
+:mainPagePreSearches :hasContent
+        """
+        <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
+        <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
+        <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
+        <h3 class="cm-main_h3">Digitale Ausgabe | Beta-Version 1.0 | 2024</h3>
+        <p class="cm-main_herausgeber">
+                Im Auftrag der Akademie der Wissenschaften und der Literatur | Mainz<br>
+                am Zentrum für Philologie und Digitalität der Universität Würzburg<br>
+                <span class="cm-main_ver-space">unter Leitung von</span><br>Andreas Haug und Frank Puppe<br>
+                <span class="cm-main_ver-space">herausgegeben von</span><br>
+                Charles M. Atkinson • Gunilla Björkvall • Gionata Brusa • David Catalunya • Maria Dorofeev • Jasmin Hartmann-Strauß • Elaine
+                Stratton-Hild<br>Isabel Kraft • Michael Klaper • Michele Loda • Salah Eddin Maraqa • Andreas Pfisterer • Anna Sanda • Konstantin Voigt • Hanna Zühlke<br>
+                <span class="cm-main_ver-space">Datenmodellierung und Forschungsdatenmanagement: Tim Eipert</span>
+        </p>
+        """@de,
+        """
+        <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
+        <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
+        <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
+        <h3 class="cm-main_h3">Digital Edition | Beta version 1.0 | 2024</h3>
+        <p class="cm-main_herausgeber">
+                Commissioned by the Akademie der Wissenschaften und der Literatur | Mainz<br>
+                at the Center for Philology and Digitality of the University of Würzburg<br>
+                <span class="cm-main_ver-space">under the direction of</span><br>Andreas Haug and Frank Puppe<br>
+                <span class="cm-main_ver-space">edited by</span><br>
+                Charles M. Atkinson • Gunilla Björkvall • Gionata Brusa • David Catalunya • Maria Dorofeev • Jasmin Hartmann-Strauß • Elaine
+                Stratton-Hild<br>Isabel Kraft • Michael Klaper • Michele Loda • Salah Eddin Maraqa • Andreas Pfisterer • Anna Sanda • Konstantin Voigt • Hanna Zühlke<br>
+                <span class="cm-main_ver-space">Data modeling and research data management: Tim Eipert</span>
+        </p>
+        """@en.
+
+:mainPagePostSearches :hasContent
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@de,
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@en,
+        """
+        <div class="logos">
+                <img src="https://corpus-monodicum.de/static/media/adwmainz.7baed2fe0cef47b74c0a.png" alt="ADW Mainz" />
+                <img src="https://corpus-monodicum.de/static/media/uniwue.7c568ad885340f813356.png" alt="Uni Würzburg" />
+                <img src="https://corpus-monodicum.de/static/media/zpdwue.a08ca892543549f1612d.png" alt="Zentrum für Philologie und Digitalität Würzburg" />
+        </div>
+        """@fr.
+
+:customJavascript :hasContent """
+function elemHeight(selector) { return Array.from(document.querySelectorAll(selector)).map((a) => a.offsetHeight).reduce((a,b) => a + b, 0) ; }
+function resizeTable() {
+    let contentHeight = (window.innerHeight - elemHeight("header") - elemHeight("footer") - elemHeight(".documentHeader") - elemHeight(".searchNavHeader")) + "px"
+    let tableBox = document.querySelector("div.tableFixHead")
+    if(tableBox) tableBox.style.height = contentHeight
+}
+
+window.addEventListener("resize", ev => { resizeTable(); });
+window.addEventListener("message", ev => {
+  if (typeof ev.data === "object" && "doc" in ev.data) {
+        resizeTable();
+  }
+});
+""".
+:customCss :hasContent """
+
+body { height: 100%; }
+.tableFixHead {
+    overflow: auto;
+    --col-pad: 16px;
+    --col-1-width: 3em;
+    --col-2-width: 10em;
+    --col-3-width: 3em;
+    --col-4-width: 3em;
+    --col-5-width: 3em;
+}
+.tableFixHead table    { table-layout: auto !important; border-collapse: collapse; }
+.tableFixHead tbody td, .tableFixHead tbody th { border-width: 2px 0px; border-color: #bbb; border-style: solid;}
+table tbody th { padding: 0; }
+table tr th:nth-child(1) div { margin: 0; padding: 8px var(--col-pad); width: var(--col-1-width) !important; }
+table tr th:nth-child(2) div { margin: 0; padding: 8px var(--col-pad); width: var(--col-2-width) !important; }
+table tr th:nth-child(3) div { margin: 0; padding: 8px var(--col-pad); width: var(--col-3-width) !important; }
+table tr th:nth-child(4) div { margin: 0; padding: 8px var(--col-pad); width: var(--col-4-width) !important; }
+table tr th:nth-child(5) div { margin: 0; padding: 8px var(--col-pad); width: var(--col-5-width) !important; }
+.tableFixHead thead { position: sticky; top: 0; z-index: 2; }
+.tableFixHead thead tr th:nth-child(1) { position: sticky; left: 0; top: 0; z-index: 3;}
+.tableFixHead tbody tr th { position: sticky; z-index: 1; }
+.tableFixHead tbody tr th:nth-child(1) { left: 0; }
+.tableFixHead tbody tr th:nth-child(2) { left: calc((var(--col-pad)) * 2 + var(--col-1-width)); }
+.tableFixHead tbody tr th:nth-child(3) { left: calc((var(--col-pad)) * 4 + var(--col-1-width) + var(--col-2-width)); }
+.tableFixHead tbody tr th:nth-child(4) { left: calc((var(--col-pad)) * 6 + var(--col-1-width) + var(--col-2-width) + var(--col-3-width)); }
+.tableFixHead tbody tr th:nth-child(5) { left: calc((var(--col-pad)) * 8 + var(--col-1-width) + var(--col-2-width) + var(--col-3-width) + var(--col-4-width)); }
+.tableFixHead thead th,  .tableFixHead td     { padding: 8px 16px; }
+.tableFixHead th       { background:#eee; }
+
+.app-main { display: flex; flex-direction: column; }
+#app-router-outlet { flex-grow: 1; }
+#app-router-outlet>div{ heigth: 100%; display: flex; flex-direction: column; }
+
+""".
+
+data:userInstructions
+   :position [ :left 1; ];
+   :hasTitle "Benutzerhinweise"@de, "User instructions"@en, "Instruction"@fr;
+   :hasRoute "user-instructions".
+
+data:project
+   :position [ :right 1; ];
+   :hasTitle "Projekt"@de, "Project"@en, "Projekt"@fr;
+   :hasRoute "project".
+
+data:team
+   :position [ :right 2; ];
+   :hasTitle "Team"@de, "Team"@en, "disparue"@fr;
+   :hasRoute "team".
+
+data:beirat
+   :position [ :right 3; ];
+   :hasTitle "Beirat"@de, "Advisory Board"@en, "Conseil consultatif"@fr;
+   :hasRoute "beirat".
+
+data:partner
+   :position [ :right 4; ];
+   :hasTitle "Partner"@de, "Partner"@en, "Partner"@fr;
+   :hasRoute "partner".
+
+data:impressum
+   :position [ :footer 1; ];
+   :hasTitle "Impressum"@de, "Imprint"@en, "Impressum"@fr;
+   :hasRoute "impressum".
+
+data:foerdervermerk
+   :position [ :footer 2; ];
+   :hasTitle "Fördervermerk"@de, "Sponsorship"@en, "Fördervermerk"@fr;
+   :hasRoute "foerdervermerk".
+
+data:datenschutz
+   :position [ :footer 3; ];
+   :hasTitle "Datenschutz"@de, "Privacy statement"@en, "Datenschutz"@fr;
+   :hasRoute "datenschutz".
+
+data:feedback
+   :position [ :footer 4; ];
+   :hasTitle "Feedback"@de, "Feedback"@en, "Feedback"@fr;
+   :hasRoute "feedback".
+
+
+
+data:userInstructions :hasContent """<div class=\"editionsprinzipien-main\">
+
+<h1>Benutzerhinweise</h1>
+<p>
+Die im Dezember 2020 veröffentlichte Alpha-Version der Onlineausgabe des CORPUS MONODICUM bietet
+    in technischer Hinsicht die hauptsächlichen Funktionen (Such- und Anzeigeoptionen) der
+    Präsentationssoftware (Viewer), inhaltlich ein Korpus von circa 1700 Editionseinheiten,
+    das bis zum Erscheinen der Beta-Version kontinuierlich auf circa 2500 aufgestockt wird.
+    Zusätzliche Softwarefunktionen (namentlich die Anzeige des Kritischen Apparats) werden
+    in der Beta-Version bereitgestellt, deren Veröffentlichung für 2021 geplant ist.</p>
+
+<h2>
+Editionskorpus
+</h2>
+<p>Die Onlineausgabe des CORPUS MONODICUM (CM) erscheint in Form eines digitalen Korpus
+    annotierter Transkriptionen, in das jeweils sämtliche Gesänge einer Gattung aufgenommen
+    werden, die in einer als Editionsquelle für diese Gattung herangezogenen Handschrift überliefert
+    sind (Edition). Darüber hinaus werden Inventare nicht (oder noch nicht) transkribierter Repertoires
+    aus Handschriften und Drucken bereitgestellt, die als kontextuelle Quellen oder als Quellen von
+    Konkordanzen von Belang sind.
+</p>
+
+<h2>
+Suche
+</h2>
+<p>
+Das Editionskorpus kann nach verschiedenen Suchkriterien durchsucht werden,
+    von denen die am häufigsten gewählten beim Aufrufen der Edition voreingestellt sind.
+    Bei der Suche nach textgleichen Gesängen ist zusätzlich zum Suchkriterium 'Textinitium'
+    das Suchkriterium 'Nachweis der Melodie' zu wählen, bei Sequenzen, die in
+    textloser Form oder mit wechselnden Texten überliefert sind, die Suchoption 'Melodiename'.
+    Es empfiehlt sich, sich bei der Navigation in der Editionsdatenbank der Steuerelemente
+    des Browsers zu bedienen (Backspace-Taste und Tabs).
+</p>
+
+<h2>
+Anzeige
+</h2>
+<p>
+Außer den Transkriptionen einzelner Gesänge können verschiedene Versionen eines
+    Gesangs zu deren Vergleich in einer frei festlegbaren Auswahl und Anordnung untereinander
+    angezeigt werden. Den Transkriptionen können Reproduktionen des Originals angezeigt werden,
+    soweit auf diese online zugegriffen werden kann (in der Alpha-Version exemplarisch für das
+    Sequenzenrepertoire von Paris, BN lat. 14819 realisiert). Bei der Anzeige des Originals und
+    beim Vergleich verschiedener Versionen empfiehlt es sich, sich zur Verkleinerung der Anzeige
+    der Zoom-Funktion des Browsers zu bedienen.
+</p>
+<h2>
+Wiedergabe der Texte
+</h2>
+<p>
+Die Wiedergabe der Texte folgt der Quelle. Abweichungen von deren Lesart werden im
+    Kritischen Apparat verzeichnet (in der Alpha-Version noch nicht angezeigt).
+</p>
+<h2>
+Orthographie
+</h2>
+<p>
+Die Verwendung von u und v sowie von e und ę (e caudata) folgt der Quelle.
+    J und j sind einheitlich durch I und i wiedergegeben, abgekürzte Schreibweisen
+    der Namen \"Iesus\" und \"Christus\" einheitlich aufgelöst. Eigennamen, der Beginn von Strophen,
+    von formalen Zeilen von Sequenzen, von Tropenelementen, von Einsatzmarken sowie Textbeginn nach
+    Sprecherwechsel innerhalb von Texteinheiten werden großgeschrieben.</p>
+
+<h2>Abbreviaturen</h2>
+<p>Abbreviaturen in der Quelle werden aufgelöst. Die Auflösung richtet sich
+    (soweit diese erkennbar sind) nach der Ausdrucksweise und Schreibweise der
+    jeweiligen Handschrift. Erscheint die Auflösung eindeutig, erfolgt sie stillschweigend,
+    andernfalls in spitzen Klammern. Beabsichtigte Auslassungen in der Quelle werden
+    nicht ergänzt, sondern durch Punkte ... kenntlich gemacht. Ergänzungen von Textlücken
+    der Quelle erfolgen in spitzen Klammern < >. Editorische Auslassungen sind durch
+    Punkte in spitzen Klammern <...> gekennzeichnet.
+</p>
+
+<h2>Textgliederung</h2>
+<p>Texte in Prosaform sind per cola et commata, Texte in Versform nach Verszeilen gegliedert.
+    Textgliederungssysteme der Quellen (Initialen und Interpunktion) werden nicht wiedergegeben.</p>
+
+<h2>Rubriken</h2>
+<p>Rubriken sind durch Grossbuchstaben hervorgehoben.</p>
+
+
+<h2>Wiedergabe der Melodien</h2>
+
+<p>Die Wiedergabe der Melodien folgt der Quelle. Abweichungen von deren Lesart werden
+    im Kritischen Apparat verzeichnet (in der Alpha-Version noch nicht angezeigt).</p>
+
+<h2>Notenformen</h2>
+<p>Die Notenformen der historischen ('neumatischen') Notationen der handschriftlichen
+    Quellen werden nicht reproduziert, sondern bezüglich der durch sie kodierten
+    melodischen Information interpretiert und in eine einheitliche moderne Notation
+    kritisch transkribiert. Dabei werden die einzelnen Vorkommen eines Notenzeichens
+    in der Quelle als Zeicheninstanzen aufgefasst, die eine begrenzte Zahl von
+    Zeichentypen verkörpern. Die Zeichentypen werden in der Edition durch
+    Transkriptionsäquivalente wiedergegeben. Über die der Transkription
+    zugrundeliegende Zuordnung von Zeicheninstanzen zu Zeichentypen und die
+    zur Wiedergabe der Zeichentypen festgelegten Transkriptionsäquivalente
+    gibt die Dokumentation des Notationsbefunds der Quelle Auskunft (in der
+    alpha-Version noch nicht verfügbar). Neben den normalen Notenzeichen
+    werden folgende Sonderzeichen zur Wiedergabe von Oriscus, Quilisma,
+    Strophicus und Liqueszenz verwendet:</p>
+<table>
+    <tr><td>Oriscus</td>
+
+        <td>
+            <svg
+                    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
+                    xmlns:cc=\"http://creativecommons.org/ns#\"
+                    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
+                    xmlns:svg=\"http://www.w3.org/2000/svg\"
+                    xmlns=\"http://www.w3.org/2000/svg\"
+                    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
+                    xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
+                    width=\"12\"
+                    height=\"60\"
+
+                    viewBox=\"24 0 12 60\"
+                    version=\"1.1\"
+                    id=\"SVGRoot\"
+                    inkscape:version=\"0.92.4 (5da689c313, 2019-01-14)\"
+                    sodipodi:docname=\"oriscus.svg\">
+                <defs
+                        id=\"defs3793\"/>
+                <sodipodi:namedview
+                        id=\"base\"
+                        pagecolor=\"#ffffff\"
+                        bordercolor=\"#666666\"
+                        borderopacity=\"1.0\"
+                        inkscape:pageopacity=\"0.0\"
+                        inkscape:pageshadow=\"2\"
+                        inkscape:zoom=\"34.133334\"
+                        inkscape:cx=\"6.0419162\"
+                        inkscape:cy=\"23.88244\"
+                        inkscape:document-units=\"px\"
+                        inkscape:current-layer=\"layer7\"
+                        showgrid=\"false\"
+                        inkscape:window-width=\"1171\"
+                        inkscape:window-height=\"1008\"
+                        inkscape:window-x=\"2660\"
+                        inkscape:window-y=\"0\"
+                        inkscape:window-maximized=\"0\"
+                        inkscape:lockguides=\"false\"
+                        showguides=\"true\"
+                        inkscape:guide-bbox=\"true\"
+                        inkscape:snap-to-guides=\"false\"
+                        inkscape:snap-grids=\"false\">
+                    <sodipodi:guide
+                            position=\"29.996795,26.847961\"
+                            orientation=\"1,0\"
+                            id=\"guide3806\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"-33.228494,29.996795\"
+                            orientation=\"0,1\"
+                            id=\"guide3808\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"7.1677424,35.010071\"
+                            orientation=\"0,1\"
+                            id=\"guide3810\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"8.8664559,24.983518\"
+                            orientation=\"0,1\"
+                            id=\"guide3812\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"23.99414,39.638671\"
+                            orientation=\"1,0\"
+                            id=\"guide20\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"36.005859,37.382812\"
+                            orientation=\"1,0\"
+                            id=\"guide22\"
+                            inkscape:locked=\"false\"/>
+                </sodipodi:namedview>
+                <metadata
+                        id=\"metadata3796\">
+                    <rdf:RDF>
+                        <cc:Work
+                                rdf:about=\"\">
+                            <dc:format>image/svg+xml</dc:format>
+                            <dc:type
+                                    rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\"/>
+                            <dc:title></dc:title>
+                        </cc:Work>
+                    </rdf:RDF>
+                </metadata>
+                <g
+                        inkscape:groupmode=\"layer\"
+                        id=\"layer7\"
+                        inkscape:label=\"Ebene 2\">
+                    <path
+                            d=\"m 24.852088,34.972151 c -1.488003,0 -0.909335,-5.125344 0.248001,-9.368908 0.137778,-0.468446 0.661335,-0.496001 1.12978,-0.496001 -0.08267,2.755562 -0.220444,4.546676 0.826668,4.546676 1.184891,0 6.558237,-4.629343 8.046239,-4.629343 1.488003,0 0.909336,5.125344 -0.248,9.368908 -0.110222,0.468446 -0.661334,0.496001 -1.102225,0.496001 0.08267,-2.755561 0.19289,-4.546676 -0.826668,-4.546676 -1.212447,0 -6.585792,4.629343 -8.073795,4.629343 z\"
+                            id=\"path2732\"
+                            inkscape:connector-curvature=\"0\"
+                            style=\"stroke:none;stroke-width:0.02755562\"/>
+                </g>
+            </svg>
+        </td>
+    </tr>
+    <tr><td>Quilisma</td>
+        <td>
+            <svg
+                    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
+                    xmlns:cc=\"http://creativecommons.org/ns#\"
+                    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
+                    xmlns:svg=\"http://www.w3.org/2000/svg\"
+                    xmlns=\"http://www.w3.org/2000/svg\"
+                    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
+                    xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
+                    width=\"12\"
+                    height=\"60\"
+                    viewBox=\"24 0 12 60\"
+                    version=\"1.1\"
+                    id=\"SVGRoot\"
+                    inkscape:version=\"0.92.4 (5da689c313, 2019-01-14)\"
+                    sodipodi:docname=\"quilisma.svg\">
+                <defs
+                        id=\"defs3793\"/>
+                <sodipodi:namedview
+                        id=\"base\"
+                        pagecolor=\"#ffffff\"
+                        bordercolor=\"#666666\"
+                        borderopacity=\"1.0\"
+                        inkscape:pageopacity=\"0.0\"
+                        inkscape:pageshadow=\"2\"
+                        inkscape:zoom=\"48.271824\"
+                        inkscape:cx=\"6.1955893\"
+                        inkscape:cy=\"31.54036\"
+                        inkscape:document-units=\"px\"
+                        inkscape:current-layer=\"layer8\"
+                        showgrid=\"false\"
+                        inkscape:window-width=\"1920\"
+                        inkscape:window-height=\"1017\"
+                        inkscape:window-x=\"1912\"
+                        inkscape:window-y=\"-8\"
+                        inkscape:window-maximized=\"1\"
+                        inkscape:lockguides=\"false\"
+                        showguides=\"true\"
+                        inkscape:guide-bbox=\"true\"
+                        inkscape:snap-to-guides=\"false\"
+                        inkscape:snap-grids=\"false\">
+                    <sodipodi:guide
+                            position=\"29.996795,26.847961\"
+                            orientation=\"1,0\"
+                            id=\"guide3806\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"-33.228494,29.996795\"
+                            orientation=\"0,1\"
+                            id=\"guide3808\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"9.2393443,35.010071\"
+                            orientation=\"0,1\"
+                            id=\"guide3810\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"8.7421598,25.02495\"
+                            orientation=\"0,1\"
+                            id=\"guide3812\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"22.000412,47.232522\"
+                            orientation=\"1,0\"
+                            id=\"guide3895\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"49.967038,53.281601\"
+                            orientation=\"1,0\"
+                            id=\"guide3897\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"38.03461,50.091333\"
+                            orientation=\"1,0\"
+                            id=\"guide3901\"
+                            inkscape:locked=\"false\"/>
+                </sodipodi:namedview>
+                <metadata
+                        id=\"metadata3796\">
+                    <rdf:RDF>
+                        <cc:Work
+                                rdf:about=\"\">
+                            <dc:format>image/svg+xml</dc:format>
+                            <dc:type
+                                    rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\"/>
+                            <dc:title></dc:title>
+                        </cc:Work>
+                    </rdf:RDF>
+                </metadata>
+                <g
+                        inkscape:groupmode=\"layer\"
+                        id=\"layer8\"
+                        inkscape:label=\"Ebene 2\">
+                    <path
+                            d=\"m 24.070966,29.337707 c 0,-0.688503 1.807319,-2.560368 2.388243,-2.560368 0.559409,0 2.366727,2.710978 3.012197,2.710978 0.666988,0 4.905581,-2.259149 6.002881,-2.990682 0.537892,-0.365766 0.580926,0.387283 0.215157,0.903659 -1.032753,1.463069 -6.519256,6.196521 -7.810199,6.196521 -0.710018,0 -3.808279,-3.528573 -3.808279,-4.260108 z\"
+                            id=\"path1479\"
+                            inkscape:connector-curvature=\"0\"
+                            style=\"stroke-width:0.0215157\"/>
+                </g>
+            </svg>
+        </td>
+    </tr>
+    <tr><td>Strophicus</td>
+
+        <td>
+            <svg
+                    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
+                    xmlns:cc=\"http://creativecommons.org/ns#\"
+                    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
+                    xmlns:svg=\"http://www.w3.org/2000/svg\"
+                    xmlns=\"http://www.w3.org/2000/svg\"
+                    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
+                    xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
+                    width=\"12\"
+                    height=\"60\"
+                    viewBox=\"24 0 12 60\"
+                    version=\"1.1\"
+                    id=\"SVGRoot\"
+                    inkscape:version=\"0.92.4 (5da689c313, 2019-01-14)\"
+                    sodipodi:docname=\"strophicus.svg\">
+                <defs
+                        id=\"defs3793\"/>
+                <sodipodi:namedview
+                        id=\"base\"
+                        pagecolor=\"#ffffff\"
+                        bordercolor=\"#666666\"
+                        borderopacity=\"1.0\"
+                        inkscape:pageopacity=\"0.0\"
+                        inkscape:pageshadow=\"2\"
+                        inkscape:zoom=\"22.627417\"
+                        inkscape:cx=\"21.165627\"
+                        inkscape:cy=\"29.59699\"
+                        inkscape:document-units=\"px\"
+                        inkscape:current-layer=\"layer10\"
+                        showgrid=\"false\"
+                        inkscape:window-width=\"1920\"
+                        inkscape:window-height=\"1017\"
+                        inkscape:window-x=\"1912\"
+                        inkscape:window-y=\"-8\"
+                        inkscape:window-maximized=\"1\"
+                        inkscape:lockguides=\"false\"
+                        showguides=\"true\"
+                        inkscape:guide-bbox=\"true\"
+                        inkscape:snap-to-guides=\"false\"
+                        inkscape:snap-grids=\"false\">
+                    <sodipodi:guide
+                            position=\"29.996795,26.847961\"
+                            orientation=\"1,0\"
+                            id=\"guide3806\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"-33.228494,29.996795\"
+                            orientation=\"0,1\"
+                            id=\"guide3808\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"15.24699,35.001786\"
+                            orientation=\"0,1\"
+                            id=\"guide3810\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"13.965359,25.013902\"
+                            orientation=\"0,1\"
+                            id=\"guide3812\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"27,35.359375\"
+                            orientation=\"1,0\"
+                            id=\"guide3910\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"33,35.40625\"
+                            orientation=\"1,0\"
+                            id=\"guide3912\"
+                            inkscape:locked=\"false\"/>
+                </sodipodi:namedview>
+                <metadata
+                        id=\"metadata3796\">
+                    <rdf:RDF>
+                        <cc:Work
+                                rdf:about=\"\">
+                            <dc:format>image/svg+xml</dc:format>
+                            <dc:type
+                                    rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\"/>
+                            <dc:title></dc:title>
+                        </cc:Work>
+                    </rdf:RDF>
+                </metadata>
+                <g
+                        inkscape:groupmode=\"layer\"
+                        id=\"layer10\"
+                        inkscape:label=\"Ebene 2\">
+                    <path
+                            style=\"fill:#000000;fill-opacity:0;stroke-width:0.04143204\"
+                            d=\"m 25.01637,39.951822 c -0.353153,-0.0736 -0.510708,-0.208826 -0.510708,-0.438314 0,-0.07091 0.410392,-0.83157 1.113554,-2.063968 2.065526,-3.62015 2.984598,-5.397636 3.386043,-6.548609 0.204631,-0.586695 0.221806,-0.817451 0.08145,-1.094425 -0.268178,-0.529225 -1.009029,-1.101763 -3.006631,-2.323561 -1.605363,-0.98189 -2.225032,-1.437879 -2.345351,-1.725844 -0.04071,-0.09743 -0.0434,-0.169456 -0.01084,-0.29053 0.314859,-1.170954 3.570921,-4.258107 5.468489,-5.18481 0.664714,-0.324622 0.974136,-0.334641 1.633586,-0.05289 1.811657,0.774025 4.939675,3.102157 5.922604,4.408098 0.29108,0.386734 0.391821,0.614282 0.392957,0.887585 0.0037,0.88143 -1.428073,3.291894 -3.924811,6.607794 -2.720053,3.612483 -5.855617,7.089418 -6.845926,7.591245 -0.39415,0.199731 -1.000736,0.301946 -1.354417,0.228232 z\"
+                            id=\"path21\"
+                            inkscape:connector-curvature=\"0\"/>
+                    <path
+                            style=\"fill:#000000;fill-opacity:1;stroke-width:0.01563728\"
+                            d=\"m 27.272624,34.965072 c -0.0819,-0.02615 -0.173457,-0.121087 -0.173457,-0.179871 0,-0.03932 0.165964,-0.391875 0.218669,-0.464511 0.0062,-0.0086 0.03803,-0.0649 0.07065,-0.125098 0.03261,-0.0602 0.203634,-0.362785 0.380046,-0.672404 0.176412,-0.309617 0.341756,-0.601644 0.367432,-0.648947 0.02567,-0.0473 0.05187,-0.09304 0.05822,-0.101642 0.04329,-0.05867 0.455513,-0.839732 0.672625,-1.274438 0.436287,-0.873541 0.544221,-1.141505 0.557423,-1.383899 l 0.0077,-0.140736 -0.06003,-0.09708 c -0.12918,-0.208932 -0.34167,-0.393423 -0.818431,-0.710591 -0.153976,-0.102434 -0.375736,-0.242576 -1.000784,-0.632453 -0.337061,-0.210242 -0.579529,-0.384186 -0.708542,-0.5083 l -0.139811,-0.134501 0.0066,-0.100058 c 0.0109,-0.165491 0.111809,-0.346394 0.378554,-0.678638 0.134184,-0.167133 0.73711,-0.781662 0.961166,-0.979663 0.623282,-0.550803 1.242229,-0.969469 1.628712,-1.101685 0.145063,-0.04962 0.304389,-0.03943 0.492574,0.03154 0.470415,0.177392 1.278602,0.678119 1.995255,1.236198 0.312209,0.243125 0.550965,0.454742 0.806043,0.714421 0.418658,0.426207 0.519744,0.651748 0.427937,0.954806 -0.171979,0.567708 -0.836754,1.643074 -1.858748,3.006791 -0.3315,0.442344 -1.1799,1.517065 -1.252945,1.587184 -0.0045,0.0043 -0.0609,0.07107 -0.125392,0.148386 -0.756127,0.906521 -1.56734,1.760895 -1.941401,2.044697 -0.111463,0.08457 -0.317609,0.180329 -0.44741,0.207836 -0.122144,0.02589 -0.424829,0.02749 -0.502606,0.0027 z\"
+                            id=\"path97\"
+                            inkscape:connector-curvature=\"0\"/>
+                </g>
+            </svg>
+        </td>
+    </tr>
+    <tr><td>Liqueszenz</td>
+        <td>
+            <svg
+                    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
+                    xmlns:cc=\"http://creativecommons.org/ns#\"
+                    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
+                    xmlns:svg=\"http://www.w3.org/2000/svg\"
+                    xmlns=\"http://www.w3.org/2000/svg\"
+                    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
+                    xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
+                    width=\"12\"
+                    height=\"60\"
+                    viewBox=\"24 0 12 60\"
+                    version=\"1.1\"
+                    id=\"SVGRoot\"
+                    inkscape:version=\"0.92.4 (5da689c313, 2019-01-14)\"
+                    sodipodi:docname=\"ascending.svg\">
+                <defs
+                        id=\"defs3793\"/>
+                <sodipodi:namedview
+                        id=\"base\"
+                        pagecolor=\"#ffffff\"
+                        bordercolor=\"#666666\"
+                        borderopacity=\"1.0\"
+                        inkscape:pageopacity=\"0.0\"
+                        inkscape:pageshadow=\"2\"
+                        inkscape:zoom=\"12.067956\"
+                        inkscape:cx=\"14.519598\"
+                        inkscape:cy=\"39.318268\"
+                        inkscape:document-units=\"px\"
+                        inkscape:current-layer=\"layer3\"
+                        showgrid=\"false\"
+                        inkscape:window-width=\"1920\"
+                        inkscape:window-height=\"1017\"
+                        inkscape:window-x=\"1912\"
+                        inkscape:window-y=\"-8\"
+                        inkscape:window-maximized=\"1\"
+                        inkscape:lockguides=\"false\"
+                        showguides=\"true\"
+                        inkscape:guide-bbox=\"true\"
+                        inkscape:snap-to-guides=\"false\"
+                        inkscape:snap-grids=\"false\">
+                    <sodipodi:guide
+                            position=\"29.996795,26.847961\"
+                            orientation=\"1,0\"
+                            id=\"guide3806\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"-33.228494,29.996795\"
+                            orientation=\"0,1\"
+                            id=\"guide3808\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"13.886718,34.921874\"
+                            orientation=\"0,1\"
+                            id=\"guide3810\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"13.476562,24.960937\"
+                            orientation=\"0,1\"
+                            id=\"guide3812\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"24.023437,55.136718\"
+                            orientation=\"1,0\"
+                            id=\"guide3829\"
+                            inkscape:locked=\"false\"/>
+                    <sodipodi:guide
+                            position=\"36.035156,55.429686\"
+                            orientation=\"1,0\"
+                            id=\"guide3831\"
+                            inkscape:locked=\"false\"/>
+                </sodipodi:namedview>
+                <metadata
+                        id=\"metadata3796\">
+                    <rdf:RDF>
+                        <cc:Work
+                                rdf:about=\"\">
+                            <dc:format>image/svg+xml</dc:format>
+                            <dc:type
+                                    rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\"/>
+                            <dc:title></dc:title>
+                        </cc:Work>
+                    </rdf:RDF>
+                </metadata>
+                <g
+                        inkscape:groupmode=\"layer\"
+                        id=\"layer3\"
+                        inkscape:label=\"Ebene 2\">
+                    <path
+                            d=\"m 28.846225,35.094337 c -2.306802,0 -4.382925,-1.557091 -4.382925,-4.123409 0,-2.85467 3.114184,-5.88235 6.459049,-5.88235 1.672433,0 2.796998,0.749712 3.3737,1.528257 l 0.02883,-0.05767 c -0.02883,-0.34602 -0.08651,-0.807381 -0.11534,-1.903111 l -0.173006,-6.574387 c 0,-0.519032 0.634372,-0.720877 1.326412,-0.547867 v 11.591686 c 0,3.402533 -3.287195,5.968852 -6.51672,5.968851 z\"
+                            id=\"path874\"
+                            inkscape:connector-curvature=\"0\"
+                            style=\"fill:#000000;fill-opacity:1;stroke-width:0.02883504\"/>
+                </g>
+            </svg>
+
+
+
+        <svg
+                xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
+                xmlns:cc=\"http://creativecommons.org/ns#\"
+                xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
+                xmlns:svg=\"http://www.w3.org/2000/svg\"
+                xmlns=\"http://www.w3.org/2000/svg\"
+                xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
+                xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
+                width=\"12\"
+                height=\"60\"
+                viewBox=\"24 0 12 60\"
+                version=\"1.1\"
+                id=\"SVGRoot\"
+                inkscape:version=\"0.92.4 (5da689c313, 2019-01-14)\"
+                sodipodi:docname=\"descending.svg\">
+            <defs
+                    id=\"defs3793\" />
+            <sodipodi:namedview
+                    id=\"base\"
+                    pagecolor=\"#ffffff\"
+                    bordercolor=\"#666666\"
+                    borderopacity=\"1.0\"
+                    inkscape:pageopacity=\"0.0\"
+                    inkscape:pageshadow=\"2\"
+                    inkscape:zoom=\"12.067956\"
+                    inkscape:cx=\"-1.6017766\"
+                    inkscape:cy=\"36.671869\"
+                    inkscape:document-units=\"px\"
+                    inkscape:current-layer=\"layer4\"
+                    showgrid=\"false\"
+                    inkscape:window-width=\"1920\"
+                    inkscape:window-height=\"1017\"
+                    inkscape:window-x=\"1912\"
+                    inkscape:window-y=\"-8\"
+                    inkscape:window-maximized=\"1\"
+                    inkscape:lockguides=\"false\"
+                    showguides=\"true\"
+                    inkscape:guide-bbox=\"true\"
+                    inkscape:snap-to-guides=\"false\"
+                    inkscape:snap-grids=\"false\">
+                <sodipodi:guide
+                        position=\"29.996795,26.847961\"
+                        orientation=\"1,0\"
+                        id=\"guide3806\"
+                        inkscape:locked=\"false\" />
+                <sodipodi:guide
+                        position=\"-33.228494,29.996795\"
+                        orientation=\"0,1\"
+                        id=\"guide3808\"
+                        inkscape:locked=\"false\" />
+                <sodipodi:guide
+                        position=\"12.949219,35.039063\"
+                        orientation=\"0,1\"
+                        id=\"guide3810\"
+                        inkscape:locked=\"false\" />
+                <sodipodi:guide
+                        position=\"13.125,24.960938\"
+                        orientation=\"0,1\"
+                        id=\"guide3812\"
+                        inkscape:locked=\"false\" />
+                <sodipodi:guide
+                        position=\"23.947718,53.405897\"
+                        orientation=\"1,0\"
+                        id=\"guide3829\"
+                        inkscape:locked=\"false\" />
+                <sodipodi:guide
+                        position=\"35.963009,53.115873\"
+                        orientation=\"1,0\"
+                        id=\"guide3831\"
+                        inkscape:locked=\"false\" />
+            </sodipodi:namedview>
+            <metadata
+                    id=\"metadata3796\">
+                <rdf:RDF>
+                    <cc:Work
+                            rdf:about=\"\">
+                        <dc:format>image/svg+xml</dc:format>
+                        <dc:type
+                                rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" />
+                        <dc:title></dc:title>
+                    </cc:Work>
+                </rdf:RDF>
+            </metadata>
+            <g
+                    inkscape:groupmode=\"layer\"
+                    id=\"layer4\"
+                    inkscape:label=\"Ebene 2\">
+                <path
+                        d=\"m 35.388649,29.040909 v 0.260586 12.739849 c 0,0.463264 -0.463266,0.636991 -1.216075,0.608038 0.115817,-2.866468 0.260587,-6.804239 0.289543,-10.626192 -1.187124,1.824113 -3.416596,3.011237 -5.617115,3.011237 -2.316337,0 -4.401038,-1.563528 -4.401038,-4.14045 0,-2.866466 3.127053,-5.906657 6.485741,-5.906657 2.953327,0 4.458944,1.968886 4.458944,4.053589 z\"
+                        id=\"path2091\"
+                        inkscape:connector-curvature=\"0\"
+                        style=\"fill:#000000;fill-opacity:1;stroke-width:0.02895419\" />
+            </g>
+        </svg>
+        </td>
+    </tr>
+</table>
+
+<h2>Tonhöhen</h2>
+<p>Die durch die Liniendiagramme der handschriftlichen Notationen übermittelte Tonhöheninformation
+    ist durch tondauerneutrale Einzeltonzeichen in einem Fünfliniensystem wiedergegeben,
+    dessen zweite Linie von unten der Tonstufe G im guidonischen Tonsystems entspricht.</p>
+
+<h2>Tongruppen</h2>
+<p>
+Über die Wiedergabe der Tonhöhen hinaus wird in der Transkription ein Moment der
+    historischen Notation erfasst, das als Merkmal 'neumatischen' Notierens gilt:
+    die Darstellung des Tonverlaufs als eine Folge von Gruppen graphisch verbunden
+    oder graphisch unverbunden notierter Töne. Die Gruppierung wird in der Transkription
+    durch horizontale Abstände zwischen den Tongruppen wiedergegeben. Graphisch verbundene
+    Notierung von Tönen innerhalb der Gruppe wird durch Bogenklammern oberhalb der Noten angezeigt.</p>
+
+<h2>Akzidentien</h2>
+<p>Die in der Quelle gesetzten Akzidentien werden wiedergegeben, aber nicht editorisch ergänzt.</p>
+
+<h2>Einschubstellen von Tropenelementen</h2>
+<p>Die Einschubstellen der Tropenelemente im Ablauf des Primärgesangs sind durch
+    die in der Quelle enthaltenen Einsatzmarken (Textmarken aus dem Primärgesang
+    mit oder ohne Notation) ersichtlich. Diese sind in dem Umfang und in den textlichen
+    und melodischen Lesarten wiedergegeben, in denen sie in der Handschrift auftreten;
+    lediglich unvollständige Wörter sind in spitzen Klammern ergänzt. Als fehlend beurteilte
+    Einsatzmarken sind (beschränkt auf deren Text) in spitzen Klammern <  > ergänzt.
+    Einsatzmarken sind durch Kapitälchen hervorgehoben.
+</p>
+<h2>Primärgesänge von Tropen</h2>
+<p>Die durch die Einsatzmarken gekennzeichneten Primärgesänge von Tropen zu den
+    Antiphonen der Messe sind in das Editionskorpus aufgenommen, soweit sie
+    in der gleichen Quelle überliefert sind wie diese. Sind die Tropen in der
+    Handschrift in ein Graduale oder Missale integriert, wird der zugehörige
+    Primärgesang den Gegebenheiten der Quelle entsprechend in unmittelbarem Anschluss
+    an den betreffenden Tropus innerhalb der Editionseinheit sowie als separate Editionseinheit
+    ediert. Sind die Tropen in der Handschrift von den (in deren Gradualteil enthaltenen)
+    Primärgesängen separiert, werden diese als Editionseinheit in das Korpus aufgenommen.
+</p>
+
+<h2>Seitenwechsel und Spaltenwechsel</h2>
+<p>Seitenwechsel oder Spaltenwechsel in der Handschrift sind durch doppelten senkrechten Strich || auf der Textebene
+    angezeigt.</p>
+
+<h2>Zeilenwechsel</h2>
+<p>Zeilenwechsel innerhalb einer Editionseinheit wird durch einfachen senkrechten Strich | angezeigt.</p>
+
+<h2>Blattzählung</h2>
+<p>Die Blattzählung der Quelle wird zu Beginn der Editionseinheit und bei Seitenwechsel oder Spaltenwechsel in der
+    rechten Randspalte mitgeteilt (in der Alpha-Version noch nicht einheitlich durchgeführt).</p>
+
+
+<h2>Editorische Zeichen</h2>
+<table>
+    <tr><td>< ></td><td>Editorischer Zusatz</td></tr>
+<tr><td>    < ... ></td><td> Editorische Auslassung</td></tr>
+<tr><td>    ...</td><td> Auslassung in der Quelle</td></tr>
+<tr><td>    *</td><td> Textincipit in der Quelle</td></tr>
+<tr><td>    [ ]</td><td> Emendationen in der Quellenbeschreibung</td></tr>
+<tr><td>    ||</td><td> Seitenwechsel oder Spaltenwechsel in der Quelle</td></tr>
+<tr><td>    | </td><td>Zeilenwechsel in der Quelle</td></tr>
+<tr><td>    GROSS</td><td> Rubriken</td></tr>
+    <tr><td>  KAPITÄLCHEN</td><td> Einsatzmarken und Primärtextsegmente innerhalb von Tropenkomplexen</td></tr></table>
+</table>
+
+<h2>Abkürzungen</h2>
+
+<table>
+    <tr>
+        <td>AH</td>
+        <td>Analecta hymnica medii aevi</td>
+    </tr>
+    <tr>
+        <td>AMS</td>
+        <td>Antiphonale missarum sextuplex</td>
+    </tr>
+    <tr>
+        <td>Bl.</td>
+        <td>Blatt / Blätter</td>
+    </tr>
+    <tr>
+        <td>BSA</td>
+        <td>Bruno-Stäblein-Archiv</td>
+    </tr>
+    <tr>
+        <td>CM</td>
+        <td>Corpus monodicum</td>
+    </tr>
+    <tr>
+        <td>Com.</td>
+        <td>Communio</td>
+    </tr>
+    <tr>
+        <td>CT</td>
+        <td>Corpus Troporum</td>
+    </tr>
+    <tr>
+        <td>f.</td>
+        <td>folio</td>
+    </tr>
+    <tr>
+        <td>Hs.</td>
+        <td>Handschrift</td>
+    </tr>
+    <tr>
+        <td>Intr.</td>
+        <td>Introitus</td>
+    </tr>
+    <tr>
+        <td>KB</td>
+        <td>Kritischer Bericht</td>
+    </tr>
+    <tr>
+        <td>MMMA</td>
+        <td>Monumenta monodica medii aevi</td>
+    </tr>
+    <tr>
+        <td>Off.</td>
+        <td>Offertorium</td>
+    </tr>
+    <tr>
+        <td>o.N.</td>
+        <td>ohne Notation</td>
+    </tr>
+    <tr>
+        <td>p</td>
+        <td>paroxytonisch</td>
+    </tr>
+    <tr>
+        <td>p.</td>
+        <td>pagina</td>
+    </tr>
+    <tr>
+        <td>pp</td>
+        <td>proparoxytonisch</td>
+    </tr>
+    <tr>
+        <td>R.</td>
+        <td>Responsorium</td>
+    </tr>
+    <tr>
+        <td>RISM</td>
+        <td>Répertoire International des Sources Musicales</td>
+    </tr>
+    <tr>
+        <td>Tr</td>
+        <td>Tropus</td>
+    </tr>
+    <tr>
+        <td>v</td>
+        <td>verso</td>
+    </tr>
+</table>
+
+
+<h2>Abgekürzt zitierte Literatur</h2>
+
+<table>
+    <tr>
+        <td>AH</td>
+        <td>Guido Maria DREVES, Clemens BLUME und Henry Marriott BANNISTER (Hg.), Analecta hymnica medii aevi, 55 Bde.,
+            Leipzig 1886–1922.
+        </td>
+    </tr>
+    <tr>
+        <td>AMS</td>
+        <td>René-Jean HESBERT (Hg.), Antiphonale Missarum Sextuplex. D’après le Graduel de Monza et les Antiphonaires de
+            Rheinau, du Mont-Blandin, de Compiègne, de Corbie et de Senlis, Brüssel 1935.
+        </td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Gordon Athol ANDERSON (Hg.), Notre-Dame and related conductus: opera omnia, Henryville 1979.</td>
+    </tr>
+    <tr>
+        <td>Bosse</td>
+        <td>Detlev BOSSE, Untersuchung einstimmiger mittelalterlicher Melodien zum ‚Gloria in excelsis Deo‘ (=
+            Forschungsbeiträge zur Musikwissenschaft 2), Regensburg 1955.
+        </td>
+    </tr>
+    <tr>
+        <td>BVMM</td>
+        <td>Bibliothèque virtuelle des manuscrits médiévaux, betreut durch das Institut de recherche et d’histoire des
+            textes (IRHT) (online unter URL: <a href=\"http://bvmm.irht.cnrs.fr/\">http://bvmm.irht.cnrs.fr/</a>, Stand: 01.12.2015).
+        </td>
+    </tr>
+    <tr>
+        <td>Cantus Planus 1992</td>
+        <td>László DOBSZAY, Ágnes PAPP und Ferenc SEBÓ (Hg.), International Musical Society Study Group Cantus Planus.
+            Papers Read at the Fourth Meeting, Pécs, Hungary, 3–8 September 1990, Budapest 1992.
+        </td>
+    </tr>
+    <tr>
+        <td>CAO</td>
+        <td>René-Jean HESBERT (Hg.), Corpus antiphonalium officii, 6 Bde. (= Rerum ecclesiasticarum documenta, Series
+            maior, Fontes VII–XII), Rom 1963–1979.
+        </td>
+    </tr>
+    <tr>
+        <td>CGM in 4°</td>
+        <td>Catalogue général des manuscrits des bibliothèques publiques des départements, Quartausgabe, 7 Bde., Paris
+            1849–1885.
+        </td>
+    </tr>
+    <tr>
+        <td>CGM Départements</td>
+        <td>Catalogue général des manuscrits des bibliothèques publiques de France, Départements, 52 Bde., Paris
+            1885–1960.
+        </td>
+    </tr>
+    <tr>
+        <td>CMN</td>
+        <td>Christian MEYER, Catalogue des Manuscrits Notés du Moyen Age Conservés dans les Bibliothèques Publiques de
+            France, 5 Bde., Turnhout 2006–2014; Notices provisoires (online unter URL: <a href=\"http://www.musmed.fr/CMN/CMN.htm\">http://www.musmed.fr/CMN/CMN.htm</a>,
+            Stand: 01.12.2015).
+        </td>
+    </tr>
+    <tr>
+        <td>CT I</td>
+        <td>Ritva JONSSON (Hg.), Tropes du propre de la messe 1: Cycle de Noël (= Corpus Troporum I), Stockholm 1975.
+        </td>
+    </tr>
+    <tr>
+        <td>CT III</td>
+        <td>Gunilla BJÖRKVALL, Gunilla IVERSEN und Ritva JONSSON (Hg.), Tropes du propre de la messe 2: Cycle de Pâques
+            (= Corpus Troporum III), Stockholm 1982.
+        </td>
+    </tr>
+    <tr>
+        <td>CT IV</td>
+        <td>Gunilla IVERSEN (Hg.), Tropes de l'Agnus Dei (= Corpus Troporum IV), Stockholm 1980.</td>
+    </tr>
+    <tr>
+        <td>CT VII</td>
+        <td>Gunilla IVERSEN (Hg.), Tropes du Sanctus (= Corpus Troporum VII), Stockholm 1990.</td>
+    </tr>
+    <tr>
+        <td>CT VIII</td>
+        <td>Bodil ASKETORP (Hg.), Tropes for the Proper of the Mass 3: The Tropes for the Dedication of a Church (=
+            Corpus Troporum VIII), Druck in Vorbereitung.
+        </td>
+    </tr>
+    <tr>
+        <td>CT IX</td>
+        <td>Ann-Katrin ANDREWS JOHANSSON (Hg.), Tropes for the Proper of the Mass 4: The Feasts of the Blessed Virgin
+            Mary (= Corpus Troporum IX), Stockholm 1998.
+        </td>
+    </tr>
+    <tr>
+        <td>CT X</td>
+        <td>Ritva Maria JACOBSSON (Hg.), Tropes du propre de la messe 5: Fêtes des Saints et de la Croix et de la
+            Transfiguration, Bd. A: Introduction et commentaires, Bd. B: Édition (= Corpus Troporum X), Stockholm 2011.
+        </td>
+    </tr>
+    <tr>
+        <td>CT XII</td>
+        <td>Gunilla IVERSEN (Hg.), Tropes du Gloria (= Corpus Troporum XII), 2 Bde., Stockholm 2014.</td>
+    </tr>
+    <tr>
+        <td>EBDB</td>
+        <td>Einbanddatenbank. Digitalisierung der Durchreibungen von Bucheinbänden des 15. und 16. Jahrhunderts,
+            gefördert durch die Deutsche Forschungsgemeinschaft (online unter URL: <a href=\"http://www.hist-einband.de/\">http://www.hist-einband.de/</a>, Stand:
+            26.04.2016).
+        </td>
+    </tr>
+    <tr>
+        <td>Eifrig/Pfisterer</td>
+        <td>William F. EIFRIG und Andreas PFISTERER (Hg.), Melodien zum Ite missa est und ihre Tropen (= MMMA 19),
+            Kassel u.a. 2006.
+        </td>
+    </tr>
+    <tr>
+        <td>Evers</td>
+        <td>Ute EVERS und Johannes JANOTA (Hg.), Die Melodien der lateinischen Osterfeiern, 2 Bde., Berlin 2013.</td>
+    </tr>
+    <tr>
+        <td>GR II</td>
+        <td>Le Graduel Romain. Édition critique par les moines de Solesmes, II: Les Sources, Solesmes 1957.</td>
+    </tr>
+    <tr>
+        <td>GW</td>
+        <td>Gesamtkatalog der Wiegendrucke, Datenbank der Staatsbibliothek Berlin, PKB (online unter URL:
+            <a href=\"http://www.gesamtkatalogderwiegendrucke.de/\">http://www.gesamtkatalogderwiegendrucke.de/</a>, Stand: 27.04.2016).
+        </td>
+    </tr>
+    <tr>
+        <td>Hiley, Ordinary chants</td>
+        <td>David HILEY. Ordinary of mass chants in English, North French and Sicilian manuscripts, in Journal of the
+            Plainsong and Mediaeval Music Society 9 (1986), S. 1-128.
+        </td>
+    </tr>
+    <tr>
+        <td>Itinerari 2008</td>
+        <td>Wulf ARLT und Giulio CATTIN (Hg.), Itinerari e stratificazioni dei tropi. San Marco, l’Italia settentrionale
+            e le regioni transalpine. Testi d’un convegno e di sessioni di studio negli anni 1992–1995 presso la
+            Fondazione Ugo e Olga Levi, Venedig 2008.
+        </td>
+    </tr>
+    <tr>
+        <td>La tradizione dei tropi 1990</td>
+        <td>Claudio LEONARDI und Enrico MENESTO (Hg.), La tradizione dei tropi liturgici. Atti dei convegni sui tropi
+            liturgici, Parigi (15–19 ottobre 1985) – Perugia (2–5 settembre 1987) (= Biblioteca del „Centro per il
+            collegamento degli studi medievali e umanistici nell’Università di Perugia“ 3), Spoleto 1990.
+        </td>
+    </tr>
+    <tr>
+        <td>Lagueux</td>
+        <td>Robert LAGUEUX, Glossing Christmas: Liturgy, Music, Exegesis, and Drama in High Medieval Laon, Ph.D.
+            Dissertation, Yale University, 2004.
+        </td>
+    </tr>
+    <tr>
+        <td>Liturgische Tropen 1985</td>
+        <td>Liturgische Tropen. Referate zweier Colloquien des Corpus Troporum in München (1983) und Canterbury (1984)
+            (= Münchener Beiträge zur Mediävistik und Renaissance-Forschung 36), München 1985.
+        </td>
+    </tr>
+    <tr>
+        <td>LOO</td>
+        <td>Walther LIPPHARDT, Lateinische Osterfeiern und Osterspiele, 9 Bde., Berlin 1975–91.</td>
+    </tr>
+    Lowe
+    E. A. LOWE (Hg.), The Bobbio Missal: A Gallican Mass-Book (Ms. Paris. Lat. 13246): Text (= Henry Bradshaw Society
+    58), London 1920.
+    <tr>
+        <td>Melnicki</td>
+        <td>Margaretha LANDWEHR-MELNICKI, Das einstimmige Kyrie des lateinischen Mittelalters (= Forschungsbeiträge zur
+            Musikwissenschaft 1), Regensburg 1955.
+        </td>
+    </tr>
+    <tr>
+        <td>2MGG</td>
+        <td>Ludwig FINSCHER (Hg.), Die Musik in Geschichte und Gegenwart. Allgemeine Enzyklopädie der Musik, 2.,
+            neubearbeitete Ausgabe, 29 Bde. in zwei Teilen, Kassel u.a. 1994ff.
+        </td>
+    </tr>
+    <tr>
+        <td>Miazga</td>
+        <td>Tadeusz MIAZGA, Die Melodien des einstimmigen Credo der römisch-katholischen lateinischen Kirche, Graz
+            1976.
+        </td>
+    </tr>
+    <tr>
+        <td>MMMA</td>
+        <td>Monumenta monodica medii aevi, begr. von Bruno Stäblein, hg. im Auftrag des Instituts für Musikwissenschaft
+            der Universität Erlangen-Nürnberg und des Instituts für Musikforschung der Universität Würzburg, Kassel u.a.
+            1956ff.
+        </td>
+    </tr>
+    <tr>
+        <td>Morandi</td>
+        <td>Nausica MORANDI, Officium Stellae: Studio Comparativo E Trascrizione Dei Testimoni Liturgico-musicali,
+            Firenze 2016.
+        </td>
+    </tr>
+    <tr>
+        <td>2NGr</td>
+        <td>Stanley SADIE und John TYRRELL (Hg.), The New Grove Dictionary of Music and Musicians, 2. Auflage, 29 Bde.,
+            London/New York 2001.
+        </td>
+    </tr>
+    <tr>
+        <td>Poleg</td>
+        <td>Eyal POLEG, Approaching the Bible in Medieval England, Manchester 2013.</td>
+    </tr>
+    <tr>
+        <td>Rankin</td>
+        <td>Susan RANKIN, A New English Source of the Visitatio sepulchri, in Journal of the Plainsong and Mediaeval
+            Music Society 4 (1981), S. 1-45.
+        </td>
+    </tr>
+    <tr>
+        <td>Recherches nouvelles 1993</td>
+        <td>Wulf ARLT und Gunilla BJÖRKVALL (Hg.), Recherches nouvelles sur les tropes liturgiques. Recueil d’études.
+            Corpus Troporum (= Acta Universitatis Stockholmiensis. Studia Latina Stockholmiensia 36), Stockholm 1993.
+        </td>
+    </tr>
+    <tr>
+        <td>RISM B</td>
+        <td>Répertoire International des Sources Musicales. Internationales Quellenlexikon der Musik, hg. unter dem
+            Patronat der Internationalen Gesellschaft für Musikwissenschaft und der Internationalen Vereinigung der
+            Musikbibliotheken, Musikarchive und Musikdokumentationszentren, Serie B, München 1960ff.
+        </td>
+    </tr>
+    <tr>
+        <td>Schildbach</td>
+        <td>Martin SCHILDBACH, Das einstimmige Agnus Dei und seine handschriftliche Überlieferung vom 10. bis zum 16.
+            Jahrhundert, Diss. Erlangen 1967.
+        </td>
+    </tr>
+    <tr>
+        <td>Thannabaur</td>
+        <td>Peter Josef THANNABAUR, Das einstimmige Sanctus der römischen Messe in der handschriftlichen Überlieferung
+            des 11. bis 16. Jahrhunderts (= Erlanger Arbeiten zur Musikwissenschaft 1), München 1962.
+        </td>
+    </tr>
+    <tr>
+        <td>TT</td>
+        <td>Andreas HAUG, Troparia tardiva. Repertorium später Tropenquellen aus dem deutschsprachigen Raum (= MMMA,
+            Subsidia I), Kassel u.a. 1995.
+        </td>
+    </tr>
+    <tr>
+        <td>VD 16</td>
+        <td>Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 16. Jahrhunderts, Datenbank der
+            Bayerischen Staatsbibliothek München (online unter URL:
+            <a href=\"https://opacplus.bib-bvb.de/TouchPoint_touchpoint/start.do?SearchProfile=Altbestand&SearchType=2\">https://opacplus.bib-bvb.de/TouchPoint_touchpoint/start.do?SearchProfile=Altbestand&SearchType=2</a>, Stand:
+            27.04.2016).
+        </td>
+    </tr>
+    <tr>
+        <td>Yardley</td>
+        <td>Anne Bagnall YARDLEY, Performing Piety: Musical Culture in Medieval English Nunneries. New York and
+            Basingstoke, England: Palgrave Macmillan, 2006.
+        </td>
+    </tr>
+    <tr>
+        <td>Young</td>
+        <td>
+            Karl YOUNG, The Drama of the Medieval Church, Oxford 1933.
+        </td>
+    </tr>
+</table>
+
+</div>
+
+"""@de.
+
+data:team :hasContent """<h2>Team</h2>
+<ul>
+    <li><a href=\"#cma\">Charles M. Atkinson</a></li>
+    <li><a href=\"#mb\">Michael Behl</a></li>
+    <li><a href=\"#gb\">Gunilla Björkvall</a></li>
+    <li><a href=\"#dc\">David Catalunya</a></li>
+    <li><a href=\"#md\">Maria Dorofeev</a></li>
+    <li><a href=\"#te\">Tim Eipert</a></li>
+    <li><a href=\"#ah\">Andreas Haug</a></li>
+    <li><a href=\"#alh\">Alexander Hartelt</a></li>
+    <li><a href=\"#jhs\">Jasmin Hartmann-Strauß</a></li>
+    <li><a href=\"#dh\">David Hiley</a></li>
+    <li><a href=\"#gi\">Gunilla Iversen</a></li>
+    <li><a href=\"#rmj\">Ritva Maria Jacobsson</a></li>
+    <li><a href=\"#mk\">Michael Klaper</a></li>
+    <li><a href=\"#mk\">Monnica Klöckener</a></li>
+    <li><a href=\"#pk\">Patricia Kolb</a></li>
+    <li><a href=\"#ik\">Isabel Kraft</a></li>
+    <li><a href=\"#mk\">Malte Krosse</a></li>
+    <li><a href=\"#kl\">Kelly Landerkin</a></li>
+    <li><a href=\"#ml\">Margarete Lein</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#sem\">Salah Eddin Maraqa</a></li>
+    <li><a href=\"#sm\">Stefanie Morawietz</a></li>
+    <li><a href=\"#ap\">Andreas Pfisterer</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#fep\">Felix Pöppel</a></li>
+    <li><a href=\"#fap\">Frank Puppe</a></li>
+    <li><a href=\"#as\">Anna Sanda</a></li>
+    <li><a href=\"#js\">Jasmin Schlotterbeck</a></li>
+    <li><a href=\"#jcs\">Johann C. Schuppe</a></li>
+    <li><a href=\"#als\">Alba Scotti</a></li>
+    <li><a href=\"#esh\">Elaine Stratton Hild</a></li>
+    <li><a href=\"#ls\">Lucia Swientek</a></li>
+    <li><a href=\"#kv\">Konstantin Voigt</a></li>
+    <li><a href=\"#hz\">Hanna Zühlke</a></li>
+</ul>
+
+
+<table class=\"tableizer-table\">
+    <thead><tr id=\"cma\"><td>CMA</td><td>Charles M. Atkinson</a></td><td>seit 2011</td><td>Edition</td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr></thead><tbody>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 9</td></tr>
+<tr id=\"mb\"><td>&nbsp;</td><td>Michael Behl</td><td>2011 bis 2014</td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"gb\"><td>&nbsp;</td><td>Gunilla Björkvall</td><td>2011 bis 2015</td><td>Textedition</td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"dc\"><td>DC</td><td>David Catalunya</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Apt 17</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 903</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lieder</td><td>Pa 1139</td></tr>
+<tr id=\"md\"><td>MD</td><td>Maria Dorofeev</td><td>2020</td><td>Edition </td><td>Sequenzen</td><td>Pro 12</td></tr>
+<tr id=\"te\"><td>&nbsp;</td><td>Tim Eipert</td><td>seit 2017</td><td>Datenmodellierung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Softwareentwicklung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"ah\"><td>&nbsp;</td><td>Andreas Haug</td><td>seit 2011</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"alh\"><td></td><td>Alexander Hartelt</td><td>seit 2020</td><td>Softwareentwicklung</td><td></td><td></td></tr>
+<tr id=\"jhs\"><td>JHS</td><td>Jasmin Hartmann-Strauß</td><td>seit 2014</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Lo 4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Quellenbeschreibung</td><td>&nbsp;</td><td>Ass 695</td></td>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"dh\"><td>DH</td><td>David Hiley</td><td>seit 2012 </td><td>Edition </td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<tr id=\"gi\"><td>&nbsp;</td><td>Gunilla Iversen</td><td>seit 2012 </td><td>Textrevision</td><td>Ordinariumsgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"rmj\"><td>&nbsp;</td><td>Ritva Maria Jacobsson</td><td>seit 2011</td><td>Textrevision</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"mk\"><td>MK</td><td>Michael Klaper</td><td>&nbsp;</td><td>Edition </td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Monnica Klöckener</td><td>2011 bis 2012</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"pk\"><td>&nbsp;</td><td>Patricia Kolb</td><td>2016 bis 2019</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"ik\"><td>IK</td><td>Isabel Kraft</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 341</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 61</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 430</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Malte Krosse</td><td>2011 bis 2012, 2015 bis 2016 </td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"kl\"><td>KL</td><td>Kelly Landerkin</td><td>2017</td><td>Edition </td><td>Spiele</td><td>Pa 1139</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr id=\"ml\"><td>&nbsp;</td><td>Margarete Lein</td><td>seit 2013</td><td>Projektverwaltung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"il\"><td>&nbsp;</td><td>Iris Lindenmann</td><td>2012 bis 2015</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"sem\"><td>SEM</td><td>Salah Eddin Maraqa</td><td>seit 2020</td><td>Edition </td><td>Sequenzen</td><td>Pa 14819</td></tr>
+<tr id=\"sm\"><td>&nbsp;</td><td>Stefanie Morawietz</td><td>2011 bis 2013</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"ap\"><td>AP</td><td>Andreas Pfisterer</td><td>seit 2015</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>AugW 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ben 34</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 664</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bar 888</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Dar 868</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 23935</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mel 109</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 4101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nea 38</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 778</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 833</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1119</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 17328</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 1340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoV 52</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tsa 135</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"fep\"><td>&nbsp;</td><td>Felix Pöppel</td><td>seit 2019</td><td>Assistenz</td><td>Sequenzen</td><td>&nbsp;</td></tr>
+<tr id=\"fap\"><td>&nbsp;</td><td>Frank Puppe</td><td>seit 2019</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"as\"><td>AS</td><td>Anna Sanda </td><td>2019 bis 2020</td><td>Edition</td><td>Sequenzen</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 14452</td></tr>
+<tr id=\"js\"><td>&nbsp;</td><td>Jasmin Schlotterbeck</td><td>2013 bis 2017</td><td>Assistenz</td><td>Tropen, Ordinariusmgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"jcs\"><td>&nbsp;</td><td>Johann C. Schuppe</td><td>seit 2019</td><td>Assistenz </td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"als\"><td>&nbsp;</td><td>Alba Scotti</td><td>2012 bis 2014</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"esh\"><td>ESH</td><td>Elaine Stratton Hild</td><td>seit 2012 </td><td>Edition </td><td>Tropen</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 2615</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Or 201</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr id=\"ls\"><td>LS</td><td>Lucia Swientek</td><td>seit 2018</td><td>Edition </td><td>Sequenzen</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lü 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"kv\"><td>KV</td><td>Konstantin Voigt</td><td>2012 bis 2013</td><td>Edition </td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"hz\"><td>HZ</td><td>Hanna Zühlke</td><td>2013 bis 2019</td><td>Quellenbeschreibungen</td><td>&nbsp;</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792 </td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 314</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 62</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 288</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 20-4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+</tbody></table>
+"""@de.
+
+data:partner :hasContent """
+    <h2>Partner</h2>
+    <table class=\"partner\">
+        <tbody>
+
+            <tr>
+            <td>Olyro GmbH
+            </td>
+            <td><img src=\"https://olyro.de/assets/img/logos/logo.svg\" width=\"100\"></td>
+            <td><a href=\"https://olyro.de/\">https://olyro.de/</a></td>
+        </tr>
+            <tr>
+            <td>Notengrafik Berlin GmbH
+            </td>
+            <td><img src=\"https://avatars2.githubusercontent.com/u/25899147?s=200&amp;v=4\" width=\"100\"></td>
+            <td><a href=\"https://notengrafik.com/\">https://notengrafik.com/
+                </a></td>
+        </tr>
+                     <tr>
+            <td>Schwabe Verlag Basel
+            </td>
+            <td><img src=\"https://schwabe.ch//themes/Frontend/Schwabe/frontend/_public/src/img/share.png\" width=\"100\"></td>
+            <td><a href=\"https://schwabe.ch/\">https://schwabe.ch/
+                </a></td>
+        </tr>
+
+    </tbody></table>
+    """@de.
+
+data:foerdervermerk :hasContent """<div class=\"foerder-main\">
+    <h2>Fördervermerk</h2>
+    Das Editionsvorhaben Corpus monodicum der Akademie der Wissenschaften und der Literatur | Mainz wird im Rahmen des Akademienprogramms von der Bundesrepublik Deutschland und vom Freistaat Bayern gefördert.
+</div>
+"""@de.
+data:beirat :hasContent """<h2>Beirat</h2>
+<ul><li>Wulf Arlt (Basel)</li>
+<li>Charles M. Atkinson (Columbus, Ohio und Würzburg)</li>
+<li>Gunilla Björkvall (Stockholm)</li>
+<li>Marco Gozzi (Trento)</li>
+<li>Max Haas (Basel) †</li>
+<li>Andrew Hankinson (Oxford)</li>
+<li>Felix Heinzer (Freiburg)</li>
+<li>David Hiley (Regensburg)</li>
+<li>Oliver Huck (Hamburg)</li>
+<li>Michael Klaper (Jena)</li>
+<li>Lori Kruckenberg (Eugene, Oregon)</li>
+<li>Susan Rankin (Cambridge)</li></ul>
+"""@de.
+data:datenschutz :hasContent """<div class=\"datenschutz\">
+    <h2>Datenschutzerklärung</h2>
+    <p>
+Verantwortlich für die Datenverarbeitung des Webangebots ist die Akademie der
+Wissenschaften und der Literatur Mainz, Geschwister-Scholl-Straße 2, 55131 Mainz,
+vertreten durch ihren Präsidenten, Prof. Dr.-Ing. Reiner Anderl.
+</p>
+<p>
+Es bestehen folgende Kontaktmöglichkeiten:
+</p>
+<p>
+Präsident der Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+Tel.: +49 (0)6131 / 577-200<br/>
+Fax.: +49 (0)6131 / 577-206<br/>
+E-Mail: praesidialbuero@adwmainz.de
+</p>
+<p>
+Kontaktdaten des/der Datenschutzbeauftragten:
+</p>
+<p>
+Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Der Datenschutzbeauftragte<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+E-Mail: datenschutz@adwmainz.de
+</p>
+<h4>
+Erfassung allgemeiner Informationen
+</h4>
+<p>
+Durch den Besuch dieser Website werden Informationen über den Zugriff (IP-Adresse, Datum, Uhrzeit, betrachtete Seite) gespeichert. Diese Daten (Server-Logfiles) lassen keine Rückschlüsse auf Ihre Person zu. Diese Informationen fallen bei der Nutzung von Webangeboten zwingend an und werden sowohl für die korrekte Wiedergabe der Website sowie der Systemsicherheit genutzt. Für folgende Zwecke werden sie verarbeitet: Sicherstellung eines problemlosen Verbindungsaufbaus sowie der reibungslosen Nutzung der Website, Sicherstellung der Systemintegrität und Abwehr von Angriffen.
+</p>
+<p>
+Die Verarbeitung der personenbezogenen Daten liegt im berechtigen Interesse aus den vorgenannten Zwecken der Datenerhebung. Empfänger der Daten sind ausschließlich die verantwortliche Stelle und ggf. Auftragsverarbeiter.
+</p>
+<p>
+Wir weisen ausdrücklich darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen und nicht lückenlos vor dem Zugriff durch Dritte geschützt werden kann.
+</p>
+<h4>
+Auskunft, Berichtigung, Löschung und Beschwerdemöglichkeiten
+</h4>
+<p>
+Sie haben nach DSGVO das Recht auf Auskunft über Sie betreffende Daten, deren Berichtigung sowie sofortige Löschung. Wenn Sie der Auffassung sind, dass Ihre Rechte gem. DSGVO verletzt werden, wenden Sie sich bitte an den Datenschutzbeauftragten der Akademie der Wissenschaften und der Literatur Mainz. Er wird Ihr Anliegen innerhalb der gesetzlichen Frist prüfen und Ihnen hiervon Mitteilung machen. Sofern keine Abhilfe erfolgt, besteht die Möglichkeit der Beschwerde bei der für die Akademie in Datenschutz-Angelegenheiten zuständigen Aufsichtsbehörde, dem Datenschutzbeauftragten des Landes Rheinland-Pfalz.
+</p>
+</div>"""@de.
+
+data:impressum :hasContent """<div class=\"impressum\">
+<h2>Impressum</h2>
+
+<p>
+Corpus monodicum<br/>
+Institut für Musikforschung<br/>
+Domerschulstraße 13<br/>
+97070 Würzburg<br/>
+Telefon (0931) 31 82114<br/>
+Telefax (0931) 31 82830<br/>
+e-mail andreas.haug(at)uni-wuerzburg.de<br/>
+</p>
+
+<h4>Urheberrecht</h4>
+<p>
+Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen Urheber- und Leistungsschutzrecht. Jede vom deutschen Urheber- und Leistungsschutzrecht nicht zugelassene Verwertung bedarf der vorherigen schriftlichen Zustimmung des Anbieters oder jeweiligen Rechteinhabers. Dies gilt insbesondere für Vervielfältigung, Bearbeitung, Übersetzung, Einspeicherung, Verarbeitung bzw. Wiedergabe von Inhalten in Datenbanken oder anderen elektronischen Medien und Systemen. Inhalte und Rechte Dritter sind dabei als solche gekennzeichnet. Die unerlaubte Vervielfältigung oder Weitergabe einzelner Inhalte oder kompletter Seiten ist nicht gestattet und strafbar. Lediglich die Herstellung von Kopien und Downloads für den persönlichen, privaten und nicht kommerziellen Gebrauch ist erlaubt.
+</p>
+<h4>
+Links
+</h4>
+<p>
+Wir haben keinen Einfluss auf den Inhalt der von dieser Seite verlinkten externen Internetseiten und sind für diese auch nicht verantwortlich. Eine Prüfung bei der Verlinkung ergab keine strafbaren Inhalte auf diesen Seiten. Alle Linkangaben ohne Gewähr. Seitenaufrufe externer Seiten über diese Links erfolgen auf eigene Gefahr. Dies gilt für alle Links auf dieser Internetseite.
+</p>
+<h4>
+Haftungsausschluss
+</h4>
+<p>
+Die Inhalte dieses Internetangebotes wurden sorgfältig geprüft und nach bestem Wissen erstellt. Eine Haftung oder Garantie für die Aktualität, Richtigkeit und Vollständigkeit der zur Verfügung gestellten Informationen und Daten ist jedoch ausgeschlossen. In keinem Fall wird für Schäden, die sich aus der Verwendung der abgerufenen Informationen ergeben, eine Haftung übernommen.
+</p></div>"""@de.
+data:feedback :hasContent """<h2>
+    Feedback
+</h2>
+<p>Haben Sie Fragen oder Anregungen? Wir freuen uns über Ihr Feedback! Schicken Sie eine eMail an <a href=\"mailto:andreas.haug@uni-wuerzburg.de\">andreas.haug@uni-wuerzburg.de</a>.</p>"""@de.
+data:userInstructions :hasContent """<div class=\"userinst-main\">
+	<p>userInstructions EN: Work in Progress.</p>
+</div>
+"""@en.
+
+
+data:team
+   :hasContent """<h2>Team</h2>
+
+<ul>
+    <li><a href=\"#cma\">Charles M. Atkinson</a></li>
+    <li><a href=\"#mb\">Michael Behl</a></li>
+    <li><a href=\"#gb\">Gunilla Björkvall</a></li>
+    <li><a href=\"#dc\">David Catalunya</a></li>
+    <li><a href=\"#md\">Maria Dorofeev</a></li>
+    <li><a href=\"#te\">Tim Eipert</a></li>
+    <li><a href=\"#ah\">Andreas Haug</a></li>
+    <li><a href=\"#alh\">Alexander Hartelt</a></li>
+    <li><a href=\"#jhs\">Jasmin Hartmann-Strauß</a></li>
+    <li><a href=\"#dh\">David Hiley</a></li>
+    <li><a href=\"#gi\">Gunilla Iversen</a></li>
+    <li><a href=\"#rmj\">Ritva Maria Jacobsson</a></li>
+    <li><a href=\"#mk\">Michael Klaper</a></li>
+    <li><a href=\"#mk\">Monnica Klöckener</a></li>
+    <li><a href=\"#pk\">Patricia Kolb</a></li>
+    <li><a href=\"#ik\">Isabel Kraft</a></li>
+    <li><a href=\"#mk\">Malte Krosse</a></li>
+    <li><a href=\"#kl\">Kelly Landerkin</a></li>
+    <li><a href=\"#ml\">Margarete Lein</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#sem\">Salah Eddin Maraqa</a></li>
+    <li><a href=\"#sm\">Stefanie Morawietz</a></li>
+    <li><a href=\"#ap\">Andreas Pfisterer</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#fep\">Felix Pöppel</a></li>
+    <li><a href=\"#fap\">Frank Puppe</a></li>
+    <li><a href=\"#as\">Anna Sanda</a></li>
+    <li><a href=\"#js\">Jasmin Schlotterbeck</a></li>
+    <li><a href=\"#jcs\">Johann C. Schuppe</a></li>
+    <li><a href=\"#als\">Alba Scotti</a></li>
+    <li><a href=\"#esh\">Elaine Stratton Hild</a></li>
+    <li><a href=\"#ls\">Lucia Swientek</a></li>
+    <li><a href=\"#kv\">Konstantin Voigt</a></li>
+    <li><a href=\"#hz\">Hanna Zühlke</a></li>
+</ul>
+
+
+<table class=\"tableizer-table\">
+    <thead><tr id=\"cma\"><td>CMA</td><td>Charles M. Atkinson</a></td><td>seit 2011</td><td>Edition</td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr></thead><tbody>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 9</td></tr>
+<tr id=\"mb\"><td>&nbsp;</td><td>Michael Behl</td><td>2011 bis 2014</td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"gb\"><td>&nbsp;</td><td>Gunilla Björkvall</td><td>2011 bis 2015</td><td>Textedition</td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"dc\"><td>DC</td><td>David Catalunya</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Apt 17</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 903</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lieder</td><td>Pa 1139</td></tr>
+<tr id=\"md\"><td>MD</td><td>Maria Dorofeev</td><td>2020</td><td>Edition </td><td>Sequenzen</td><td>Pro 12</td></tr>
+<tr id=\"te\"><td>&nbsp;</td><td>Tim Eipert</td><td>seit 2017</td><td>Datenmodellierung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Softwareentwicklung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"ah\"><td>&nbsp;</td><td>Andreas Haug</td><td>seit 2011</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"alh\"><td></td><td>Alexander Hartelt</td><td>seit 2020</td><td>Softwareentwicklung</td><td></td><td></td></tr>
+<tr id=\"jhs\"><td>JHS</td><td>Jasmin Hartmann-Strauß</td><td>seit 2014</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Lo 4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Quellenbeschreibung</td><td>&nbsp;</td><td>Ass 695</td></td>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"dh\"><td>DH</td><td>David Hiley</td><td>seit 2012 </td><td>Edition </td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<tr id=\"gi\"><td>&nbsp;</td><td>Gunilla Iversen</td><td>seit 2012 </td><td>Textrevision</td><td>Ordinariumsgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"rmj\"><td>&nbsp;</td><td>Ritva Maria Jacobsson</td><td>seit 2011</td><td>Textrevision</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"mk\"><td>MK</td><td>Michael Klaper</td><td>&nbsp;</td><td>Edition </td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Monnica Klöckener</td><td>2011 bis 2012</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"pk\"><td>&nbsp;</td><td>Patricia Kolb</td><td>2016 bis 2019</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"ik\"><td>IK</td><td>Isabel Kraft</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 341</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 61</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 430</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Malte Krosse</td><td>2011 bis 2012, 2015 bis 2016 </td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"kl\"><td>KL</td><td>Kelly Landerkin</td><td>2017</td><td>Edition </td><td>Spiele</td><td>Pa 1139</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr id=\"ml\"><td>&nbsp;</td><td>Margarete Lein</td><td>seit 2013</td><td>Projektverwaltung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"il\"><td>&nbsp;</td><td>Iris Lindenmann</td><td>2012 bis 2015</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"sem\"><td>SEM</td><td>Salah Eddin Maraqa</td><td>seit 2020</td><td>Edition </td><td>Sequenzen</td><td>Pa 14819</td></tr>
+<tr id=\"sm\"><td>&nbsp;</td><td>Stefanie Morawietz</td><td>2011 bis 2013</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"ap\"><td>AP</td><td>Andreas Pfisterer</td><td>seit 2015</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>AugW 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ben 34</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 664</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bar 888</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Dar 868</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 23935</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mel 109</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 4101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nea 38</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 778</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 833</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1119</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 17328</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 1340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoV 52</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tsa 135</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"fep\"><td>&nbsp;</td><td>Felix Pöppel</td><td>seit 2019</td><td>Assistenz</td><td>Sequenzen</td><td>&nbsp;</td></tr>
+<tr id=\"fap\"><td>&nbsp;</td><td>Frank Puppe</td><td>seit 2019</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"as\"><td>AS</td><td>Anna Sanda </td><td>2019 bis 2020</td><td>Edition</td><td>Sequenzen</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 14452</td></tr>
+<tr id=\"js\"><td>&nbsp;</td><td>Jasmin Schlotterbeck</td><td>2013 bis 2017</td><td>Assistenz</td><td>Tropen, Ordinariusmgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"jcs\"><td>&nbsp;</td><td>Johann C. Schuppe</td><td>seit 2019</td><td>Assistenz </td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"als\"><td>&nbsp;</td><td>Alba Scotti</td><td>2012 bis 2014</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"esh\"><td>ESH</td><td>Elaine Stratton Hild</td><td>seit 2012 </td><td>Edition </td><td>Tropen</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 2615</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Or 201</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr id=\"ls\"><td>LS</td><td>Lucia Swientek</td><td>seit 2018</td><td>Edition </td><td>Sequenzen</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lü 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"kv\"><td>KV</td><td>Konstantin Voigt</td><td>2012 bis 2013</td><td>Edition </td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"hz\"><td>HZ</td><td>Hanna Zühlke</td><td>2013 bis 2019</td><td>Quellenbeschreibungen</td><td>&nbsp;</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792 </td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 314</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 62</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 288</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 20-4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+</tbody></table>
+"""@en.
+data:partner :hasContent """
+    <h2>Partner</h2>
+    <table class=\"partner\">
+        <tbody>
+
+            <tr>
+            <td>Olyro GmbH
+            </td>
+            <td><img src=\"https://olyro.de/assets/img/logos/logo.svg\" width=\"100\"></td>
+            <td><a href=\"https://olyro.de/\">https://olyro.de/</a></td>
+        </tr>
+            <tr>
+            <td>Notengrafik Berlin GmbH
+            </td>
+            <td><img src=\"https://avatars2.githubusercontent.com/u/25899147?s=200&amp;v=4\" width=\"100\"></td>
+            <td><a href=\"https://notengrafik.com/\">https://notengrafik.com/
+                </a></td>
+        </tr>
+                     <tr>
+            <td>Schwabe Verlag Basel
+            </td>
+            <td><img src=\"https://schwabe.ch//themes/Frontend/Schwabe/frontend/_public/src/img/share.png\" width=\"100\"></td>
+            <td><a href=\"https://schwabe.ch/\">https://schwabe.ch/
+                </a></td>
+        </tr>
+
+    </tbody></table>
+    """@en.
+data:foerdervermerk :hasContent """<div class=\"foerder-main\">
+    <h2>Fördervermerk</h2>
+    Das Editionsvorhaben Corpus monodicum der Akademie der Wissenschaften und der Literatur | Mainz wird im Rahmen des Akademienprogramms von der Bundesrepublik Deutschland und vom Freistaat Bayern gefördert.
+</div>
+"""@en.
+data:beirat :hasContent """<h2>Beirat</h2>
+<ul><li>Wulf Arlt (Basel)</li>
+<li>Charles M. Atkinson (Columbus, Ohio und Würzburg)</li>
+<li>Gunilla Björkvall (Stockholm)</li>
+<li>Marco Gozzi (Trento)</li>
+<li>Max Haas (Basel) †</li>
+<li>Andrew Hankinson (Oxford)</li>
+<li>Felix Heinzer (Freiburg)</li>
+<li>David Hiley (Regensburg)</li>
+<li>Oliver Huck (Hamburg)</li>
+<li>Michael Klaper (Jena)</li>
+<li>Lori Kruckenberg (Eugene, Oregon)</li>
+<li>Susan Rankin (Cambridge)</li></ul>
+"""@en.
+data:datenschutz :hasContent """<div class=\"datenschutz\">
+    <h2>Datenschutzerklärung</h2>
+    <p>
+Verantwortlich für die Datenverarbeitung des Webangebots ist die Akademie der
+Wissenschaften und der Literatur Mainz, Geschwister-Scholl-Straße 2, 55131 Mainz,
+vertreten durch ihren Präsidenten, Prof. Dr.-Ing. Reiner Anderl.
+</p>
+<p>
+Es bestehen folgende Kontaktmöglichkeiten:
+</p>
+<p>
+Präsident der Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+Tel.: +49 (0)6131 / 577-200<br/>
+Fax.: +49 (0)6131 / 577-206<br/>
+E-Mail: praesidialbuero@adwmainz.de
+</p>
+<p>
+Kontaktdaten des/der Datenschutzbeauftragten:
+</p>
+<p>
+Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Der Datenschutzbeauftragte<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+E-Mail: datenschutz@adwmainz.de
+</p>
+<h4>
+Erfassung allgemeiner Informationen
+</h4>
+<p>
+Durch den Besuch dieser Website werden Informationen über den Zugriff (IP-Adresse, Datum, Uhrzeit, betrachtete Seite) gespeichert. Diese Daten (Server-Logfiles) lassen keine Rückschlüsse auf Ihre Person zu. Diese Informationen fallen bei der Nutzung von Webangeboten zwingend an und werden sowohl für die korrekte Wiedergabe der Website sowie der Systemsicherheit genutzt. Für folgende Zwecke werden sie verarbeitet: Sicherstellung eines problemlosen Verbindungsaufbaus sowie der reibungslosen Nutzung der Website, Sicherstellung der Systemintegrität und Abwehr von Angriffen.
+</p>
+<p>
+Die Verarbeitung der personenbezogenen Daten liegt im berechtigen Interesse aus den vorgenannten Zwecken der Datenerhebung. Empfänger der Daten sind ausschließlich die verantwortliche Stelle und ggf. Auftragsverarbeiter.
+</p>
+<p>
+Wir weisen ausdrücklich darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen und nicht lückenlos vor dem Zugriff durch Dritte geschützt werden kann.
+</p>
+<h4>
+Auskunft, Berichtigung, Löschung und Beschwerdemöglichkeiten
+</h4>
+<p>
+Sie haben nach DSGVO das Recht auf Auskunft über Sie betreffende Daten, deren Berichtigung sowie sofortige Löschung. Wenn Sie der Auffassung sind, dass Ihre Rechte gem. DSGVO verletzt werden, wenden Sie sich bitte an den Datenschutzbeauftragten der Akademie der Wissenschaften und der Literatur Mainz. Er wird Ihr Anliegen innerhalb der gesetzlichen Frist prüfen und Ihnen hiervon Mitteilung machen. Sofern keine Abhilfe erfolgt, besteht die Möglichkeit der Beschwerde bei der für die Akademie in Datenschutz-Angelegenheiten zuständigen Aufsichtsbehörde, dem Datenschutzbeauftragten des Landes Rheinland-Pfalz.
+</p>
+</div>"""@en.
+data:impressum :hasContent """<div class=\"impressum\">
+<h2>Impressum</h2>
+
+<p>
+Corpus monodicum<br/>
+Institut für Musikforschung<br/>
+Domerschulstraße 13<br/>
+97070 Würzburg<br/>
+Telefon (0931) 31 82114<br/>
+Telefax (0931) 31 82830<br/>
+e-mail andreas.haug(at)uni-wuerzburg.de<br/>
+</p>
+
+<h4>Urheberrecht</h4>
+<p>
+Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen Urheber- und Leistungsschutzrecht. Jede vom deutschen Urheber- und Leistungsschutzrecht nicht zugelassene Verwertung bedarf der vorherigen schriftlichen Zustimmung des Anbieters oder jeweiligen Rechteinhabers. Dies gilt insbesondere für Vervielfältigung, Bearbeitung, Übersetzung, Einspeicherung, Verarbeitung bzw. Wiedergabe von Inhalten in Datenbanken oder anderen elektronischen Medien und Systemen. Inhalte und Rechte Dritter sind dabei als solche gekennzeichnet. Die unerlaubte Vervielfältigung oder Weitergabe einzelner Inhalte oder kompletter Seiten ist nicht gestattet und strafbar. Lediglich die Herstellung von Kopien und Downloads für den persönlichen, privaten und nicht kommerziellen Gebrauch ist erlaubt.
+</p>
+<h4>
+Links
+</h4>
+<p>
+Wir haben keinen Einfluss auf den Inhalt der von dieser Seite verlinkten externen Internetseiten und sind für diese auch nicht verantwortlich. Eine Prüfung bei der Verlinkung ergab keine strafbaren Inhalte auf diesen Seiten. Alle Linkangaben ohne Gewähr. Seitenaufrufe externer Seiten über diese Links erfolgen auf eigene Gefahr. Dies gilt für alle Links auf dieser Internetseite.
+</p>
+<h4>
+Haftungsausschluss
+</h4>
+<p>
+Die Inhalte dieses Internetangebotes wurden sorgfältig geprüft und nach bestem Wissen erstellt. Eine Haftung oder Garantie für die Aktualität, Richtigkeit und Vollständigkeit der zur Verfügung gestellten Informationen und Daten ist jedoch ausgeschlossen. In keinem Fall wird für Schäden, die sich aus der Verwendung der abgerufenen Informationen ergeben, eine Haftung übernommen.
+</p></div>"""@en.
+data:feedback :hasContent """<h2>
+    Feedback
+</h2>
+<p>Haben Sie Fragen oder Anregungen? Wir freuen uns über Ihr Feedback! Schicken Sie eine eMail an <a href=\"mailto:andreas.haug@uni-wuerzburg.de\">andreas.haug@uni-wuerzburg.de</a>.</p>"""@en.
+data:userInstructions :hasContent """<div class=\"userinst-main\">
+	<p>userInstructions FR: Work in Progress.</p>
+</div>
+"""@fr.
+
+data:team :hasContent """<h2>Team</h2>
+
+
+<ul>
+    <li><a href=\"#cma\">Charles M. Atkinson</a></li>
+    <li><a href=\"#mb\">Michael Behl</a></li>
+    <li><a href=\"#gb\">Gunilla Björkvall</a></li>
+    <li><a href=\"#dc\">David Catalunya</a></li>
+    <li><a href=\"#md\">Maria Dorofeev</a></li>
+    <li><a href=\"#te\">Tim Eipert</a></li>
+    <li><a href=\"#ah\">Andreas Haug</a></li>
+    <li><a href=\"#alh\">Alexander Hartelt</a></li>
+    <li><a href=\"#jhs\">Jasmin Hartmann-Strauß</a></li>
+    <li><a href=\"#dh\">David Hiley</a></li>
+    <li><a href=\"#gi\">Gunilla Iversen</a></li>
+    <li><a href=\"#rmj\">Ritva Maria Jacobsson</a></li>
+    <li><a href=\"#mk\">Michael Klaper</a></li>
+    <li><a href=\"#mk\">Monnica Klöckener</a></li>
+    <li><a href=\"#pk\">Patricia Kolb</a></li>
+    <li><a href=\"#ik\">Isabel Kraft</a></li>
+    <li><a href=\"#mk\">Malte Krosse</a></li>
+    <li><a href=\"#kl\">Kelly Landerkin</a></li>
+    <li><a href=\"#ml\">Margarete Lein</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#sem\">Salah Eddin Maraqa</a></li>
+    <li><a href=\"#sm\">Stefanie Morawietz</a></li>
+    <li><a href=\"#ap\">Andreas Pfisterer</a></li>
+    <li><a href=\"#il\">Iris Lindenmann</a></li>
+    <li><a href=\"#fep\">Felix Pöppel</a></li>
+    <li><a href=\"#fap\">Frank Puppe</a></li>
+    <li><a href=\"#as\">Anna Sanda</a></li>
+    <li><a href=\"#js\">Jasmin Schlotterbeck</a></li>
+    <li><a href=\"#jcs\">Johann C. Schuppe</a></li>
+    <li><a href=\"#als\">Alba Scotti</a></li>
+    <li><a href=\"#esh\">Elaine Stratton Hild</a></li>
+    <li><a href=\"#ls\">Lucia Swientek</a></li>
+    <li><a href=\"#kv\">Konstantin Voigt</a></li>
+    <li><a href=\"#hz\">Hanna Zühlke</a></li>
+</ul>
+
+
+<table class=\"tableizer-table\">
+    <thead><tr id=\"cma\"><td>CMA</td><td>Charles M. Atkinson</a></td><td>seit 2011</td><td>Edition</td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr></thead><tbody>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 9</td></tr>
+<tr id=\"mb\"><td>&nbsp;</td><td>Michael Behl</td><td>2011 bis 2014</td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"gb\"><td>&nbsp;</td><td>Gunilla Björkvall</td><td>2011 bis 2015</td><td>Textedition</td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"dc\"><td>DC</td><td>David Catalunya</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Apt 17</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 903</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lieder</td><td>Pa 1139</td></tr>
+<tr id=\"md\"><td>MD</td><td>Maria Dorofeev</td><td>2020</td><td>Edition </td><td>Sequenzen</td><td>Pro 12</td></tr>
+<tr id=\"te\"><td>&nbsp;</td><td>Tim Eipert</td><td>seit 2017</td><td>Datenmodellierung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Softwareentwicklung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"ah\"><td>&nbsp;</td><td>Andreas Haug</td><td>seit 2011</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"alh\"><td></td><td>Alexander Hartelt</td><td>seit 2020</td><td>Softwareentwicklung</td><td></td><td></td></tr>
+<tr id=\"jhs\"><td>JHS</td><td>Jasmin Hartmann-Strauß</td><td>seit 2014</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Lo 4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Quellenbeschreibung</td><td>&nbsp;</td><td>Ass 695</td></td>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"dh\"><td>DH</td><td>David Hiley</td><td>seit 2012 </td><td>Edition </td><td>Ordinariumsgesänge</td><td>Ass 695</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 148</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 358</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>PaA 135</td></tr>
+<tr id=\"gi\"><td>&nbsp;</td><td>Gunilla Iversen</td><td>seit 2012 </td><td>Textrevision</td><td>Ordinariumsgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"rmj\"><td>&nbsp;</td><td>Ritva Maria Jacobsson</td><td>seit 2011</td><td>Textrevision</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"mk\"><td>MK</td><td>Michael Klaper</td><td>&nbsp;</td><td>Edition </td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Monnica Klöckener</td><td>2011 bis 2012</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"pk\"><td>&nbsp;</td><td>Patricia Kolb</td><td>2016 bis 2019</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"ik\"><td>IK</td><td>Isabel Kraft</td><td>seit 2011</td><td>Edition </td><td>Tropen</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 341</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 61</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 430</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+<tr id=\"mk\"><td>&nbsp;</td><td>Malte Krosse</td><td>2011 bis 2012, 2015 bis 2016 </td><td>Assistenz</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"kl\"><td>KL</td><td>Kelly Landerkin</td><td>2017</td><td>Edition </td><td>Spiele</td><td>Pa 1139</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr id=\"ml\"><td>&nbsp;</td><td>Margarete Lein</td><td>seit 2013</td><td>Projektverwaltung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"il\"><td>&nbsp;</td><td>Iris Lindenmann</td><td>2012 bis 2015</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"sem\"><td>SEM</td><td>Salah Eddin Maraqa</td><td>seit 2020</td><td>Edition </td><td>Sequenzen</td><td>Pa 14819</td></tr>
+<tr id=\"sm\"><td>&nbsp;</td><td>Stefanie Morawietz</td><td>2011 bis 2013</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"ap\"><td>AP</td><td>Andreas Pfisterer</td><td>seit 2015</td><td>Edition </td><td>Ordinariumsgesänge</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>AugW 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ben 34</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 664</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bar 888</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Dar 868</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 23935</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mel 109</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 4101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nea 38</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 778</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 833</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1119</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 17328</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 1340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoV 52</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tsa 135</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Tropen</td><td>Be 40608</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Bo 2824</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 56</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 79</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>GeB 74</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Go I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mil 25</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mod 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mza 77</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nvr G 3</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 16</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 47</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 01</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 05</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Parm 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pia 65</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 120a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pst 121a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>RoC 1741</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SeZ 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>To 18</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vat 3797</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56a</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vce 56b</td></tr>
+<tr id=\"fep\"><td>&nbsp;</td><td>Felix Pöppel</td><td>seit 2019</td><td>Assistenz</td><td>Sequenzen</td><td>&nbsp;</td></tr>
+<tr id=\"fap\"><td>&nbsp;</td><td>Frank Puppe</td><td>seit 2019</td><td>Projektleitung</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id=\"as\"><td>AS</td><td>Anna Sanda </td><td>2019 bis 2020</td><td>Edition</td><td>Sequenzen</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 14452</td></tr>
+<tr id=\"js\"><td>&nbsp;</td><td>Jasmin Schlotterbeck</td><td>2013 bis 2017</td><td>Assistenz</td><td>Tropen, Ordinariusmgesänge</td><td>&nbsp;</td></tr>
+<tr id=\"jcs\"><td>&nbsp;</td><td>Johann C. Schuppe</td><td>seit 2019</td><td>Assistenz </td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"als\"><td>&nbsp;</td><td>Alba Scotti</td><td>2012 bis 2014</td><td>Assistenz</td><td>Tropen</td><td>&nbsp;</td></tr>
+<tr id=\"esh\"><td>ESH</td><td>Elaine Stratton Hild</td><td>seit 2012 </td><td>Edition </td><td>Tropen</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Spiele</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lo 2615</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Or 201</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr id=\"ls\"><td>LS</td><td>Lucia Swientek</td><td>seit 2018</td><td>Edition </td><td>Sequenzen</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 366</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Lü 11</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Assistenz</td><td>Spiele</td><td>&nbsp;</td></tr>
+<tr id=\"kv\"><td>KV</td><td>Konstantin Voigt</td><td>2012 bis 2013</td><td>Edition </td><td>Lieder</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1139</td></tr>
+<tr id=\"hz\"><td>HZ</td><td>Hanna Zühlke</td><td>2013 bis 2019</td><td>Quellenbeschreibungen</td><td>&nbsp;</td><td>Aa 13</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Abb 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Aut 183</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ba 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 40078</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Be 792 </td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Cai 72</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 101</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Civ 102</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ei 610</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Eng 314</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ful 62</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Gr 807</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Halb 45</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ka 5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Kön D</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>La 263</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 19421</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 288</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 289</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ma 20-4</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 29307(2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Mü 5539</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MüU 156</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau I</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Nau VIII</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>NY 905</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ox 340</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1107</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1235</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 1871</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 904</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pa 909</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pad 55</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pre 2</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Pro 12</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 222</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Rou 250</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Sal 20</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>SCan 7</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Si 29</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ut 417</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ver 10</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Vic 105</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wilton/Sol 596</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>WiSch 4/5</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wo 491</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Wü 165</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Ven 4</td></tr>
+</tbody></table>
+"""@fr.
+data:partner :hasContent """
+    <h2>Partner</h2>
+    <table class=\"partner\">
+        <tbody>
+
+            <tr>
+            <td>Olyro GmbH
+            </td>
+            <td><img src=\"https://olyro.de/assets/img/logos/logo.svg\" width=\"100\"></td>
+            <td><a href=\"https://olyro.de/\">https://olyro.de/</a></td>
+        </tr>
+            <tr>
+            <td>Notengrafik Berlin GmbH
+            </td>
+            <td><img src=\"https://avatars2.githubusercontent.com/u/25899147?s=200&amp;v=4\" width=\"100\"></td>
+            <td><a href=\"https://notengrafik.com/\">https://notengrafik.com/
+                </a></td>
+        </tr>
+                     <tr>
+            <td>Schwabe Verlag Basel
+            </td>
+            <td><img src=\"https://schwabe.ch//themes/Frontend/Schwabe/frontend/_public/src/img/share.png\" width=\"100\"></td>
+            <td><a href=\"https://schwabe.ch/\">https://schwabe.ch/
+                </a></td>
+        </tr>
+
+    </tbody></table>
+    """@fr.
+data:foerdervermerk :hasContent """<div class=\"foerder-main\">
+    <h2>Fördervermerk</h2>
+    Das Editionsvorhaben Corpus monodicum der Akademie der Wissenschaften und der Literatur | Mainz wird im Rahmen des Akademienprogramms von der Bundesrepublik Deutschland und vom Freistaat Bayern gefördert.
+</div>
+"""@fr.
+data:beirat :hasContent """<h2>Beirat</h2>
+<ul><li>Wulf Arlt (Basel)</li>
+<li>Charles M. Atkinson (Columbus, Ohio und Würzburg)</li>
+<li>Gunilla Björkvall (Stockholm)</li>
+<li>Marco Gozzi (Trento)</li>
+<li>Max Haas (Basel) †</li>
+<li>Andrew Hankinson (Oxford)</li>
+<li>Felix Heinzer (Freiburg)</li>
+<li>David Hiley (Regensburg)</li>
+<li>Oliver Huck (Hamburg)</li>
+<li>Michael Klaper (Jena)</li>
+<li>Lori Kruckenberg (Eugene, Oregon)</li>
+<li>Susan Rankin (Cambridge)</li></ul>
+"""@fr.
+data:datenschutz :hasContent """<div class=\"datenschutz\">
+    <h2>Datenschutzerklärung</h2>
+    <p>
+Verantwortlich für die Datenverarbeitung des Webangebots ist die Akademie der
+Wissenschaften und der Literatur Mainz, Geschwister-Scholl-Straße 2, 55131 Mainz,
+vertreten durch ihren Präsidenten, Prof. Dr.-Ing. Reiner Anderl.
+</p>
+<p>
+Es bestehen folgende Kontaktmöglichkeiten:
+</p>
+<p>
+Präsident der Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+Tel.: +49 (0)6131 / 577-200<br/>
+Fax.: +49 (0)6131 / 577-206<br/>
+E-Mail: praesidialbuero@adwmainz.de
+</p>
+<p>
+Kontaktdaten des/der Datenschutzbeauftragten:
+</p>
+<p>
+Akademie der Wissenschaften und der Literatur | Mainz<br/>
+Der Datenschutzbeauftragte<br/>
+Geschwister-Scholl-Str. 2<br/>
+55131 Mainz<br/>
+E-Mail: datenschutz@adwmainz.de
+</p>
+<h4>
+Erfassung allgemeiner Informationen
+</h4>
+<p>
+Durch den Besuch dieser Website werden Informationen über den Zugriff (IP-Adresse, Datum, Uhrzeit, betrachtete Seite) gespeichert. Diese Daten (Server-Logfiles) lassen keine Rückschlüsse auf Ihre Person zu. Diese Informationen fallen bei der Nutzung von Webangeboten zwingend an und werden sowohl für die korrekte Wiedergabe der Website sowie der Systemsicherheit genutzt. Für folgende Zwecke werden sie verarbeitet: Sicherstellung eines problemlosen Verbindungsaufbaus sowie der reibungslosen Nutzung der Website, Sicherstellung der Systemintegrität und Abwehr von Angriffen.
+</p>
+<p>
+Die Verarbeitung der personenbezogenen Daten liegt im berechtigen Interesse aus den vorgenannten Zwecken der Datenerhebung. Empfänger der Daten sind ausschließlich die verantwortliche Stelle und ggf. Auftragsverarbeiter.
+</p>
+<p>
+Wir weisen ausdrücklich darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen und nicht lückenlos vor dem Zugriff durch Dritte geschützt werden kann.
+</p>
+<h4>
+Auskunft, Berichtigung, Löschung und Beschwerdemöglichkeiten
+</h4>
+<p>
+Sie haben nach DSGVO das Recht auf Auskunft über Sie betreffende Daten, deren Berichtigung sowie sofortige Löschung. Wenn Sie der Auffassung sind, dass Ihre Rechte gem. DSGVO verletzt werden, wenden Sie sich bitte an den Datenschutzbeauftragten der Akademie der Wissenschaften und der Literatur Mainz. Er wird Ihr Anliegen innerhalb der gesetzlichen Frist prüfen und Ihnen hiervon Mitteilung machen. Sofern keine Abhilfe erfolgt, besteht die Möglichkeit der Beschwerde bei der für die Akademie in Datenschutz-Angelegenheiten zuständigen Aufsichtsbehörde, dem Datenschutzbeauftragten des Landes Rheinland-Pfalz.
+</p>
+</div>"""@fr.
+data:impressum :hasContent """<div class=\"impressum\">
+<h2>Impressum</h2>
+
+<p>
+Corpus monodicum<br/>
+Institut für Musikforschung<br/>
+Domerschulstraße 13<br/>
+97070 Würzburg<br/>
+Telefon (0931) 31 82114<br/>
+Telefax (0931) 31 82830<br/>
+e-mail andreas.haug(at)uni-wuerzburg.de<br/>
+</p>
+
+<h4>Urheberrecht</h4>
+<p>
+Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen Urheber- und Leistungsschutzrecht. Jede vom deutschen Urheber- und Leistungsschutzrecht nicht zugelassene Verwertung bedarf der vorherigen schriftlichen Zustimmung des Anbieters oder jeweiligen Rechteinhabers. Dies gilt insbesondere für Vervielfältigung, Bearbeitung, Übersetzung, Einspeicherung, Verarbeitung bzw. Wiedergabe von Inhalten in Datenbanken oder anderen elektronischen Medien und Systemen. Inhalte und Rechte Dritter sind dabei als solche gekennzeichnet. Die unerlaubte Vervielfältigung oder Weitergabe einzelner Inhalte oder kompletter Seiten ist nicht gestattet und strafbar. Lediglich die Herstellung von Kopien und Downloads für den persönlichen, privaten und nicht kommerziellen Gebrauch ist erlaubt.
+</p>
+<h4>
+Links
+</h4>
+<p>
+Wir haben keinen Einfluss auf den Inhalt der von dieser Seite verlinkten externen Internetseiten und sind für diese auch nicht verantwortlich. Eine Prüfung bei der Verlinkung ergab keine strafbaren Inhalte auf diesen Seiten. Alle Linkangaben ohne Gewähr. Seitenaufrufe externer Seiten über diese Links erfolgen auf eigene Gefahr. Dies gilt für alle Links auf dieser Internetseite.
+</p>
+<h4>
+Haftungsausschluss
+</h4>
+<p>
+Die Inhalte dieses Internetangebotes wurden sorgfältig geprüft und nach bestem Wissen erstellt. Eine Haftung oder Garantie für die Aktualität, Richtigkeit und Vollständigkeit der zur Verfügung gestellten Informationen und Daten ist jedoch ausgeschlossen. In keinem Fall wird für Schäden, die sich aus der Verwendung der abgerufenen Informationen ergeben, eine Haftung übernommen.
+</p></div>"""@fr.
+data:feedback :hasContent """<h2>
+    Feedback
+</h2>
+<p>Haben Sie Fragen oder Anregungen? Wir freuen uns über Ihr Feedback! Schicken Sie eine eMail an <a href=\"mailto:andreas.haug@uni-wuerzburg.de\">andreas.haug@uni-wuerzburg.de</a>.</p>"""@fr.
+
+data:project :hasContent """
+<div class="left">
+<img src="https://corpus-monodicum.de/static/media/cm_band_de.b66bf2045860fb737ca2.jpg" alt="CM II 2"/>
+<img src="https://corpus-monodicum.de/static/media/cm_band_franz.9f0a1f7295096cc384be.jpg" alt="CM II 1"/>
+</div>
+<div class="content">
+    <p> Das Corpus monodicum (CM) ist ein Langzeitforschungsprojekt der Akademie der Wissenschaften und der Literatur | Mainz,
+        [<a href="http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html">http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html</a>]
+        innerhalb des Forschungsprogramms der Union der deutschen Akademien der Wissenschaften.
+        Seine Laufzeit beträgt 16 Jahre (2011 bis 2026).</p>
+    <p>Das Projekt widmet sich der Erforschung und Edition musikhistorisch signifikanter, editorisch weithin unerschlossener Bestände
+        der einstimmigen Musik des europäischen Mittelalters mit lateinischem Text mit dem Ziel, ein philologisch gesichertes Fundament
+        für die weitere Erforschung der Formungsphase europäischer Musik zu legen und somit eines der größten Defizite der
+        musikhistorischen Mittelalterforschung zu beseitigen.</p>
+    <p>Die Edition wird am Zentrum für Philologie und Digitalität (ZPD) der Universität Würzburg unter Leitung des Musikhistorikers
+        Andreas Haug [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/">https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/</a>]
+        und des Informatikers Frank Puppe [<a href="https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/">https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/</a>]
+        herausgegeben. </p>
+    <p>Die Arbeitsstelle des Projektes befindet sich am Institut für Musikforschung [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/startseite/">https://www.musikwissenschaft.uni-wuerzburg.de/startseite/</a>] der Universität Würzburg.</p>
+    <p>Das digitale Editionskorpus umfasst annotierte Transkriptionen von rund 5000 Gesängen oder Gesangskomplexen verschiedener
+        Gattungen (Kyrie, Gloria, Sanctus, Agnus, Tropen, Sequenzen, Lieder und Spiele) mit Texten in lateinischer Sprache aus
+        über 200 meist handschriftlichen Quellen des 12. bis 16. Jahrhunderts englischer, normannischer, französischer, deutscher,
+        italienischer, aquitanischer und katalanischer Herkunft. </p>
+    <p>Die Druckausgabe des Corpus monodicum erscheint beim Verlag Schwabe AG in Basel [<a href="https://schwabe.ch/produkttypen/editionen/corpus-monodicum/">https://schwabe.ch/produkttypen/editionen/corpus-monodicum/</a>].
+        Das Notengrafikkonzept der Druckausgabe und die bei deren Herstellung eingesetzte Software Monodi für die digitale Transkription
+        der Texte und der Melodien wurden 2012 bis 2015 in Zusammenarbeit mit der Firma Notengrafik Berlin GmbH
+        [<a href="https://notengrafik.com/">https://notengrafik.com/</a>] entwickelt.</p>
+    <p>Die im Projekt eingesetzte Software MonodiPlus für die digitale Transkription der Texte und der
+        Melodien und die Präsentationssoftware (Viewer) für die Onlineausgabe wurden 2018 bis 2020 von der Würzburger Firma
+        Olyro GmbH in Zusammenarbeit mit dem Lehrstuhl für Künstliche Intelligenz und Wissenssysteme der Universität Würzburg entwickelt.</p>
+    <p>Die Kodierung der Editionsdaten beruht auf dem Format der Music Encoding Initiative (MEI)
+        [<a href="https://music-encoding.org/projects/corpus-monodicum.html">https://music-encoding.org/projects/corpus-monodicum.html</a>],
+        an der sich das Corpus monodicum beteiligt.</p>
+</div>
+"""@de.
+data:project :hasContent """
+<div class="left">
+<img src="https://corpus-monodicum.de/static/media/cm_band_de.b66bf2045860fb737ca2.jpg" alt="CM II 2"/>
+<img src="https://corpus-monodicum.de/static/media/cm_band_franz.9f0a1f7295096cc384be.jpg" alt="CM II 1"/>
+</div>
+<div class="content">
+    <p> Das Corpus monodicum (CM) ist ein Langzeitforschungsprojekt der Akademie der Wissenschaften und der Literatur | Mainz,
+        [<a href="http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html">http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html</a>]
+        innerhalb des Forschungsprogramms der Union der deutschen Akademien der Wissenschaften.
+        Seine Laufzeit beträgt 16 Jahre (2011 bis 2026).</p>
+    <p>Das Projekt widmet sich der Erforschung und Edition musikhistorisch signifikanter, editorisch weithin unerschlossener Bestände
+        der einstimmigen Musik des europäischen Mittelalters mit lateinischem Text mit dem Ziel, ein philologisch gesichertes Fundament
+        für die weitere Erforschung der Formungsphase europäischer Musik zu legen und somit eines der größten Defizite der
+        musikhistorischen Mittelalterforschung zu beseitigen.</p>
+    <p>Die Edition wird am Zentrum für Philologie und Digitalität (ZPD) der Universität Würzburg unter Leitung des Musikhistorikers
+        Andreas Haug [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/">https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/</a>]
+        und des Informatikers Frank Puppe [<a href="https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/">https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/</a>]
+        herausgegeben. </p>
+    <p>Die Arbeitsstelle des Projektes befindet sich am Institut für Musikforschung [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/startseite/">https://www.musikwissenschaft.uni-wuerzburg.de/startseite/</a>] der Universität Würzburg.</p>
+    <p>Das digitale Editionskorpus umfasst annotierte Transkriptionen von rund 5000 Gesängen oder Gesangskomplexen verschiedener
+        Gattungen (Kyrie, Gloria, Sanctus, Agnus, Tropen, Sequenzen, Lieder und Spiele) mit Texten in lateinischer Sprache aus
+        über 200 meist handschriftlichen Quellen des 12. bis 16. Jahrhunderts englischer, normannischer, französischer, deutscher,
+        italienischer, aquitanischer und katalanischer Herkunft. </p>
+    <p>Die Druckausgabe des Corpus monodicum erscheint beim Verlag Schwabe AG in Basel [<a href="https://schwabe.ch/produkttypen/editionen/corpus-monodicum/">https://schwabe.ch/produkttypen/editionen/corpus-monodicum/</a>].
+        Das Notengrafikkonzept der Druckausgabe und die bei deren Herstellung eingesetzte Software Monodi für die digitale Transkription
+        der Texte und der Melodien wurden 2012 bis 2015 in Zusammenarbeit mit der Firma Notengrafik Berlin GmbH
+        [<a href="https://notengrafik.com/">https://notengrafik.com/</a>] entwickelt.</p>
+    <p>Die im Projekt eingesetzte Software MonodiPlus für die digitale Transkription der Texte und der
+        Melodien und die Präsentationssoftware (Viewer) für die Onlineausgabe wurden 2018 bis 2020 von der Würzburger Firma
+        Olyro GmbH in Zusammenarbeit mit dem Lehrstuhl für Künstliche Intelligenz und Wissenssysteme der Universität Würzburg entwickelt.</p>
+    <p>Die Kodierung der Editionsdaten beruht auf dem Format der Music Encoding Initiative (MEI)
+        [<a href="https://music-encoding.org/projects/corpus-monodicum.html">https://music-encoding.org/projects/corpus-monodicum.html</a>],
+        an der sich das Corpus monodicum beteiligt.</p>
+</div>
+"""@en.
+data:project :hasContent """
+<div class="left">
+<img src="https://corpus-monodicum.de/static/media/cm_band_de.b66bf2045860fb737ca2.jpg" alt="CM II 2"/>
+<img src="https://corpus-monodicum.de/static/media/cm_band_franz.9f0a1f7295096cc384be.jpg" alt="CM II 1"/>
+</div>
+<div class="content">
+    <p> Das Corpus monodicum (CM) ist ein Langzeitforschungsprojekt der Akademie der Wissenschaften und der Literatur | Mainz,
+        [<a href="http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html">http://www.adwmainz.de/projekte/corpus-monodicum-die-einstimmige-musik-des-lateinischen-mittelalters-gattungen-werkbestaende-kontexte/informationen.html</a>]
+        innerhalb des Forschungsprogramms der Union der deutschen Akademien der Wissenschaften.
+        Seine Laufzeit beträgt 16 Jahre (2011 bis 2026).</p>
+    <p>Das Projekt widmet sich der Erforschung und Edition musikhistorisch signifikanter, editorisch weithin unerschlossener Bestände
+        der einstimmigen Musik des europäischen Mittelalters mit lateinischem Text mit dem Ziel, ein philologisch gesichertes Fundament
+        für die weitere Erforschung der Formungsphase europäischer Musik zu legen und somit eines der größten Defizite der
+        musikhistorischen Mittelalterforschung zu beseitigen.</p>
+    <p>Die Edition wird am Zentrum für Philologie und Digitalität (ZPD) der Universität Würzburg unter Leitung des Musikhistorikers
+        Andreas Haug [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/">https://www.musikwissenschaft.uni-wuerzburg.de/team/haug-andreas-prof-dr/</a>]
+        und des Informatikers Frank Puppe [<a href="https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/">https://www.informatik.uniwuerzburg.de/is/mitarbeiter/puppe-frank/</a>]
+        herausgegeben. </p>
+    <p>Die Arbeitsstelle des Projektes befindet sich am Institut für Musikforschung [<a href="https://www.musikwissenschaft.uni-wuerzburg.de/startseite/">https://www.musikwissenschaft.uni-wuerzburg.de/startseite/</a>] der Universität Würzburg.</p>
+    <p>Das digitale Editionskorpus umfasst annotierte Transkriptionen von rund 5000 Gesängen oder Gesangskomplexen verschiedener
+        Gattungen (Kyrie, Gloria, Sanctus, Agnus, Tropen, Sequenzen, Lieder und Spiele) mit Texten in lateinischer Sprache aus
+        über 200 meist handschriftlichen Quellen des 12. bis 16. Jahrhunderts englischer, normannischer, französischer, deutscher,
+        italienischer, aquitanischer und katalanischer Herkunft. </p>
+    <p>Die Druckausgabe des Corpus monodicum erscheint beim Verlag Schwabe AG in Basel [<a href="https://schwabe.ch/produkttypen/editionen/corpus-monodicum/">https://schwabe.ch/produkttypen/editionen/corpus-monodicum/</a>].
+        Das Notengrafikkonzept der Druckausgabe und die bei deren Herstellung eingesetzte Software Monodi für die digitale Transkription
+        der Texte und der Melodien wurden 2012 bis 2015 in Zusammenarbeit mit der Firma Notengrafik Berlin GmbH
+        [<a href="https://notengrafik.com/">https://notengrafik.com/</a>] entwickelt.</p>
+    <p>Die im Projekt eingesetzte Software MonodiPlus für die digitale Transkription der Texte und der
+        Melodien und die Präsentationssoftware (Viewer) für die Onlineausgabe wurden 2018 bis 2020 von der Würzburger Firma
+        Olyro GmbH in Zusammenarbeit mit dem Lehrstuhl für Künstliche Intelligenz und Wissenssysteme der Universität Würzburg entwickelt.</p>
+    <p>Die Kodierung der Editionsdaten beruht auf dem Format der Music Encoding Initiative (MEI)
+        [<a href="https://music-encoding.org/projects/corpus-monodicum.html">https://music-encoding.org/projects/corpus-monodicum.html</a>],
+        an der sich das Corpus monodicum beteiligt.</p>
+</div>
+"""@fr.

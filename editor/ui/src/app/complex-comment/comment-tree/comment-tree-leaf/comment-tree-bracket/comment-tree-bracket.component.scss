@@ -1,0 +1,14 @@
+:host {
+  display: grid;
+  grid-template-columns: auto;
+  justify-content: center;
+}
+
+.bracket {
+  width: 1rem;
+  border-width: 0.3rem;
+  border-color: #000;
+  border-right-style: solid;
+  border-top-style: solid;
+  border-bottom-style: solid;
+}

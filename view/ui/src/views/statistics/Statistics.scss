@@ -1,0 +1,9 @@
+@import "../app/App.scss";
+
+.statistics-main {
+  margin: var(--main-v-indent) var(--main-h-indent);
+
+  select {
+    margin: 10px;
+  }
+}

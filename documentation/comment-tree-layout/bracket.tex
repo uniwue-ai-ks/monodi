@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+
+\draw (0, 0) coordinate (A)
+  -- ++(0.2cm, 0) coordinate (B)
+  -- ++(0, -0.2cm) coordinate (C)
+  -- ++(0, -0.6cm) coordinate (D)
+  -- ++(0, -0.2cm) coordinate (E)
+  -- ++(0, -0.2cm) coordinate (F)
+  -- ++(-0.2cm, 0) coordinate (G)
+;
+
+\begin{pgfonlayer}{background}
+  \node[ultra thick,inner sep=0, fit={(A) (G) (B)},draw=green!20] {};
+  \draw[thick,blue!20] ($ (A) - (0.5cm, 0) $) node[anchor=east] {BH} --+ (2cm, 0);
+  \draw[thick,blue!20] ($ (G) - (0.5cm, 0) $) node[anchor=east] {BL} --+ (2cm, 0);
+  \draw[thick,blue!20] ($ (D) - (0.7cm, 0) $) node[anchor=east] {B} --+ (2cm, 0);
+  \draw[thick,blue!20] ($ (C) - (1.4cm, 0) $) node[anchor=east] {BIH} --+ (2cm, 0);
+  \draw[thick,blue!20] ($ (E) - (1.4cm, 0) $) node[anchor=east] {BIL} --+ (2cm, 0);
+\end{pgfonlayer}
+
+
+\end{tikzpicture}

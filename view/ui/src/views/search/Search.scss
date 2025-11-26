@@ -1,0 +1,175 @@
+.searchTable {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  padding: 0em 2em;
+  box-sizing: border-box;
+  overflow-x: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr;
+
+  .loader {
+    grid-row: 2/3;
+    grid-column: 1/4;
+    justify-self: center;
+    z-index: 10;
+  }
+
+  .pages {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    margin: auto;
+
+    >* {
+      padding: 0.5em;
+
+      &:hover:not(.current) {
+        background-color: var(--backgroundLightGrey);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .print-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: right;
+    gap: 1rem;
+
+    >* {
+      width: fit-content;
+      margin-left: auto;
+
+      &:hover:not(.current) {
+        background-color: var(--backgroundLightGrey);
+        cursor: pointer;
+      }
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
+.pagination-and-table {
+  position: relative;
+  margin-top: 2em;
+
+  .loader {
+    position: absolute;
+    z-index: 100;
+    top: 3em;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+  }
+
+  .search-output-table {
+    width: 100%;
+    margin: 1em 0;
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 1em;
+
+    tr {
+      padding: 1em 0;
+    }
+
+    td:first-child,
+    th:first-child {
+      border-left: none !important;
+    }
+
+    td:last-child,
+    th:last-child {
+      border-right: none !important;
+    }
+
+    .table-icon {
+      padding: unset;
+      text-align: center;
+      cursor: pointer;
+      color: #d5d5d5;
+
+      a {
+        color: #676767;
+        text-decoration: none;
+      }
+
+      svg {
+        margin-top: 25%;
+      }
+
+      &.added {
+        color: #676767;
+      }
+    }
+
+    td {
+      padding: 0.8em 1.5em;
+      border: 1px solid #d5d5d5;
+      max-width: 20em;
+    }
+
+    th {
+      user-select: none;
+      cursor: pointer;
+      padding: 0.8em 1.5em;
+      border-top: none !important;
+      font-weight: bolder;
+      color: #676767;
+      border: 1px solid #d5d5d5;
+
+      svg.hide {
+        visibility: hidden;
+      }
+    }
+
+    .openLink {
+      color: #6a21a0;
+      text-decoration: underline;
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        a {
+          cursor: pointer;
+        }
+      }
+    }
+
+    td:has(input[type='checkbox']) {
+      text-align: center;
+    }
+  }
+}
+
+.shorten-string {
+  position: relative;
+
+  .shortened {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .full {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    padding: 10px;
+    background-color: var(--backgroundLightGrey);
+    overflow: visible;
+    display: none;
+    width: 150%;
+    z-index: 9999;
+  }
+
+  &:hover .full {
+    display: block;
+  }
+}

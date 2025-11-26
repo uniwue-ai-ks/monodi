@@ -1,0 +1,84 @@
+\begin{tikzpicture}
+  \coordinate (ZLA0S) at (0,0);
+  \coordinate (ZLA0E) at ($ (ZLA0S) + (\stafflinelength,0) $);
+  \coordinate (ZLA1S) at ($ (ZLA0S) + (0,\stafflinemargin) $);
+  \coordinate (ZLA1E) at ($ (ZLA1S) + (\stafflinelength,0) $);
+  \coordinate (ZLA2S) at ($ (ZLA0S) + (0,2*\stafflinemargin) $);
+  \coordinate (ZLA2E) at ($ (ZLA2S) + (\stafflinelength,0) $);
+  \coordinate (ZLA3S) at ($ (ZLA0S) + (0,3*\stafflinemargin) $);
+  \coordinate (ZLA3E) at ($ (ZLA3S) + (\stafflinelength,0) $);
+  \coordinate (ZLA4S) at ($ (ZLA0S) + (0,4*\stafflinemargin) $);
+  \coordinate (ZLA4E) at ($ (ZLA4S) + (\stafflinelength,0) $);
+
+  \draw (ZLA0S) -- (ZLA0E);
+  \draw (ZLA1S) -- (ZLA1E);
+  \draw (ZLA2S) -- (ZLA2E);
+  \draw (ZLA3S) -- (ZLA3E);
+  \draw (ZLA4S) -- (ZLA4E);
+
+  \draw[fill] ($ (ZLA0S) + (0.2*\stafflinelength, 0*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.4*\stafflinelength, 2*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.6*\stafflinelength, 4*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLA0S) + (0.8*\stafflinelength, 6*\stafflinemargin) $) circle (0.1cm);
+
+  \node[anchor=north west] (ZA-text) at ($ (ZLA0S) - (0, \textLineMargin) $) {Ha- bi- tus};
+
+  \node[anchor=base west] (first-text) at ($ (ZLA1E) + (0.5cm,0) $) {Some Texty};
+
+  \coordinate (ZLB0S) at ($ (first-text.base east) + (1.0cm, -\stafflinemargin) $);
+  \coordinate (ZLB0E) at ($ (ZLB0S) + (\stafflinelength,0) $);
+  \coordinate (ZLB1S) at ($ (ZLB0S) + (0,\stafflinemargin) $);
+  \coordinate (ZLB1E) at ($ (ZLB1S) + (\stafflinelength,0) $);
+  \coordinate (ZLB2S) at ($ (ZLB0S) + (0,2*\stafflinemargin) $);
+  \coordinate (ZLB2E) at ($ (ZLB2S) + (\stafflinelength,0) $);
+  \coordinate (ZLB3S) at ($ (ZLB0S) + (0,3*\stafflinemargin) $);
+  \coordinate (ZLB3E) at ($ (ZLB3S) + (\stafflinelength,0) $);
+  \coordinate (ZLB4S) at ($ (ZLB0S) + (0,4*\stafflinemargin) $);
+  \coordinate (ZLB4E) at ($ (ZLB4S) + (\stafflinelength,0) $);
+
+  \draw (ZLB0S) -- (ZLB0E);
+  \draw (ZLB1S) -- (ZLB1E);
+  \draw (ZLB2S) -- (ZLB2E);
+  \draw (ZLB3S) -- (ZLB3E);
+  \draw (ZLB4S) -- (ZLB4E);
+
+  \draw[fill] ($ (ZLB0S) + (0.1*\stafflinelength, 0*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLB0S) + (0.5*\stafflinelength, 2*\stafflinemargin) $) circle (0.1cm);
+  \draw[fill] ($ (ZLB0S) + (0.9*\stafflinelength, 4*\stafflinemargin) $) circle (0.1cm);
+
+  \node[anchor=north west] (ZB-text) at ($ (ZLB0S) - (0, \textLineMargin) $) {Schma- bi- tus};
+
+  \draw[-,thick] ($ (ZLB4S) - (0.8cm, -\stafflinemargin) $) coordinate (BracketA)
+    -- ++ (0.3cm,0) coordinate (BracketB)
+    -- ++ (0,0.-6*\stafflinemargin) coordinate (BracketC)
+    -- ++(-0.3cm, 0) coordinate (BracketD)
+  ;
+
+  \node[anchor=base west] (second-text) at ($ (ZLB1E) + (0.5cm,0) $) {Other Texty};
+
+  \node[
+      draw,
+      minimum width=2cm,
+      minimum height=4cm,
+      anchor=west,
+      pattern=north east lines
+    ] (sub grid) at ($ (second-text.base east) + (0.5cm, 0) $) {};
+
+  \draw[red,<->] ($ (sub grid.north east) +(0.1cm, 0) $)
+    -- ($ (sub grid.north east)!0.5!(sub grid.south east) + (0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+  \draw[red,<->] ($ (sub grid.north east)!0.5!(sub grid.south east) + (0.1cm, 0) $)
+    -- ($ (sub grid.south east) +(0.1cm, 0) $) node[above, midway,rotate=-90] {½}
+  ;
+   
+
+
+  \begin{scope}[on background layer]
+    \draw[thick,blue!20] ($ (ZLA1S) - (1.2cm, 0) $)   node[anchor=east] (B)  {B}  -- ++(15.7cm, 0);
+    \draw[thick,blue!20] ($ (ZLA0S) - (0.5cm, 0) $)   node[anchor=east] (SH) {SH} -- ++(15cm, 0);
+    \draw[thick,blue!20] ($ (ZLA4S) - (0.5cm, 0) $)   node[anchor=east] (SL) {SL} -- ++(15cm, 0);
+    \draw[thick,blue!20] (B.east |- BracketA) node[anchor=east] (BH) {BH} -- ++(15.7cm, 0);
+    \draw[thick,blue!20] (B.east |- BracketD) node[anchor=east] (BL) {BL} -- ++(15.7cm, 0);
+  \end{scope}
+
+\end{tikzpicture}
