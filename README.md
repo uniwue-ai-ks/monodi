@@ -25,7 +25,7 @@ Other projects using Monodi:
 ```yaml
 services:
   fuseki:
-    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi-fuseki:latest
+    image: ghcr.io/uniwue-ai-ks/monodi-fuseki:latest
     restart: always
     volumes:
       # mount the folder with your TTL files here
@@ -34,7 +34,7 @@ services:
       - backend
 
   frontend:
-    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi:latest
+    image: ghcr.io/uniwue-ai-ks/monodi:latest
     restart: always
     ports:
       # set your desired external port here
