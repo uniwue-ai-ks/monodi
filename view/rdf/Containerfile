@@ -1,6 +1,6 @@
 FROM alpine:latest as tmp
 
-ARG JENA_VERSION=5.6.0
+ARG JENA_VERSION=6.0.0
 
 RUN apk add curl && \
 	curl -fLo "apache-jena-${JENA_VERSION}.tar.gz" "https://dlcdn.apache.org/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" && \
@@ -11,7 +11,7 @@ RUN apk add curl && \
 	mv /opt/app/apache-jena-${JENA_VERSION} /opt/app/apache-jena && \
 	mv /opt/app/apache-jena-fuseki-${JENA_VERSION} /opt/app/apache-jena-fuseki
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 COPY --from=tmp /opt/app /opt/app
 COPY entrypoint /opt/app/
