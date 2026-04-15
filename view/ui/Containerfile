@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 # set working directory
 WORKDIR /app
@@ -10,11 +10,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm ci --silent && npm install react-scripts@3.4.1 -g --silent
+RUN npm ci && npm install react-scripts@3.4.1 -g
 # add app
 COPY public/ /app/public
 COPY src/ /app/src
 COPY tsconfig.json /app/
+COPY vite.config.ts /app/
 COPY index.html /app/index.html
 RUN VITE_FUSEKI_URL="/fuseki/tdb2-database/query?query=" VITE_PDF_URL="/resources/pdf/" VITE_SVG_URL="/resources/svg/" npm run build
 

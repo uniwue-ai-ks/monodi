@@ -1,7 +1,7 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactElement, useContext, useState } from "react";
-import ReactSelect from "react-select";
+import ReactSelect, { SingleValue } from "react-select";
 import Translation from "../../translation/Translation";
 import { assertNever } from "../../util";
 import LangContext from "../app/App";
@@ -132,7 +132,7 @@ export const Settings = (props: SettingsProps): ReactElement => {
         <span className="settings-titel">{translate("page-setup")}</span>
         <div className="page-selection">
           <label>{translate("page")}</label>
-          <ReactSelect className="select-page" value={getSelectedPage()} options={pageOptions} onChange={(e) => onPageSelect(e)} />
+          <ReactSelect className="select-page" value={getSelectedPage()} options={pageOptions} onChange={(e: SingleValue<PageOption>) => onPageSelect(e)} />
           <span className="restore-default" onClick={() => setSettings(getDefaultPrintSettings())}>{translate("restore")}</span>
         </div>
         <div className="page-inputs">

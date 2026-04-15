@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Route, Switch, useLocation } from 'react-router-dom';
-import Select, { components } from 'react-select';
+import Select, { components, SingleValue } from 'react-select';
 import * as H from 'history';
 
 import '../../../node_modules/intro.js/introjs.css';
@@ -24,6 +24,7 @@ const LangContext = React.createContext<LangContextType>({ lang: "de", overrides
 export default LangContext;
 
 export function App() {
+  type LangOption = { value: string, label: string };
   const [searches, setSearches] = useState<EntityName[]>([]);
   const [shortUrls, setShortUrls] = useState<api.ShortUrlEntitys[]>([]);
   const [language, setLanguage] = useState<string>("de");
@@ -119,7 +120,7 @@ export function App() {
       return <></>;
     }
 
-    const langOptions = allLanguages.map((lang) => { return { value: lang, label: lang.toUpperCase() } })
+    const langOptions: LangOption[] = allLanguages.map((lang) => { return { value: lang, label: lang.toUpperCase() } })
     const CustomValue = (_children: any, _props: any) => {
       const label = langOptions.find(a => a.value === language)?.label;
 
@@ -141,7 +142,7 @@ export function App() {
     }
 
     return (
-      <Select className="lang-select" options={langOptions} components={{ Option: CustomOption, ValueContainer: CustomValue }} onChange={(e) => onLangSelect(e?.value)} />
+      <Select className="lang-select" options={langOptions} components={{ Option: CustomOption, ValueContainer: CustomValue }} onChange={(e: SingleValue<LangOption>) => onLangSelect(e?.value)} />
     )
   }
 
