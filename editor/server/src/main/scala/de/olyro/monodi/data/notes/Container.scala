@@ -8,7 +8,7 @@ import io.circe.*, io.circe.parser.*
 sealed trait Container derives io.circe.derivation.ConfiguredCodec:
   def uuid: String
 
-sealed trait RootChildren extends Container derives io.circe.derivation.ConfiguredCodec
+sealed trait RootChildren     extends Container derives io.circe.derivation.ConfiguredCodec
 sealed trait FormteilChildren extends Container derives io.circe.derivation.ConfiguredCodec
 sealed trait MiscChildren     extends FormteilChildren derives io.circe.derivation.ConfiguredCodec
 
@@ -18,7 +18,7 @@ final case class RootContainer(
     comments: List[Comment],
     documentType: DocumentType,
     version: Option[Int],
-    globalComment: Option[CommentTree],
+    globalComment: Option[CommentTree]
 ) extends Container
 
 final case class FormteilContainer(uuid: String, children: List[FormteilChildren], data: List[FormteilData])
@@ -36,7 +36,7 @@ final case class ParatextContainer(
     text: String,
     retro: Boolean,
     paratextType: ParatextType,
-    comment: Option[ParatextComment],
+    comment: Option[ParatextComment]
 ) extends Container
     with FormteilChildren
     with MiscChildren
@@ -52,6 +52,14 @@ object Container:
       case mc: MiscContainer     => f(mc) :: mc.children.flatMap(fold(f))
       case rc: RootContainer     => f(rc) :: rc.children.flatMap(fold(f))
 
+  def foldMany[A](f: Container => Vector[A])(c: Container): Vector[A] =
+    c match
+      case pc: ParatextContainer => f(pc)
+      case zc: ZeileContainer    => f(zc)
+      case fc: FormteilContainer => f(fc) ++ fc.children.flatMap(foldMany(f))
+      case mc: MiscContainer     => f(mc) ++ mc.children.flatMap(foldMany(f))
+      case rc: RootContainer     => f(rc) ++ rc.children.flatMap(foldMany(f))
+
   def flatCata[A](f: Container => A)(c: Container): A =
     c match
       case pc: ParatextContainer => f(pc)
@@ -65,7 +73,7 @@ object Container:
       zeile: ZeileContainer => A,
       form: (FormteilContainer, List[A]) => A,
       misc: (MiscContainer, List[A]) => A,
-      root: (RootContainer, List[A]) => A,
+      root: (RootContainer, List[A]) => A
   )(c: Container): A =
     c match
       case pc: ParatextContainer => para(pc)
@@ -73,7 +81,7 @@ object Container:
       case fc: FormteilContainer =>
         form(
           fc,
-          fc.children.map(recursiveCata(para, zeile, form, misc, root)),
+          fc.children.map(recursiveCata(para, zeile, form, misc, root))
         )
       case mc: MiscContainer     =>
         misc(mc, mc.children.map(recursiveCata(para, zeile, form, misc, root)))
@@ -104,7 +112,7 @@ object Container:
       Nil,
       DocumentType.Level1,
       None,
-      None,
+      None
     )
 
   def getAllNotes(c: Container): List[Note] =
@@ -133,4 +141,3 @@ object Container:
     rc.children flatMap:
       case fc: FormteilContainer => toLineParts(fc)
       case _                     => Nil
-

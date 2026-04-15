@@ -16,6 +16,14 @@ type GroupedQuery = {
   values: { value: string, index: number }[];
 }
 
+const addParameter = (attributes: Attribute[], dispatch: (ce: ChangeEvent) => void) => (uri: string): void => {
+  const attribute = attributes.find(a => a.uri === uri);
+  if (attribute) {
+    const value = attribute.uiQueryPrefillValue || "";
+    dispatch({ kind: "AddParameter", param: { uri: attribute.uri, value } });
+  }
+}
+
 export function SearchBar(props: { entity: EntityDescription, search: Attribute[], modeButtons: ReactElement }) {
   const [urlState, setUrlState] = useUrlData<Search.Params>()('query');
   const [hidden,] = useUrlData<Search.Params>()('hideFromSearch');
@@ -29,15 +37,11 @@ export function SearchBar(props: { entity: EntityDescription, search: Attribute[
     dispatch({ kind: "Set", parameters: urlState ? urlState : [] })
   }, [urlState])
 
-  const addParameter = (uri: string): void => {
-    const attribute = props.search.find(a => a.uri === uri);
-    if (attribute) {
-      dispatch({ kind: "AddParameter", param: { uri: attribute.uri, value: "" } });
-    }
-  }
+  const addParam = addParameter(props.search, dispatch);
+  
   useEffect(() => {
     props.search.filter(a => a.initialSearch && !urlState?.some(qp => qp.uri === a.uri)).forEach(attribute => {
-      dispatch({ kind: "AddParameter", param: { uri: attribute.uri, value: "" } });
+      addParam(attribute.uri);
     })
   }, [dispatch, urlState, props.search])
 
@@ -55,10 +59,14 @@ export function SearchBar(props: { entity: EntityDescription, search: Attribute[
 
   return <div className="searchBar">
     <div className="parameters">
-      <select data-intro={translate("introSearch2")} className="simple-select" value="" onChange={e => { addParameter(e.target.value) }}>
+      <select data-intro={translate("introSearch2")} className="simple-select" value="" onChange={e => { addParam(e.target.value) }}>
         <option value="" disabled hidden>{translate("search_criteria")}</option>
         {
-          props.search.filter(a => a.searchOrder !== undefined && !isHidden(a.uri)).map(a =>
+          props.search.filter(a =>
+            a.searchOrder !== undefined &&
+            !isHidden(a.uri) &&
+            (a.allowMultipleSearch !== false || !query.some(qp => qp.uri === a.uri))
+          ).map(a =>
             <option key={a.uri} value={a.uri}>
               {a.label}
             </option>
@@ -98,6 +106,7 @@ export function QueryParameterComponentMulti(props: { entity: EntityDescription,
   }
 
   if (attribute) {
+    const allowMultiple = attribute.allowMultipleSearch !== false;
 
     const inputs = props.values.map(({ value, index }) => <QueryParamSingle
       key={index}
@@ -108,31 +117,24 @@ export function QueryParameterComponentMulti(props: { entity: EntityDescription,
       value={value}
       index={index}
       params={props.params}
+      allowMultiple={allowMultiple}
       dispatch={props.dispatch} />);
 
     const intersection = getIntersection(attribute.uri);
     const translate = (key: string): string => {
       return Translation.getTranslation(key, langContext.lang, langContext.overrides);
     }
-    const logicLabel = intersection ? translate("allOf") : translate("anyOf")
 
-    const toggleButton = inputs?.length > 1 ? <>
-      <br />
-      <button className="intersectionToggle" onClick={() => setIntersection(attribute.uri, !intersection)}>
-        {logicLabel}
-      </button>
-    </> : null;
+    const multiValueControls = allowMultiple && inputs.length > 1
+      ? renderIntersectionControls(intersection, () => setIntersection(attribute.uri, !intersection), translate)
+      : null;
 
-    const logicSymbol = inputs?.length > 1 ? <span className="logicSymbol" onClick={() => setIntersection(attribute.uri, !intersection)} title={logicLabel}>
-      {intersection ? "\u2227" : "\u2228"}
-    </span> : null;
-
-    return !inputs ? null : <div className={"searchQueryInput " + uriToClasName(attribute.uri)}>
+    return !inputs || inputs.every(i => i === null) ? null : <div className={"searchQueryInput " + uriToClasName(attribute.uri)}>
       <div className="searchLabel">
         {attribute.label}
-        {toggleButton}
+        {multiValueControls?.toggleButton}
       </div>
-      {logicSymbol}
+      {multiValueControls?.logicSymbol}
       <div className="searchValues">
         {inputs}
       </div>
@@ -142,8 +144,20 @@ export function QueryParameterComponentMulti(props: { entity: EntityDescription,
   }
 }
 
+function renderIntersectionControls(
+  intersection: boolean,
+  onToggle: () => void,
+  translate: (key: string) => string
+): { toggleButton: ReactElement; logicSymbol: ReactElement } {
+  const logicLabel = intersection ? translate("allOf") : translate("anyOf");
+  return {
+    toggleButton: <><br /><button className="intersectionToggle" onClick={onToggle}>{logicLabel}</button></>,
+    logicSymbol: <span className="logicSymbol" onClick={onToggle} title={logicLabel}>{intersection ? "\u2227" : "\u2228"}</span>,
+  };
+}
 
-const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescription, search: Attribute[], uri: string, value: string, index: number, params: QueryParameter[], dispatch: (ce: ChangeEvent) => void }): ReactElement | null => {
+
+const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescription, search: Attribute[], uri: string, value: string, index: number, params: QueryParameter[], allowMultiple: boolean, dispatch: (ce: ChangeEvent) => void }): ReactElement | null => {
 
   const attribute = props.attribute;
   const value = props.value;
@@ -212,7 +226,7 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
 
   const userSearchable = attribute.searchOrder !== undefined
 
-  const input = (() => {
+  const input = attribute.hideInputFromSearch ? null : (() => {
     switch (attribute.kind) {
       case 'http://olyro.de/mondiview/number':
         if (attribute.searchSpan) {
@@ -255,16 +269,38 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
       case 'http://olyro.de/mondiview/htmlContent':
       case 'http://olyro.de/mondiview/htmlImageCollection':
         return null;
+      case 'http://olyro.de/mondiview/boolean': {
+        const nextValue = value === "" ? "true" : value === "true" ? "false" : "";
+        const display = value === "true" ? "✔" : value === "false" ? "✘" : "";
+        return <button
+          className="booleanFilter"
+          title={value === "true" ? translate("boolean_true") : value === "false" ? translate("boolean_false") : translate("boolean_any")}
+          onClick={() => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: nextValue })}
+        >{display}</button>;
+      }
       default: return assertNever(attribute);
     }
   })();
 
-  return input === null ? null : <>
+  return <>
     {input}
-    <div onClick={() => props.dispatch({ kind: "RemoveParameter", index: index })} className="searchClose">x</div>
-    {userSearchable ? <div onClick={() => props.dispatch({ kind: "AddParameter", param: { uri: attribute.uri, value: "" } })} className="searchClose">+</div> : null}
+    <div onClick={() => props.dispatch({ kind: "RemoveParameter", index: index })} className="searchClose">{removeIcon}</div>
+    {props.allowMultiple && userSearchable && !attribute.hideInputFromSearch ? <div onClick={() => {
+      const addParam = addParameter(props.search, props.dispatch);
+      addParam(attribute.uri);
+    }} className="searchClose">{addIcon}</div> : null}
   </>;
 }
+
+const removeIcon = <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+</svg>
+
+const addIcon = <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="8" y1="3" x2="8" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  <line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+</svg>
 
 type ChangeEvent = {
   kind: "AddParameter";

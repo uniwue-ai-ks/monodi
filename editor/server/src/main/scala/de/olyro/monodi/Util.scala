@@ -91,6 +91,23 @@ object Util:
       case Nil    => a :: Nil
       case h :: t => f(h) :: t
 
+  extension [A, CC[x] <: scala.collection.IterableOps[x, CC, CC[x]]](xs: CC[A])
+    def splitWhen(p: A => Boolean): CC[CC[A]] =
+      val factory = xs.iterableFactory
+      val builder = factory.newBuilder[CC[A]]
+      var current = factory.newBuilder[A]
+      var nonEmpty = false
+      for x <- xs do
+        if p(x) then
+          builder += current.result()
+          current = factory.newBuilder[A]
+          nonEmpty = true
+        else
+          current += x
+          nonEmpty = true
+      if nonEmpty then builder += current.result()
+      builder.result()
+
   def intersperse[A](l: List[A], a: A): List[A] =
     @tailrec
     def go(accu: List[A], rest: List[A]): List[A] =

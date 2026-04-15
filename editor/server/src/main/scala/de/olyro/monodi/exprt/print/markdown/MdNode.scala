@@ -15,6 +15,7 @@ enum MdNode:
   case MdList(ordered: Boolean, items: List[MdNode])
   case MdListItem(items: List[MdNode])
   case MdImage(altText: Option[String], src: String)
+  case MdLink(text: String, uri: String)
   case MdTable(rows: List[MdNode])
   case MdRow(children: List[MdNode])
   case MdCell(header: Boolean, children: List[MdNode])
@@ -29,6 +30,7 @@ enum MdNode:
     case MdList(ordered, items)     => MdList(ordered, items :+ child)
     case MdListItem(items)          => MdListItem(items :+ child)
     case MdImage(_, _)              => sys.error("MdImage nodes cannot have children")
+    case MdLink(_, _)               => sys.error("MdLink nodes cannot have children")
     case MdTable(rows)              => MdTable(rows :+ child)
     case MdRow(children)            => MdRow(children :+ child)
     case MdCell(header, children)   => MdCell(header, children :+ child)
@@ -67,6 +69,10 @@ object MdNode:
           case t: Text => t.getLiteral()
         .filter(_.nonEmpty)
       addChild(MdNode.MdImage(altText, node.getDestination))
+
+    override def visit(node: Link): Unit =
+      val text = node.getFirstChild().asInstanceOf[Text].getLiteral()
+      addChild(MdNode.MdLink(text, node.getDestination))
 
     override def visit(node: CustomBlock): Unit =
       node match

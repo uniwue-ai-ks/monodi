@@ -3,6 +3,7 @@ import {
   Attribute,
   AttributeWithData, CategoryEntryGuard, CollectionImageHtml, DocumentPart, DocumentPosition, HtmlImageCollection,
   Kind,
+  MetadataEntry,
   ReferenceAttribute,
   ShortenPosition,
   SHORTEN_POSITION_NONE
@@ -160,6 +161,7 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
       ?searchPreviewLabel ?searchPreviewContextKind ?searchPreviewContextCount ?searchPreviewMaxDistanceRatio
       ?referenceSearch ?pdfTextAttribute ?downloadIcon ?initialSearch
       ?normalizationAttribute ?normalizationNormalizer
+      ?implicitQueryValue ?uiQueryPrefillValue ?hideInputFromSearch ?allowMultipleSearch
   `
   const attributeQueryString = `
   SELECT
@@ -191,6 +193,10 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
     OPTIONAL { ?property  :pdfTextAttribute ?pdfTextAttribute . }
     OPTIONAL { ?property  :icon ?downloadIcon . }
     OPTIONAL { ?property  :initialSearch ?initialSearch . }
+    OPTIONAL { ?property  :implicitQueryValue ?implicitQueryValue . }
+    OPTIONAL { ?property  :uiQueryPrefillValue ?uiQueryPrefillValue . }
+    OPTIONAL { ?property  :hideInputFromSearch ?hideInputFromSearch . }
+    OPTIONAL { ?property  :allowMultipleSearch ?allowMultipleSearch . }
     OPTIONAL {
       ?property  :searchPreview  [
         :label ?searchPreviewLangs ;
@@ -255,6 +261,12 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
       shortenPosition: getShortenPosition(b),
       downloadIcon: valueOrUndefined(b.downloadIcon),
       initialSearch: !!b.initialSearch,
+      implicitQueryValue: valueOrUndefined(b.implicitQueryValue),
+      uiQueryPrefillValue: valueOrUndefined(b.uiQueryPrefillValue),
+      hideInputFromSearch: b.hideInputFromSearch?.value.toLowerCase() === "true" ? true : false,
+      allowMultipleSearch: b.allowMultipleSearch
+        ? b.allowMultipleSearch.value.toLowerCase() === "true"
+        : b.range.value !== "http://olyro.de/mondiview/boolean",
     } as Attribute
 
     if (
@@ -374,7 +386,13 @@ const remapNormalizedAttributes = (entityDescription: EntityDescription, params:
   });
 }
 
-export async function doQuery(entityDescription: EntityDescription, language: string, params: QueryParameter[], pagination: Pagination | null = null, intersections: string[] | null = null): Promise<QueryResult> {
+export async function doQuery(
+  entityDescription: EntityDescription,
+  language: string,
+  params: QueryParameter[],
+  pagination: Pagination | null = null,
+  intersections: string[] | null = null
+): Promise<QueryResult> {
   const newEntityDescription: EntityDescription = JSON.parse(JSON.stringify(entityDescription))
   const newFilterdParams = remapNormalizedAttributes(entityDescription, params).filter(p => p.value.length > 0)
   const newFilterdAttributes = entityDescription.attributes.filter(a => {
@@ -444,6 +462,9 @@ function buildQuery(description: EntityDescription, language: string, params: Qu
 
   const makeFilterInner = (p: QueryParameter, sparqlVariable: string): string => {
     const attribute = description.attributes.find(a => a.uri === p.uri)!;
+    if (attribute.kind === "http://olyro.de/mondiview/boolean") {
+      return `(str(${sparqlVariable}) = "${p.value}")`;
+    }
     const value: string = switchOnKind(attribute, {
       "http://olyro.de/mondiview/reference": () => p.value, // this is not completely correct,
       //since a filter on a referenced substringSearchText field would be missing the transformation.
@@ -546,7 +567,8 @@ const translatable = (kind: Kind): boolean =>
   kind !== 'http://olyro.de/mondiview/number' &&
   kind !== "http://olyro.de/mondiview/entity" &&
   kind !== "http://olyro.de/mondiview/imageCollection" &&
-  kind !== "http://olyro.de/mondiview/htmlImageCollection"
+  kind !== "http://olyro.de/mondiview/htmlImageCollection" &&
+  kind !== "http://olyro.de/mondiview/boolean"
 
 export async function getEntity(description: EntityDescription, uri: string, language: string): Promise<Entity> {
   const withoutReference = description.attributes.filter(a => a.kind !== "http://olyro.de/mondiview/reference");
@@ -557,7 +579,7 @@ export async function getEntity(description: EntityDescription, uri: string, lan
 
   for (const k of Object.keys(o)) {
     const attr = withoutReference[+k.substring(1)];
-    const value = await parseAndFetch(o[k], attr);
+    const value = await parseAndFetch(o[k], attr, language);
     if (value !== null) {
       ret.push(value);
     }
@@ -592,7 +614,7 @@ export async function getReferenceEntity(description: EntityDescription, localAt
   return reference.attributes;
 }
 
-async function parseAndFetch(obj: BindingValue, attribute: Attribute): Promise<AttributeWithData | null> {
+async function parseAndFetch(obj: BindingValue, attribute: Attribute, language: string): Promise<AttributeWithData | null> {
   switch (attribute.kind) {
     case "http://olyro.de/mondiview/number": return {
       kind: attribute.kind,
@@ -610,7 +632,7 @@ async function parseAndFetch(obj: BindingValue, attribute: Attribute): Promise<A
       data: obj.value
     };
     case "http://olyro.de/mondiview/imageCollection": {
-      const completeDocument = await getImage(obj.value);
+      const completeDocument = await getImage(obj.value, language);
       return {
         kind: attribute.kind,
         attribute: attribute,
@@ -653,6 +675,11 @@ async function parseAndFetch(obj: BindingValue, attribute: Attribute): Promise<A
       kind: attribute.kind,
       attribute: attribute,
       data: obj.value
+    };
+    case "http://olyro.de/mondiview/boolean": return {
+      kind: attribute.kind,
+      attribute: attribute,
+      data: obj.value === "true"
     };
     case "http://olyro.de/mondiview/reference": return null;
     default: return assertNever(attribute);
@@ -716,7 +743,45 @@ async function getHtmlImageCollection(collectionUri: string): Promise<HtmlImageC
   return collection;
 }
 
-async function getImage(collectionUri: string): Promise<DocumentPart[]> {
+async function getPageMetadata(collectionUri: string, language: string): Promise<Map<number, MetadataEntry[]>> {
+  const queryToCall = `SELECT ?page ?metadataIndex ?metadataLabel ?metadataValue WHERE {
+    <${collectionUri}> :hasPage ?pages .
+    ?pages :pageNr ?page .
+    ?pages :hasMetadata ?metadata .
+    ?metadata :metadataEntry ?entry .
+    ?entry :index ?metadataIndex .
+    ?entry :label ?labelLiteral .
+    ?entry :value ?metadataValue .
+    BIND(STR(?labelLiteral) as ?metadataLabel)
+    FILTER (lang(?labelLiteral) = '${language}')
+  }`;
+  
+  const result = await query(queryToCall);
+  const metadataMap = new Map<number, MetadataEntry[]>();
+  
+  result.results.bindings.forEach(r => {
+    const pageNumber: number = +r.page.value;
+    const metadataEntry: MetadataEntry = {
+      index: +r.metadataIndex.value,
+      label: r.metadataLabel.value,
+      value: r.metadataValue.value
+    };
+    
+    if (!metadataMap.has(pageNumber)) {
+      metadataMap.set(pageNumber, []);
+    }
+    
+    metadataMap.get(pageNumber)!.push(metadataEntry);
+  });
+  
+  metadataMap.forEach(entries => {
+    entries.sort((a, b) => a.index - b.index);
+  });
+  
+  return metadataMap;
+}
+
+async function getImage(collectionUri: string, language: string): Promise<DocumentPart[]> {
   const queryToCall = ` SELECT ?page ?fileName ?width ?imageURL ?label ?pdf WHERE {
         <${collectionUri}> :hasPage ?pages .
         ?pages :pageNr ?page .
@@ -727,18 +792,28 @@ async function getImage(collectionUri: string): Promise<DocumentPart[]> {
         OPTIONAL {<${collectionUri}> data:hasPrintView ?pdf .}
       }`;
   const result = await query(queryToCall);
+  
+  const metadataMap = await getPageMetadata(collectionUri, language);
+  
   const res: DocumentPart[] = [];
   result.results.bindings.forEach(r => {
     const pageNumber: number = +r.page.value;
     const index = res.findIndex(r => r.page === pageNumber);
     if (index === -1) {
-      res.push({
+      const newPart: DocumentPart = {
         page: pageNumber,
         imageURL: r.imageURL ? r.imageURL.value : "",
         label: r.label ? r.label.value : "",
         pdfUrl: r.pdf ? r.pdf.value : "",
         resolutions: r.width && r.fileName ? [{ width: r.width.value, fileName: r.fileName.value }] : []
-      })
+      };
+      
+      const pageMetadata = metadataMap.get(pageNumber);
+      if (pageMetadata) {
+        newPart.metadata = pageMetadata;
+      }
+      
+      res.push(newPart);
     } else {
       res[index].resolutions.push({ width: r.width.value, fileName: r.fileName.value })
     }

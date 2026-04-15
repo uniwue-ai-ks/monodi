@@ -115,7 +115,7 @@ object Bookbinder:
   private def getSettingsForPrint(printSettings: PrintSettings, defaultDocData: Option[DefaultDocData]): Settings =
     (printSettings.drawPageNumbers, defaultDocData) match
       case (false, _)       => Settings(None)
-      case (true, None)     => Settings(Some("Seite"))
+      case (true, None)     => Settings(Some("Corpus Monodicum, Auszug aus der digitalen Ausgabe, Seite"))
       case (true, Some(dd)) =>
         Settings(
           Some(
@@ -129,7 +129,7 @@ object Bookbinder:
       request: Request
   ): List[BookEntry] =
     val allDiscriminators = NonEmptyList.of[DocWithSourceDiscriminator](
-      DocWithSourceDiscriminator.dokumenteId
+      DocWithSourceDiscriminator.tocText
     )
 
     val customCover = request.customCover match
@@ -146,7 +146,7 @@ object Bookbinder:
       if request.printSettings.addCriticalApparatus then
         docs.toList
           .filter(_.notes.comments.nonEmpty)
-          .map(d => BookEntry.CriticalApparatus(d.doc.id, d.doc.dokumenten_id, d.notes))
+          .map(d => BookEntry.CriticalApparatus(d.doc.id, tocEntryText(d), d.notes))
       else Nil
 
     val cover = customCover match
@@ -163,9 +163,10 @@ object Bookbinder:
     ).count(_ == true)
 
     val docHierarchy = docs.map: d =>
-      H.TableOfContentsItem(d.doc.dokumenten_id, Some(H.TocEntityId.Document(d.doc.id)), Nil)
-    val bookEntries  = makeMetaAndDocEntries(docs.toList, allDiscriminators)
-    val toc          =
+      H.TableOfContentsItem(tocEntryText(d), Some(H.TocEntityId.Document(d.doc.id)), Nil)
+
+    val bookEntries = makeMetaAndDocEntries(docs.toList, allDiscriminators)
+    val toc         =
       if numKindOfEntries == 1 then BookEntry.TableOfContents(H.TableOfContents(docHierarchy.toList).toView.items)
       else
         BookEntry.TableOfContents:
@@ -188,7 +189,7 @@ object Bookbinder:
                 None,
                 criticalApparati.map(c =>
                   TableOfContentsItem(
-                    c.documentId,
+                    c.tocEntryText,
                     Some(H.TocEntityId.CriticalApparatus(c.documentId)),
                     Nil
                   )
@@ -362,18 +363,25 @@ object Bookbinder:
         LineItem.VSkip(3.0.percentPH),
         LineItem.Text("unter Leitung von", 2.5.percentPW),
         LineItem.VSkip(3.0.percentPH),
-        LineItem.Text("Andreas Haug und Frank Puppe", 2.5.percentPW)
-      ),
+        LineItem.Text("Andreas Haug (bis 2024), Frank Puppe und Konstantin Voigt (ab 2025)", 2.5.percentPW),
+        LineItem.VSkip(3.0.percentPH)
+      ) ++
+        List(
+          "Charles M. Atkinson • Gunilla Björkvall • Gionata Brusa • David Catalunya",
+          "Maria Dorofeev • Jasmin Hartmann-Strauß • David Hiley • Michele Loda",
+          "Elaine Stratton-Hild Isabel Kraft • Michael Klaper • Salah Eddin Maraqa",
+          "Andreas Pfisterer • Anna Sanda • Konstantin Voigt • Hanna Zühlke"
+        ).map(text => LineItem.Text(text, 2.5.percentPW)),
       bottomItems = List(
-        "Open Access © 2024 bei CORPUS MONODICUM https://corpus.monodicum.de Dieses Werk ist",
+        "Open Access © 2025 bei CORPUS MONODICUM https://corpus.monodicum.de Dieses Werk ist",
         "lizenziert unter einer Creative Commons Namensnennung – Nicht kommerziell – Keine",
-        "Bearbeitung 4.0 International Lizenz. http://doi.org/10.1515/ etc."
+        "Bearbeitung 4.0 International Lizenz."
       ).map(text => LineItem.Text(text, 2.0.percentPW))
     )
 
   private lazy val betaLines = List(
     LineItem.VSkip(5.0.percentPH),
-    LineItem.Text("Auszug aus der Beta-Version 1.0 der digitalen Ausgabe (2024)", 2.5.percentPW)
+    LineItem.Text("Auszug aus der Beta-Version der digitalen Ausgabe (2025)", 2.5.percentPW)
   )
 
   private lazy val notYetSupportedCover: BookEntry =
@@ -398,3 +406,6 @@ object Bookbinder:
   // it should work until the ids get fixed in the underlying data base
   private def fixId(s: String): String =
     s.replace("%0A", "\n")
+
+  def tocEntryText(d: DocWithSource): String =
+    s"${d.doc.dokumenten_id}, ${d.doc.gattung1}, ${d.doc.textinitium}"

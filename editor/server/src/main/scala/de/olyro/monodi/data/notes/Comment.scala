@@ -5,6 +5,12 @@ package notes
 import io.circe.*
 import io.circe.generic.semiauto.*
 
+/**
+  * Represents a comment in a document, spanning from a start UUID to an end UUID.
+  *
+  * The text/emendation/line are basically outdated and are note exported anymore.
+  * Everything now goes through the CommentTree.
+  */
 final case class Comment(
     startUUID: String,
     endUUID: String,

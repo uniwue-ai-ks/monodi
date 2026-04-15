@@ -7,7 +7,9 @@ import de.olyro.monodi.data.notes.Modifier.Modifier
 
 object Pages:
 
-  final case class Page(idx: Int, label: String, notes: RootContainer, imageUri: String)
+  final case class SpielElementMetadata(dokumentenId: String, gattung1: String, gattung2: String, nachweisText: String)
+
+  final case class Page(idx: Int, label: String, notes: RootContainer, imageUri: String, chantMetadata: Option[SpielElementMetadata])
 
   final private case class LabelledPageId(uuid: String, label: String)
   final private case class PageBreak(id: LabelledPageId, next: String)
@@ -47,11 +49,11 @@ object Pages:
   given [C <: Container] => HasUUID[C] = c => c.uuid
   //given HasUUID[LinePart] = lp => lp.uuid
 
-  def mkPages(rc: RootContainer, startLabel: String): List[Either[String, Page]] =
+  def mkPages(rc: RootContainer, startLabel: String, startIndex: Int): List[Either[String, Page]] =
     val (_, pageBreaks) = Modifier.modify(modifier, rc).runS((Seeking, Vector.empty)).value
 
     if pageBreaks.isEmpty then
-      List(Right(Page(0, startLabel, rc, "")))
+      List(Right(Page(startIndex, startLabel, rc, "", None)))
     else
       val tmp =
         PageBreak(LabelledPageId("", startLabel), rc.uuid) +: pageBreaks :+ PageBreak(LabelledPageId(rc.uuid, ""), "")
@@ -62,7 +64,7 @@ object Pages:
         Cutter
           .cut(rc, start.next, end.id.uuid)
           .leftMap(_ => s"failed to split between $start and $end")
-          .map(_.map(Page(idx, start.id.label, _, "")))
+          .map(_.map(Page(startIndex + idx, start.id.label, _, "", None)))
       })).map {
         case Right(Some(page)) => Right(page)
         case Right(None)       => Left("ignored empty page")

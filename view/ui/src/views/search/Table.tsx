@@ -362,7 +362,10 @@ export const renderBody = (
   }
 
   const formatCell = (row: Api.RowResult, header: Attribute) => {
-    if (header.kind === "http://olyro.de/mondiview/category" && header.mapping && row.data[header.uri] !== undefined) {
+    if (header.kind === "http://olyro.de/mondiview/boolean") {
+      const val = row.data[header.uri];
+      return <td key={header.uri}>{val === "true" ? "✔" : val === "false" ? "✘" : ""}</td>;
+    } else if (header.kind === "http://olyro.de/mondiview/category" && header.mapping && row.data[header.uri] !== undefined) {
       return <td key={header.uri}>{header.mapping[row.data[header.uri]] || showOrShorten(row, header)}</td>
     } else if (header.kind === "http://olyro.de/mondiview/htmlContent") {
       return <StaticContent tag="td" key={header.uri} innerHtml={row.data[header.uri]} staticRoutes={staticRoutes} />
@@ -443,7 +446,8 @@ const useResult = (
     setRunning(true);
     if (search !== null) {
       (async () => {
-        const q = subsituteQueryLabelsByValues(search, query || []);
+        const substituted = subsituteQueryLabelsByValues(search, query || []);
+        const q = applyImplicitQueryValues(search, substituted);
         const results = await Api.doQuery(search, language, q, pagination, intersections);
         if (!canceled) {
           setResult(results);
@@ -468,6 +472,21 @@ const subsituteQueryLabelsByValues = (search: EntityDescription, query: QueryPar
     }
     return param;
   });
+}
+
+const applyImplicitQueryValues = (search: EntityDescription, query: QueryParameter[]): QueryParameter[] => {
+  const result = [...query];
+  
+  for (const attr of search.attributes) {
+    if (attr.implicitQueryValue) {
+      const hasUserValue = query.some(q => q.uri === attr.uri);
+      if (!hasUserValue) {
+        result.push({ uri: attr.uri, value: attr.implicitQueryValue });
+      }
+    }
+  }
+  
+  return result;
 }
 
 export const getDefaultPagination = (ed: EntityDescription): Api.Pagination | null => {

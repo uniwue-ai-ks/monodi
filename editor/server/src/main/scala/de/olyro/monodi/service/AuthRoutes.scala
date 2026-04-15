@@ -6,7 +6,6 @@ import cats.data.*, cats.implicits.*, cats.effect.*
 import data.*
 import db.*
 import io.circe.*
-import java.security.*, java.security.cert.*
 import java.time.*
 import org.http4s.*
 import org.http4s.circe.CirceEntityCodec.*
@@ -69,16 +68,6 @@ object AuthRoutes:
   yield result)
 
   def decode[A: Decoder](s: String): Either[Throwable, A] =
-    JwtCirce.decodeJson(s, publicKey, List(JwtAlgorithm.RS256)) match
+    JwtCirce.decodeJson(s, Cert.publicKey, List(JwtAlgorithm.RS256)) match
       case Success(v) => Decoder[A].decodeJson(v)
       case Failure(e) => Left(e)
-
-  private val publicKey: PublicKey =
-    val cf   = CertificateFactory.getInstance("X.509");
-    val cert = Util.unsafeWithResource(
-      getClass,
-      "/de/olyro/monodi/certificate/certificate.pem",
-      cf.generateCertificate(_).asInstanceOf[X509Certificate],
-    )
-    cert.getPublicKey
-

@@ -16,7 +16,7 @@ enum Run:
 
   def inHeading(level: Int): Run = this match
     case Run.Text(text, size, style) =>
-      val sizeFactor = 1.0 + (0.3 * (7 - level))
+      val sizeFactor = 1.0 + (0.10 * (7 - level))
       Run.Text(text, Size.OfSyllableFontSize(sizeFactor), style)
     case img: Run.Image => img
 
@@ -31,7 +31,11 @@ enum Run:
 object Run:
   given (svg: Svg) => Linebreak.Run[Run]:
     def baseline(bb: BoundingBox): Double =
-      bb.resolve("baseline").head.y
+      bb.resolve("baseline").headOption match
+        case Some(head) => head.y
+        case None =>
+          println("Warning: No baseline found in bounding box!")
+          0.0
 
     extension (run: Run)
       def render: BoundingBox = run match

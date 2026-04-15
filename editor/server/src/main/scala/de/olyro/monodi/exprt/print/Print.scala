@@ -12,9 +12,7 @@ import H.TocEntityId
 import de.olyro.monodi.data.notes.CommentTree.CommentTreeUndecided
 import de.olyro.monodi.data.notes.CommentTree.CommentTreeLeaf
 import de.olyro.monodi.data.notes.CommentTree.CommentTreeGrid
-import de.olyro.monodi.data.notes.CommentTreeLeafContent.Text
 import de.olyro.monodi.data.notes.CommentTreeLeafContent.Bracket
-import de.olyro.monodi.data.notes.CommentTreeLeafContent.Notes
 import java.util.UUID
 
 final case class Print(
@@ -154,12 +152,26 @@ final case class Print(
       todo: List[BookEntry],
       source: Source
   ): URIO[ProgressNotifier, PrintStage1] =
+    val isFirstSourceDescription = !accu.tocInfo.keys.exists:
+      case TocEntityId.SourceDescription(_) => true
+      case _                                => false
+
+    val sectionTitle =
+      if isFirstSourceDescription then
+        Some(
+          normalText("Quellenbeschreibungen", 1.5.ofSFS)
+            .centerX(config.width / 2)
+            .widenX(config.width)
+            .widenY(normalText("X", 1.5.ofSFS).height * 1)
+        )
+      else None
+
     val closed = if partialPage.isEmpty then None else Some(makePage(partialPage))
     val pageNr = accu.pageCount + 1 + closed.toList.size
     makeStage1(
       accu
         .addPages(closed.toList)
-        .addPages(Markdown.render(svg, source.beschreibung, contentStartY))
+        .addPages(Markdown.render(svg, source.beschreibung, contentStartY, sectionTitle))
         .registerSourceDesc(source.id, pageNr),
       Nil,
       todo
@@ -203,9 +215,10 @@ final case class Print(
     )
 
   private def renderCriticalApparatusBoxes(dokumentenId: String, content: RootContainer): List[BoundingBox] =
-    val titleBox = normalText(dokumentenId, 1.5.ofSFS)
+    val titleBox = normalText(dokumentenId, 1.2.ofSFS)
       .widenX(config.width)
-      .padTop(config.syllableFontSize)
+      .padTop(config.syllableFontSize * 1.5)
+      .padBottom(config.syllableFontSize * 0.75)
 
     // Filter to only valid comments with trees
     val validComments = ViewModel
@@ -242,6 +255,7 @@ final case class Print(
         BoundingBox
           .concatXAlignByFunction(List(alignedSignatures, maybeBroken), padding, getCommentTreeBaseline)
           .widenX(config.width)
+          .padBottom(padding)
 
       titleBox :: commentBoxes
 

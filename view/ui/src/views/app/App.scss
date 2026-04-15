@@ -23,9 +23,8 @@
 body {
   font-size: 15px;
   margin: 0;
-  font-family: "Crimson Text", serif;
+  font-family: Georgia, serif;
   display: flex;
-  //min-height: 100vh;
   flex-direction: column;
 }
 
@@ -56,7 +55,7 @@ body {
     z-index: 2;
 
     a {
-      font-family: "Crimson Text", serif;
+      font-family: Georgia, serif;
       font-weight: normal;
       color: inherit;
       text-decoration: none;
@@ -77,11 +76,10 @@ body {
     padding: 0.3em 0.4em 0;
 
     .title {
-      margin: 0;
-      font-family: "Crimson Text", serif;
-
-      text-decoration: none;
+      font-family: Georgia, serif;
       color: var(--titleColor);
+      margin-top: -0.1em;
+      text-decoration: none;
       padding: .24rem 2rem .24rem 1em;
       font-size: 1.5rem;
       display: flex;
@@ -116,14 +114,14 @@ body {
 
         .flagSelected {
           background-repeat: no-repeat;
-          width: 20px;
+
           height: 20px;
           top: 0;
           left: 0;
           z-index: 1000;
           background-color: #fff;
-          margin-left: 5px;
-          margin-right: 5px;
+          width: 15px !important;
+          margin: 3px 4px 0 10px !important;
         }
 
         .flag-fr {
@@ -132,6 +130,7 @@ body {
 
         .flag-de {
           background-image: url("../../images/de.svg");
+
         }
 
         .flag-en {
@@ -140,6 +139,9 @@ body {
 
         .langOption {
           display: flex;
+          span {
+            padding-top: 3px;
+          }
         }
       }
 
@@ -239,7 +241,6 @@ body {
     border: 1px solid var(--foregroundLightGrey);
     padding: 0.5em 2.2em 0.7em;
     margin: 0.4em 0.7em 0.4em 0;
-    border-radius: 6px;
     color: var(--textLevel4);
     cursor: pointer;
     transition: all 0.03s ease-in;
@@ -275,11 +276,11 @@ select.simple-select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='silver'><polygon points='0,0 8,0 4,4'/></svg>") no-repeat scroll 95% 60% transparent;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='16' fill='rgba(0,0,0,0.4)'><polygon points='0,0 8,0 4,4' transform='scale(2),translate(0.4,0.1)'/></svg>") no-repeat scroll 97% 60% transparent;
   color: var(--textLevel4);
   outline: none;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .react-autosuggest__container {
@@ -345,7 +346,7 @@ select.simple-select {
 }
 
 .cm-main {
-  font-family: Crimson Text, serif;
+  font-family: Georgia, serif;
   text-align: center;
 }
 
@@ -364,6 +365,7 @@ select.simple-select {
 .cm-main_h2 {
   color: #c00000;
   font-size: 1.8em;
+  margin: 1em;
 }
 
 .cm-main_h3 {

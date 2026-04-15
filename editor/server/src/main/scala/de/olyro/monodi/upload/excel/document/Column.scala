@@ -27,6 +27,7 @@ object Column:
   case object Quellensigle                extends Column
   case object Druckausgabe                extends Column
   case object Referenz_auf_Spiel          extends Column
+  case object SpielName                   extends Column
   case object Editionsstatus              extends Column
   case object Editor                      extends Column
   case object Schreibzugriff              extends Column
@@ -35,6 +36,7 @@ object Column:
   case object Quellen_ID                  extends Column
   case object Publish                     extends Column
   case object IIIFs                       extends Column
+  case object FestUndGattung              extends Column
 
   val allColumns: List[Column] = List(
     Dokumenten_ID,
@@ -59,6 +61,7 @@ object Column:
     Quellensigle,
     Druckausgabe,
     Referenz_auf_Spiel,
+    SpielName,
     Editionsstatus,
     Editor,
     Schreibzugriff,
@@ -66,7 +69,8 @@ object Column:
     Doc_Id,
     Quellen_ID,
     Publish,
-    IIIFs
+    IIIFs,
+    FestUndGattung
   )
 
   def parse(s: String): Option[Column] =

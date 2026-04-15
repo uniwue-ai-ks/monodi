@@ -122,6 +122,22 @@ data:sourceJahrhundert
       [ :value "14."; rdfs:label "14. Jahrhundert"@de,"14th century"@en,"disparue"@fr],
       [ :value "15."; rdfs:label "15. Jahrhundert"@de,"15th century"@en,"disparue"@fr].
 
+data:spielOrPassus
+   a           rdf:Property ;
+   :searchOrder 17 ;
+   :documentPosition [ ];
+   rdfs:label  "Spiele-Elemente"@de,"Parts of plays"@en,"disparue"@fr  ;
+   rdfs:domain data:document;
+   :implicitQueryValue "Spiel";
+   :uiQueryPrefillValue "Element";
+   :hideInputFromSearch true;
+   rdfs:range  :category      .
+
+data:spielOrPassus
+   :hasPossibleValue
+      [ :value "Spiel"; rdfs:label "Spiel oder normal"@de,"Play or normal"@en,"disparue"@fr],
+      [ :value "Element"; rdfs:label "Element"@de,"Element"@en,"disparue"@fr].
+
 data:sourceKommentar
    a           rdf:Property ;
    :documentPosition [
@@ -153,8 +169,8 @@ data:document
    :referenceLabel     "Dokumente anzigen"@de,"Show documents"@en,"disparue"@fr ;
    :shortUrlTag "d" ;
    :comparableInSynopsis [];
-   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
-   :openIIIFText "Original Anzeigen"@de,"missing"@en,"disparue"@fr ;
+   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
+   :openIIIFText "Faksimile"@de,"Faksimile"@en,"disparue"@fr ;
    :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
    :orderBy "3";
    :conditionalOpenText [
@@ -173,7 +189,7 @@ data:documentEdiert
    :referenceAttribute data:documentQuelle;
    :referenceClass     data:source;
    :comparableInSynopsis [];
-   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
    :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
    :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"ediert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
    :orderBy "0";
@@ -193,7 +209,7 @@ data:documentTranskribiert
    :referenceAttribute data:documentQuelle;
    :referenceClass     data:source;
    :comparableInSynopsis [];
-   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
    :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
    :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"transkribiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
    :orderBy "1";
@@ -213,7 +229,7 @@ data:documentZitiert
    :referenceAttribute data:documentQuelle;
    :referenceClass     data:source;
    :comparableInSynopsis [];
-   :openPopupText "Kritischen Apparat öffnen"@de,"Open critical apparatus"@en,"disparue"@fr ;
+   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
    :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
    :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"zitiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
    :orderBy "2";
@@ -266,13 +282,30 @@ data:documentGattung1
     rdfs:label  "Gattung"@de,"Genre"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
     rdfs:range  :category      .
+
+data:documentGattung1
+   :hasPossibleValue
+      [ :value "Agnus"; rdfs:label "Agnus"@de,"Agnus"@en,"Agnus"@fr],
+      [ :value "Antiphon"; rdfs:label "Antiphon"@de,"Antiphon"@en,"Antiphon"@fr],
+      [ :value "Benedicamus"; rdfs:label "Benedicamus"@de,"Benedicamus"@en,"Benedicamus"@fr],
+      [ :value "Credo"; rdfs:label "Credo"@de,"Credo"@en,"Credo"@fr],
+      [ :value "Gloria"; rdfs:label "Gloria"@de,"Gloria"@en,"Gloria"@fr],
+      [ :value "Humiliate vos"; rdfs:label "Humiliate vos"@de,"Humiliate vos"@en,"Humiliate vos"@fr],
+      [ :value "Ite missa est"; rdfs:label "Ite missa est"@de,"Ite missa est"@en,"Ite missa est"@fr],
+      [ :value "Kyrie"; rdfs:label "Kyrie"@de,"Kyrie"@en,"Kyrie"@fr],
+      [ :value "Lied"; rdfs:label "Lied"@de,"Song"@en,"Chanson"@fr],
+      [ :value "Requiescant"; rdfs:label "Requiescant"@de,"Requiescant"@en,"Requiescant"@fr],
+      [ :value "Sanctus"; rdfs:label "Sanctus"@de,"Sanctus"@en,"Sanctus"@fr],
+      [ :value "Sequenz"; rdfs:label "Sequenz"@de,"Sequence"@en,"Séquence"@fr],
+      [ :value "Spiel"; rdfs:label "Spiel"@de,"Play"@en,"Pièce de théâtre"@fr],
+      [ :value "Tropus"; rdfs:label "Tropus"@de,"Tropus"@en,"Tropus"@fr].
       
 data:documentGattung2
     a           rdf:Property ;
     :documentPosition [
        :right 1
     ];
-    rdfs:label  "2. Gattung"@de,"2. Genre"@en,"disparue"@fr  ;
+    rdfs:label  "Gattung II"@de,"Genre II"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
     rdfs:range  :category      .
       
@@ -329,13 +362,13 @@ data:documentDruckausgabe
 
 data:documentZeilenstart
     a           rdf:Property ;
-    rdfs:label  "Zeilenstart"@de,"missing"@en,"disparue"@fr  ;
+    rdfs:label  "Zeile"@de,"Line"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
     rdfs:range  :string      .
 
 data:documentFoliostart
     a           rdf:Property ;
-    rdfs:label  "Foliostart"@de,"missing"@en,"disparue"@fr  ;
+    rdfs:label  "Folio"@de,"Folio"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
     rdfs:range  :string      .
       
@@ -508,6 +541,15 @@ data:Editor
    rdfs:domain data:document;
    rdfs:range :category.
 
+data:SpielName
+  a rdf:Property;
+  rdfs:label "Spielname"@de,"Play name"@en,"disparue"@fr;
+  :searchOrder 18;
+  :documentPosition [
+     :header 1
+  ];
+  rdfs:domain data:document;
+  rdfs:range :category.
 
 data:rSourceQuellensigle
    a   rdf:Property ;
@@ -608,5 +650,12 @@ data:rSourceHerkunftsregion
    rdfs:domain data:document ;
    rdfs:range :reference ;
    :referenceField data:sourceHerkunftsregion .
+
+data:textInitia
+    a           rdf:Property ;
+    :searchOrder 8 ;
+    rdfs:label  "Textinitium Element"@de,"Textinitium Element"@en,"Textinitium Element"@fr ;
+    rdfs:domain data:document ;
+    rdfs:range  :category .
 
 data:version a rdf:Property .

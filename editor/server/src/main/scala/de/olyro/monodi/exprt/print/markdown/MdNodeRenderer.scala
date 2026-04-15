@@ -27,6 +27,7 @@ class MdNodeRenderer(svg: Svg):
     case node: MdList           => rdrList(width, node)
     case node: MdListItem       => rdr(width, MdDocument(node.items))
     case node: MdImage          => linebreak(width, getRuns(node)).map(Line.Full.apply)
+    case node: MdLink           => linebreak(width, List(defaultRun(node.text))).map(Line.Full.apply)
     case node: MdTable          => rdrTable(width, node)
     case node: MdRow            => linebreak(width, getRuns(node)).map(Line.Full.apply)
     case node: MdCell           => linebreak(width, getRuns(node)).map(Line.Full.apply)
@@ -60,10 +61,16 @@ class MdNodeRenderer(svg: Svg):
           case head :: tail =>
             val firstLine  =
               BoundingBox
-                .concatXAlignByFunction(List(dotBB, head.bb), listDotItemSpace, _.resolve("baseline").head.y, None)
+                .concatXAlignByFunction(
+                  List(dotBB, head.bb),
+                  listDotItemSpace,
+                  bb => bb.resolve("baseline").head.y,
+                  None
+                )
                 .padLeft(listPadding)
+                .shrinkToFullY
             val otherLines = tail.map(_.bb.padLeft(listPadding + listDotItemSpace + dotWidth))
-            Line.Full(firstLine) :: otherLines.map(Line.Full(_))
+            Line.Full(firstLine) :: otherLines.map(bb => Line.Full(bb.shrinkToFullY))
       .flatten
 
   private def rdrTable(width: Double, node: MdTable): List[Line] =
@@ -126,7 +133,11 @@ class MdNodeRenderer(svg: Svg):
     case MdRow(children)            => children.flatMap(getRuns)
     case MdCell(header, children)   => children.flatMap(getRuns)
     case MdImage(altText, src)      =>
-      List(Run.Image(src, Size.OfPageWidth(altText.flatMap(_.toDoubleOption).getOrElse(0.3))))
+      if src.startsWith("http") then
+        val data = ImageFetcher.fetchImage(src)
+        data.map(d => Run.Image(d, Size.OfPageWidth(altText.flatMap(_.toDoubleOption).getOrElse(0.3)))).toList
+      else List(Run.Image(src, Size.OfPageWidth(altText.flatMap(_.toDoubleOption).getOrElse(0.3))))
+    case MdLink(text, _)            => List(defaultRun(text))
 
   private val paragraphYMargin   = Size.sameAsSyllable
   private val headlineYMargin    = Size.sameAsSyllable * 0.5

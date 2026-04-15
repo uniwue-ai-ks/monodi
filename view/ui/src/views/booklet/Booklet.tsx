@@ -196,7 +196,7 @@ export const getDefaultPrintSettings = (): PrintSettings => {
     marginRightInMm: 20,
     marginBottomInMm: 14,
     marginLeftInMm: 20,
-    zoomFactor: 0.7,
+    zoomFactor: 0.6,
     paratextWordPadding: 5.0,
     paratextLinePadding: 5.0,
     lineContinuationIndent: 50.0,
@@ -215,9 +215,9 @@ export const getDefaultPrintSettings = (): PrintSettings => {
     synopsisParatextYPadding: 3.0,
     syllableFontSize: 20.0,
     drawPageNumbers: true,
-    drawTableOfContents: false,
-    addSourceDescriptions: false,
-    addCriticalApparatus: false,
+    drawTableOfContents: true,
+    addSourceDescriptions: true,
+    addCriticalApparatus: true,
   };
 }
 

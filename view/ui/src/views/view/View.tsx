@@ -106,6 +106,9 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
     window.postMessage({ "doc": doc, "entity": entity });
   }, [doc, entity])
 
+  const hideSidebar = entity ? imageCollectionViewerDisplaysSidebar(entity) : false;
+  const showSidePanel = sideBar && !hideSidebar;
+
   return entity === null ? null : <div className="view-main">
     <Popup
       state={popupState}
@@ -118,20 +121,22 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
     <SearchNavigation onDocumentChange={onDocumentChange} />
     {!loading ?
       <>
-        <Allotment separator={true} className={"documentViewer" + (sideBar ? " sidebar-active" : " sidebar-Inactive")} defaultSizes={[85, 15]}>
+        <Allotment separator={true} className={"documentViewer" + (showSidePanel ? " sidebar-active" : " sidebar-Inactive")} defaultSizes={showSidePanel ? [85, 15] : [100]}>
           <Allotment.Pane className={"documentMain" + (showStickyColumn ? " stickyColumn" : "")}>
             <DocumentNavigation entity={entity} attributeData={entity.attributes} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
             {priorityColumns.length > 0
-              ? <AttributeRows position={p => p.priority} attributes={priorityColumns} view={view} setView={setView} staticRoutes={staticRoutes} />
+              ? <AttributeRows position={p => p.priority} attributes={priorityColumns} view={view} setView={setView} staticRoutes={staticRoutes} hideSidebar={hideSidebar} />
               : <>
-                <AttributeRows position={p => p.main} attributes={entity.attributes} view={view} setView={setView} staticRoutes={staticRoutes} />
+                <AttributeRows position={p => p.main} attributes={entity.attributes} view={view} setView={setView} staticRoutes={staticRoutes} hideSidebar={hideSidebar} />
                 {showStickyColumn
-                  ? <AttributeRows position={p => p.sticky} attributes={entity.attributes} view={view} setView={setView} className="stickyColumn" staticRoutes={staticRoutes} />
+                  ? <AttributeRows position={p => p.sticky} attributes={entity.attributes} view={view} setView={setView} className="stickyColumn" staticRoutes={staticRoutes} hideSidebar={hideSidebar} />
                   : null}
               </>}
           </Allotment.Pane>
 
-          <SidePanel entity={entity} sidePanelAttributes={sidePanelAttributes} open={sideBar} setOpen={setSideBar} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
+          {!hideSidebar && (
+            <SidePanel entity={entity} sidePanelAttributes={sidePanelAttributes} open={sideBar} setOpen={setSideBar} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
+          )}
         </Allotment>
         <SearchNavigation onDocumentChange={onDocumentChange} />
       </>
@@ -225,6 +230,7 @@ interface AttributeTableProps {
   setView: (view: viewType) => void;
   className?: string;
   staticRoutes: StaticRoutes;
+  hideSidebar?: boolean;
 }
 
 const attributesByPosition = (attributes: AttributeWithData[], position: (pos: DocumentPosition) => number | undefined) => {
@@ -232,7 +238,7 @@ const attributesByPosition = (attributes: AttributeWithData[], position: (pos: D
     .sort((a, b) => position(a.attribute.documentPosition)! - position(b.attribute.documentPosition)!)
 }
 
-const AttributeRows = ({ position, attributes, view, setView, className, staticRoutes }: AttributeTableProps) => {
+const AttributeRows = ({ position, attributes, view, setView, className, staticRoutes, hideSidebar }: AttributeTableProps) => {
   const simpleAttributeRow = (a: AttributeWithData, value: string): ReactElement =>
     <p key={a.attribute.uri}><span className="name">{a.attribute.label}:</span> <span className="value">{value}</span></p>
 
@@ -244,7 +250,8 @@ const AttributeRows = ({ position, attributes, view, setView, className, staticR
       "http://olyro.de/mondiview/category": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/imageCollection": (i) => {
         if (anyViewIsAvaialble(i.data)) {
-          return <div key={a.attribute.uri} className="content"><ImageCollectionViewer completeDocument={i.data.completeDocument} currentView={view} onChangeView={setView} allowFullscreenToggle={true} closable={viewIsAvailable(i.data, 'Pages')} /></div>
+          console.log("Rendering image collection for attribute", i.data.completeDocument.length);
+          return <div key={a.attribute.uri} className="content"><ImageCollectionViewer completeDocument={i.data.completeDocument} currentView={view} onChangeView={setView} allowFullscreenToggle={true} closable={viewIsAvailable(i.data, 'Pages')} showMetadata={hideSidebar} /></div>
         } else {
           return <span key={a.attribute.uri} />
         }
@@ -255,6 +262,7 @@ const AttributeRows = ({ position, attributes, view, setView, className, staticR
       "http://olyro.de/mondiview/substringSearchText": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/entity": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
+      "http://olyro.de/mondiview/boolean": (b) => simpleAttributeRow(a, b.data ? "✔" : "✘"),
       "http://olyro.de/mondiview/reference": (a) => getAttributeRow(a.data),
     })
   }
@@ -276,7 +284,7 @@ const getAttributesForPopup = (attributes: AttributeWithData[], view: viewType, 
       "http://olyro.de/mondiview/category": (s) => <div key={a.attribute.uri}>{s.data}</div>,
       "http://olyro.de/mondiview/imageCollection": (i) => {
         if (anyViewIsAvaialble(i.data)) {
-          return <div key={a.attribute.uri} className="content"><ImageCollectionViewer completeDocument={i.data.completeDocument} currentView={view} onChangeView={setView} allowFullscreenToggle={true} closable={viewIsAvailable(i.data, 'Pages')} /></div>
+          return <div key={a.attribute.uri} className="content"><ImageCollectionViewer completeDocument={i.data.completeDocument} currentView={view} onChangeView={setView} allowFullscreenToggle={true} closable={viewIsAvailable(i.data, 'Pages')} showMetadata={false} /></div>
         } else {
           return <span key={a.attribute.uri} />
         }
@@ -287,6 +295,7 @@ const getAttributesForPopup = (attributes: AttributeWithData[], view: viewType, 
       "http://olyro.de/mondiview/substringSearchText": () => <div>substring search texts are not supported here</div>,
       "http://olyro.de/mondiview/entity": (s) => <div key={a.attribute.uri}>{s.data}</div>,
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
+      "http://olyro.de/mondiview/boolean": (b) => <div key={a.attribute.uri}>{b.data ? "✔" : "✘"}</div>,
       "http://olyro.de/mondiview/reference": (a) => getAttributeRow(a.data)
     })
   }
@@ -299,6 +308,20 @@ const getImageCollections = (entity: Entity) => entity.attributes.flatMap(r => {
     return [r];
   } else return [];
 })
+
+const imageCollectionViewerDisplaysSidebar = (entity: Entity): boolean => {
+  const imageCollections = getImageCollections(entity);
+  if (imageCollections.length === 0) return false;
+  
+  const hasMultiplePagesWithMetadata = imageCollections.some(ic => {
+    const pagesWithMetadata = ic.data.completeDocument.filter(
+      page => page.metadata && page.metadata.length > 0
+    );
+    return pagesWithMetadata.length > 1;
+  });
+  
+  return hasMultiplePagesWithMetadata;
+}
 
 
 const renderSupersript = (value: string) => {
@@ -340,6 +363,7 @@ export const getInlineAttribute = (attr: AttributeWithData, staticRoutes: Static
       }
     },
     "http://olyro.de/mondiview/copyText": (s) => ({ value: <CopyableTextField label={s.attribute.label} text={s.data} /> }),
+    "http://olyro.de/mondiview/boolean": (b) => text(b.data ? "✔" : "✘"),
     "http://olyro.de/mondiview/reference": (a) => a.data ? getInlineAttribute(a.data, staticRoutes, openDocumentHandler) : { value: <></> },
   })
 }

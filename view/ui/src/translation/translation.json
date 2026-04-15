@@ -137,11 +137,11 @@
       "langItems": [
         {
           "language": "de",
-          "translation": "Digitale Ausgabe | Beta-Version 1.0 | 2024"
+          "translation": "Digitale Ausgabe | Beta-Version | 2026"
         },
         {
           "language": "en",
-          "translation": "Digital Edition | Beta version 1.0 | 2024"
+          "translation": "Digital Edition | Beta version | 2026"
         },
         {
           "language": "fr",
@@ -358,11 +358,11 @@
       "langItems": [
         {
           "language": "de",
-          "translation": "Keine Daten vorhanden für diese Seite"
+          "translation": "Keine Daten vorhanden"
         },
         {
           "language": "en",
-          "translation": "No data available for this page"
+          "translation": "No data available"
         },
         {
           "language": "fr",
@@ -477,15 +477,15 @@
       "langItems": [
         {
           "language": "de",
-          "translation": "Die Spezifikation für die Suche ist noch nicht geladen. Wenn sie nicht innerhalb weniger Sekunden geladen wird, handelt es sich wahrscheinlich um einen Fehler. In diesem Fall benachrichtigen Sie bitte einen Administrator."
+          "translation": ""
         },
         {
           "language": "en",
-          "translation": "The specification for the search is not yet loaded. If it doesn't load within a few seconds, this is probably a bug. In this case, please notify an administrator."
+          "translation": ""
         },
         {
           "language": "fr",
-          "translation": "La spécification de la recherche n'est pas encore chargée. Si elle n'est pas chargée au bout de quelques secondes, il s'agit probablement d'un bug. Dans ce cas, veuillez en informer un administrateur."
+          "translation": ""
         }
       ]
     },
@@ -630,11 +630,11 @@
       "langItems": [
         {
           "language": "de",
-          "translation": "Versionen vergleichen"
+          "translation": "Synopse"
         },
         {
           "language": "en",
-          "translation": "Compare versions"
+          "translation": "Synopsis"
         },
         {
           "language": "fr",
@@ -664,11 +664,11 @@
       "langItems": [
         {
           "language": "de",
-          "translation": "Permalink zum Viewer"
+          "translation": "Permalink"
         },
         {
           "language": "en",
-          "translation": "short link"
+          "translation": "Short Link"
         },
         {
           "language": "fr",
@@ -804,7 +804,7 @@
         },
         {
           "language": "en",
-          "translation": "Sponsorship"
+          "translation": "Funding"
         },
         {
           "language": "fr",
@@ -2198,6 +2198,45 @@
         {
           "language": "en",
           "translation": "Or"
+        }
+      ]
+    },
+    {
+      "key": "boolean_true",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Wahr"
+        },
+        {
+          "language": "en",
+          "translation": "True"
+        }
+      ]
+    },
+    {
+      "key": "boolean_false",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Falsch"
+        },
+        {
+          "language": "en",
+          "translation": "False"
+        }
+      ]
+    },
+    {
+      "key": "boolean_any",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Beliebig"
+        },
+        {
+          "language": "en",
+          "translation": "Any"
         }
       ]
     }

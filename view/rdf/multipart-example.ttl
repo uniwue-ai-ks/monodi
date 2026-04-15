@@ -15,7 +15,7 @@ data:book
   rdfs:label "Bücher"@de,"Books"@en;
   :shortUrlTag "book";
   :disablePrintColumn true;
-  :openIIIFText "Original Anzeigen"@de,"Show original"@en.
+  :openIIIFText "Faksimile"@de,"Faksimile"@en.
 
 data:bookOcNumber
   a rdf:Property;
@@ -103,7 +103,7 @@ data:page
    # pages search, restricted to pages from the selected book
   :referenceLabel "Seiten durchsuchen"@de, "Seiten durchsuchen"@en;
   :disablePrintColumn true;
-  :openIIIFText "Original Anzeigen"@de,"Show original"@en.
+  :openIIIFText "Faksimile"@de,"Faksimile"@en.
 
 # the reference attribute, which will contain book URIs. rdfs:range may be
 # entity, or, for legacy reasons, :string. If no locations for displaying it are

@@ -61,7 +61,7 @@ object ExportSingleSvg extends ZIOAppDefault:
                       .printSvg(printPages)
                       .flatMap(pdf => ZIO.attemptBlocking(Files.write(Paths.get("/tmp/cmpl.pdf"), pdf.data)))
                       .orDie
-    (errs, pages) = Pages.mkPages(notes._1, "???").partitionMap(identity)
+    (errs, pages) = Pages.mkPages(notes._1, "???", 0).partitionMap(identity)
     _            <- ZStream.fromIterable(errs).mapZIO(x => Console.printLine(x)).runDrain
     _            <- ZStream
                       .fromIterable(svg.drawPages(pages.map(_.notes)))

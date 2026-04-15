@@ -9,7 +9,8 @@ export type Kind =
   "http://olyro.de/mondiview/substringSearchText" |
   "http://olyro.de/mondiview/entity" |
   "http://olyro.de/mondiview/copyText" |
-  "http://olyro.de/mondiview/reference";
+  "http://olyro.de/mondiview/reference" |
+  "http://olyro.de/mondiview/boolean";
 
 interface AttributeBase<T extends Kind> {
   kind: T;
@@ -26,6 +27,19 @@ interface AttributeBase<T extends Kind> {
   shortenPosition?: ShortenPosition;
   downloadIcon?: string;
   initialSearch: boolean;
+  // If set, this value is automatically added to search queries unless the
+  // user has provided their own value for this attribute
+  implicitQueryValue?: string;
+  // If set, prefills the input field with this value when the user adds
+  // this attribute as a filter to the search bar
+  uiQueryPrefillValue?: string;
+  // If true, hides the input field for this attribute in the search bar
+  // (the attribute can still be added as a filter)
+  hideInputFromSearch?: boolean;
+  // If false, the search bar shows only a single input for this attribute
+  // (no "add another value" button, no intersection/union toggle).
+  // Defaults to false for boolean, true for all other types.
+  allowMultipleSearch?: boolean;
 }
 
 export interface SearchPreview {
@@ -85,12 +99,19 @@ export interface ImageCollection {
   completeDocument: DocumentPart[];
 }
 
+export interface MetadataEntry {
+  index: number;
+  label: string;
+  value: string;
+}
+
 export interface DocumentPart {
   page: number;
   imageURL: string;
   label: string;
   pdfUrl: string;
   resolutions: Resolution[];
+  metadata?: MetadataEntry[];
 };
 
 export interface Resolution {
@@ -142,6 +163,7 @@ export interface Normalization {
   normalizer: string;
 }
 
+export type BooleanAttribute = AttributeBase<"http://olyro.de/mondiview/boolean">
 export type NumberAttribute = AttributeBase<"http://olyro.de/mondiview/number">
 export interface StringAttribute extends AttributeBase<"http://olyro.de/mondiview/string"> {
   normalization?: Normalization;
@@ -163,7 +185,7 @@ export interface ReferenceAttribute extends AttributeBase<"http://olyro.de/mondi
 
 export type Attribute = NumberAttribute | StringAttribute | ImageCollectionAttribute | PDFAttribute |
   CategoryAttribute | HtmlContentAttribute | HtmlImageCollectionAttribute | SubstringSearchTextAttribute |
-  EntityAttribute | CopyTextAttribute | ReferenceAttribute;
+  EntityAttribute | CopyTextAttribute | ReferenceAttribute | BooleanAttribute;
 
 export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/number" ? number :
@@ -177,6 +199,7 @@ export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/entity" ? string :
   T extends "http://olyro.de/mondiview/copyText" ? string :
   T extends "http://olyro.de/mondiview/reference" ? AttributeWithData :
+  T extends "http://olyro.de/mondiview/boolean" ? boolean :
   never;
 
 type Tmp<X extends Attribute> = X extends any ? { kind: X["kind"]; attribute: X; data: DataOf<X["kind"]> } : never;

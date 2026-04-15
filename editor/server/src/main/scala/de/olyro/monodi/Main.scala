@@ -50,7 +50,8 @@ object Main extends IOApp:
       IO(println("Exported")) *>
       BlazeServerBuilder[IO]
         .bindHttp(9070, "0.0.0.0")
-        .withIdleTimeout(2.minutes)
+        .withIdleTimeout(15.minutes)
+        .withResponseHeaderTimeout(15.minutes)
         .withHttpApp(
           returnErrors(
             CORS.policy.withAllowOriginAll.withAllowHeadersAll(
@@ -78,9 +79,10 @@ object Main extends IOApp:
                   DocumentService.saveNotes <+>
                   DocumentService.verifyNotes <+>
                   staticService
-              ).orNotFound)
-              )
+              ).orNotFound
             )
+          )
+        )
         .serve
         .compile
         .drain

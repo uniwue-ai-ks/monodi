@@ -15,6 +15,8 @@ import doobie.hikari.HikariTransactor
 import doobie.implicits.*
 import io.circe.*
 import io.circe.parser.decode
+import de.olyro.monodi.exprt.filter.SourcePublishInfo
+import de.olyro.monodi.exprt.filter.DocPublishInfo
 
 import zio.interop.catz.*
 import zio.{Task, ZIO, ZLayer}
@@ -242,6 +244,22 @@ object DBRunner:
 
   val getDistinctDocumentEdititionsstatus: ConnectionIO[List[String]] =
     sql"""SELECT DISTINCT editionsstatus FROM dokument""".query[String].to[List]
+
+  val getSourcePublishInfos: ConnectionIO[List[SourcePublishInfo]] =
+    sql"""SELECT id, publish FROM quelle""".query[SourcePublishInfo].to[List]
+
+  val getSpieleInfo: ConnectionIO[Map[String, List[String]]] =
+    sql"""
+      SELECT
+          weiterefelder->>'Referenz_auf_Spiel' AS ref,
+          id
+      FROM dokument
+      WHERE weiterefelder->>'Referenz_auf_Spiel' IS NOT NULL
+        AND trim(weiterefelder->>'Referenz_auf_Spiel') <> '';
+    """.query[(String, String)].to[List].map(_.groupBy(_._1).view.mapValues(_.map(_._2)).toMap)
+
+  val getDocumentPublishInfos: ConnectionIO[List[DocPublishInfo]] =
+    sql"""SELECT id, publish, quelle_id FROM dokument""".query[DocPublishInfo].to[List]
 
   def getDistinctGattung1: ConnectionIO[List[String]] =
     sql"""SELECT DISTINCT gattung1 FROM dokument""".query[String].to[List]

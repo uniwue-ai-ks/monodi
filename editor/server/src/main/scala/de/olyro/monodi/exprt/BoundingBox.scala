@@ -273,3 +273,5 @@ object BoundingBox:
     rect.addAt(bb, Point(padding, padding))
 
   lazy val empty = BoundingBox(0, 0, Nil)
+
+extension (bb: BoundingBox) def withBorder: BoundingBox = BoundingBox.borderBox(bb, 0)

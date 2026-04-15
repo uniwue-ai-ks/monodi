@@ -95,7 +95,8 @@ object ViewModel:
       .fold(false)(fd => fd.data == "Refrain")
 
   def getCommentInfo(linePart: LinePart, comments: List[Comment]): (Boolean, Boolean, String) =
-    val (starts, ends) = (comments.map(_.startUUID), comments.map(_.endUUID))
+    val relevantComments = comments.filter(_.tree.nonEmpty)
+    val (starts, ends) = (relevantComments.map(_.startUUID), relevantComments.map(_.endUUID))
 
     val ids = linePart match
       case s @ Syllable(uuid, _, _, kind) =>
@@ -106,7 +107,7 @@ object ViewModel:
       case Clef(uuid, _, _, _, _)         => List(uuid)
       case Box(uuid, _)          => List(uuid)
 
-    val commentId = comments
+    val commentId = relevantComments
       .find(c => ids.contains(c.startUUID) || ids.contains(c.endUUID))
       .map(_.concatenatedIds)
       .getOrElse("")

@@ -31,7 +31,7 @@ export function App() {
   const [contents, setContents] = useState<api.Contents>({ contents: [] });
 
   const getContentByUri = (uri: string): string =>
-    getContentByUriOrElse(uri, "<span>ERROR: Page " + uri + " is Missing for language " + language + "<span>")
+    getContentByUriOrElse(uri, "");
 
   const getContentByUriOrElse = (uri: string, fallback: string): string => {
     const cont = contents.contents.find(c => c.uri === uri);
@@ -105,7 +105,7 @@ export function App() {
     const icon =
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path id="circle" fill="#FFFFFF" d="m12 2.085c-5.477 0-9.915 4.438-9.915 9.916 0 5.48 4.438 9.92 9.916 9.92 5.48 0 9.92-4.44 9.92-9.913 0-5.477-4.44-9.915-9.913-9.915zm.002 18a8.084 8.084 0 1 1 0 -16.17 8.084 8.084 0 0 1 0 16.17z" />
-        <path id="info" fill="#FFFFFF" d="m11 6.16v2.01h2.02v-2.01zm-1.61 3.22v2.01h1.61v4.43h-1.61v2.01h5.23v-2.01h-1.61v-6.44z" />
+        <path id="info" transform="translate(0,1)" fill="#FFFFFF" d="m11 6.16v2.01h2.02v-2.01zm-1.61 3.22v2.01h1.61v4.43h-1.61v2.01h5.23v-2.01h-1.61v-6.44z" />
       </svg>
     if (target.startsWith("http")) {
       return <a title={title} href={target}>{icon}</a>
@@ -164,7 +164,7 @@ export function App() {
     <div id="app-main" className="app-main">
       <header className="header">
         <NavLink to="/" className="title">
-          <span>{getContentByUriOrElse("http://olyro.de/mondiview/headerTitle", "CM Digital")}</span>
+          <span>{getContentByUriOrElse("http://olyro.de/mondiview/headerTitle", "CORPUS MONODICUM")}</span>
         </NavLink>
         <div className="navigation">
           <>

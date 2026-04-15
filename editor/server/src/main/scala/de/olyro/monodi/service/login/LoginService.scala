@@ -7,7 +7,6 @@ import cats.effect.*, cats.implicits.*
 import de.olyro.monodi.data.*
 import db.*
 import io.circe.*, io.circe.syntax.*
-import java.security.*
 import java.time.*
 import org.http4s.*
 import org.http4s.circe.CirceEntityCodec.*
@@ -41,9 +40,4 @@ object LoginService:
     string <- IO { encode(Token(u, now)) }
   yield string
 
-  private val privateKey: PrivateKey =
-    val p12 = KeyStore.getInstance("pkcs12");
-    Util.unsafeWithResource(getClass, "/de/olyro/monodi/certificate/certificate.p12", p12.load(_, "1".toCharArray))
-    p12.getEntry("1", new KeyStore.PasswordProtection("1".toCharArray)).asInstanceOf[KeyStore.PrivateKeyEntry].getPrivateKey
-
-  private def encode[A: Encoder](a: A): String = JwtCirce.encode(a.asJson, privateKey, JwtAlgorithm.RS256)
+  private def encode[A: Encoder](a: A): String = JwtCirce.encode(a.asJson, Cert.privateKey, JwtAlgorithm.RS256)

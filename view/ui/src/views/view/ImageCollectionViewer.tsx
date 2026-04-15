@@ -1,11 +1,11 @@
-import { MutableRefObject, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MutableRefObject, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { svgBase } from "../../api";
-import { DocumentPart } from "../../model/attribute";
+import { DocumentPart, MetadataEntry } from "../../model/attribute";
 import { Dragon } from '../dragon/Dragon';
 import './ImageCollectionViewer.scss';
 import { viewType } from './View';
 
-export const ImageCollectionViewer = (props: { completeDocument: DocumentPart[], currentView: viewType, onChangeView: (view: viewType) => void, allowFullscreenToggle: boolean, closable: boolean }): ReactElement => {
+export const ImageCollectionViewer = (props: { completeDocument: DocumentPart[], currentView: viewType, onChangeView: (view: viewType) => void, allowFullscreenToggle: boolean, closable: boolean, showMetadata?: boolean }): ReactElement => {
 
   // TODO pass closable to dragon from view
   const pages = props.completeDocument;
@@ -52,13 +52,32 @@ export const ImageCollectionViewer = (props: { completeDocument: DocumentPart[],
   });
 
   const renderPageView = () => {
-    return <div className="document-pages">
-      <div className="complete-document" ref={ref}>
-        {pages.map(i => {
-          return (<DocumentSVGPage key={i.page} page={i} currentPage={currentPage} parentWidth={currentWidth} scrollState={scrollStateRef} />)
-        })}
+    const useGrid = props.showMetadata && pages.some(p => p.metadata && p.metadata.length > 0);
+
+    if (useGrid) {
+      return <div className="document-pages">
+        <div className={"complete-document-grid"} ref={ref}>
+          {groupByMetadata(pages).map(pages =>
+            <div className="grid-sub-row" key={pages[0].page}>
+              <div>
+                {pages.map(i =>
+                <DocumentSVGPage page={i} currentPage={currentPage} parentWidth={currentWidth} scrollState={scrollStateRef} />
+                )}
+              </div>
+              <PageMetadata metadata={pages[0].metadata} />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    } else {
+      return <div className="document-pages">
+        <div className={"complete-document"} ref={ref}>
+          {pages.map(i =>
+            <DocumentSVGPage key={i.page} page={i} currentPage={currentPage} parentWidth={currentWidth} scrollState={scrollStateRef} />
+          )}
+        </div>
+      </div>
+    }
   }
 
   const renderDragon = () => {
@@ -162,4 +181,52 @@ const DocumentSVGPage = (props: DocumentPageProps): ReactElement => {
   } else {
     return (<span>ERROR Loading Page</span>)
   }
+}
+
+interface PageMetadataProps {
+  metadata?: MetadataEntry[];
+}
+
+const PageMetadata = ({ metadata }: PageMetadataProps): ReactElement => {
+  if (!metadata || metadata.length === 0) {
+    return <div className="page-metadata-empty"></div>;
+  }
+  
+  return (
+    <div className="page-metadata">
+      {metadata
+        .sort((a, b) => a.index - b.index)
+        .map(entry => (
+          <div key={entry.index} className="metadata-entry">
+            <span className="metadata-label">{entry.label}:</span>
+            <span className="metadata-value">{entry.value}</span>
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+/**
+ * Groups document pages for display with metadata sections. Each page that has metadata
+ * starts a new group, while consecutive pages without metadata are grouped together
+ * with it and will share the metadata display from the preceding metadata page.
+ * 
+ * Example: [P1(meta), P2, P3, P4(meta), P5] -> [[P1(meta), P2, P3], [P4(meta), P5]]
+ */
+const groupByMetadata = (pages: DocumentPart[]): DocumentPart[][] => {
+  const groups: DocumentPart[][] = [];
+
+  for (const p of pages) {
+    if (p.metadata) {
+      groups.push([p]);
+    } else {
+      if (groups.length === 0) {
+        groups.push([]);
+      }
+      groups[groups.length - 1].push(p);
+    }
+  }
+
+  return groups;
 }

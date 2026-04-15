@@ -48,8 +48,10 @@ object TableParser:
         Endzeile,
         Nachtragsschicht,
         Referenz_auf_Spiel,
+        SpielName,
         Editor,
         IIIFs,
+        FestUndGattung
       ).map(column => fixKeyName(column.toString) -> projection.get(column).getOrElse("")).toMap
 
     def fixKeyName(key: String): String =

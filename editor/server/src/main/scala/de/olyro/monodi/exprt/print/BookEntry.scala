@@ -12,7 +12,7 @@ enum BookEntry derives CanEqual:
   case Cover(cover: C.Cover)
   case TableOfContents(toc: List[H.TableOfContentsViewItem])
   case SourceDescription(source: Source)
-  case CriticalApparatus(documentId: String, dokumentenId: String, content: RootContainer)
+  case CriticalApparatus(documentId: String, tocEntryText: String, content: RootContainer)
 
 object BookEntry:
   def ofMetaStrings(strings: List[String]): BookEntry =

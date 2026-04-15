@@ -134,14 +134,18 @@ final case class Svg(config: CanvasConfig):
       case pattern(text, folio) => (text, "|| " + folio)
       case _                    => (p.text, "")
 
-    val drawn      =
-      if p.comment.isEmpty then drawParatext(text)
-      else drawCommentMarkers(drawParatext(text))((true, true, p.uuid), config.commentMarkerXOffsetRelative, 0.8)
-    val line       = if padToLineWidth then drawn.widenX(lineWidth) else drawn
-    val sig        = getSignature(line, sigs)
-    val folioTextB = getFolioText(line, folioChangeText)
+    val drawCommentMarker = p.comment.fold(false)(_.tree.nonEmpty)
+    val drawn             =
+      if drawCommentMarker then
+        drawCommentMarkers(drawParatext(text))((true, true, p.uuid), config.commentMarkerXOffsetRelative, 0.8)
+      else drawParatext(text)
+    val line              = if padToLineWidth then drawn.widenX(lineWidth) else drawn
+    val sig               = getSignature(line, sigs)
+    val folioTextB        = getFolioText(line, folioChangeText)
 
-    BoundingBox.concatX(List(sig, line, folioTextB), 0, Some("line-container")).padTop(halfY(lineHalfs.last))
+    BoundingBox
+      .concatX(List(sig, line, folioTextB), 0, Some("line-container"))
+      .padTop(halfY(lineHalfs.last) * 0.5)
 
   def drawLine(sigs: List[String], lps: List[LinePart], cmts: List[Comment], font: FontKind): BoundingBox =
     val line        = drawLineParts(lps, font, cmts).widenX(lineWidth)

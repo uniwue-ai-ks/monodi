@@ -28,3 +28,65 @@
   display: grid;
   grid-template-columns: 100%;
 }
+
+.complete-document-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1em;
+  width: 100%;
+  align-items: start;
+
+  object {
+    max-width: 100%;
+    width: auto;
+    justify-self: start;
+
+  }
+}
+
+.grid-sub-row {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+
+  &:not(:first-of-type) {
+    border-top: 1px solid #ddd;
+    padding-top: 1em;
+  }
+}
+
+.page-metadata {
+  padding: 1em;
+  background-color: #f5f5f5;
+  border-left: 3px solid #ddd;
+  align-self: start;
+  position: sticky;
+  top: 2em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  .metadata-entry {
+    margin-bottom: 0.75em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .metadata-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.25em;
+    color: #333;
+  }
+
+  .metadata-value {
+    display: block;
+    color: #666;
+    word-wrap: break-word;
+  }
+}
+
+.page-metadata-empty {
+  // Empty placeholder for pages without metadata
+  // Maintains grid structure
+}
