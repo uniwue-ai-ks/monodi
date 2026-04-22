@@ -1,6 +1,14 @@
 #!/bin/sh
-rm -rf db/ run/ \
- && apache-jena/bin/tdb2.tdbloader --loc db /data/*.ttl \
- && mkdir run/luceneIndexing -p \
- && java -Xmx16G -cp apache-jena-fuseki/fuseki-server.jar jena.textindexer --desc=fuseki.ttl \
- && apache-jena-fuseki/fuseki-server --config=fuseki.ttl
+run() {
+	echo "$*"
+	$@ || exit 1
+}
+echo "=== Cleaning up ==="
+run rm -rf db/ run/
+echo "=== Load TTLs ==="
+run apache-jena/bin/tdb2.tdbloader --loc db /data/*.ttl
+echo "=== Run indexer ==="
+run mkdir run/luceneIndexing -p
+run java -Xmx16G -cp apache-jena-fuseki/fuseki-server.jar jena.textindexer --desc=fuseki.ttl
+echo "=== Start server ==="
+run apache-jena-fuseki/fuseki-server --config=fuseki.ttl
