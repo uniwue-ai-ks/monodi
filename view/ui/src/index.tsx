@@ -33,9 +33,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
   // const root = createRoot(rootElement!);
 
   library.add(fas)
+  const basePath = (window as any).__BASE_PATH__ || "";
+
   root.render(
     <StrictMode>
-      <Router>
+      <Router basename={basePath}>
         <App />
       </Router>
     </StrictMode>

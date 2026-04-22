@@ -27,6 +27,7 @@ RUN mv /srv/index.html /srv/index.html.template
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /bin/entrypoint.sh
 ENV HTML_TITLE="Monodi viewer"
+ENV BASE_PATH=""
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
 CMD [ "caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile" ]

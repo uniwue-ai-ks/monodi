@@ -1,7 +1,7 @@
 name: monodi-viewer
 services:
   fuseki:
-    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi-fuseki:latest
+    image: ghcr.io/uniwue-ai-ks/monodi-fuseki:latest
     restart: always
     volumes:
       # directory with ttl files. all files in this volume will be used.
@@ -10,7 +10,7 @@ services:
       - backend
 
   frontend:
-    image: harbor-ls6.informatik.uni-wuerzburg.de/monodi-diw/monodi:latest
+    image: ghcr.io/uniwue-ai-ks/monodi:latest
     restart: always
     ports:
       - "3000:80"
@@ -25,6 +25,8 @@ services:
     environment:
       HTML_TITLE: "Project Name"
       HTML_HEAD_EXTRA: "<meta name=\"description\" content=\"Project description\"/>"
+      # optional: when not running at the root of the domain, specify the base path
+      # BASE_PATH: "/viewer"
 
 volumes:
   caddy_data:
