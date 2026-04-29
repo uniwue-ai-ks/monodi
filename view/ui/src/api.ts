@@ -1070,7 +1070,10 @@ interface BindingValue {
   value: any;
 }
 
-export const base = import.meta.env.VITE_FUSEKI_URL || [window.location.protocol, "//", window.location.hostname, ":3030/tdb2-database/query?query="].join("");
-export const svgBase = import.meta.env.VITE_SVG_URL || "http://localhost/monodicum/svgs/"
-export const pdfBase = import.meta.env.VITE_PDF_URL || svgBase
+const __basePath = (window as any).__BASE_PATH__ || "";
+export const base = import.meta.env.VITE_FUSEKI_URL
+  ? __basePath + import.meta.env.VITE_FUSEKI_URL
+  : [window.location.protocol, "//", window.location.hostname, ":3030/tdb2-database/query?query="].join("");
+export const svgBase = import.meta.env.VITE_SVG_URL ? __basePath + import.meta.env.VITE_SVG_URL : "http://localhost/monodicum/svgs/"
+export const pdfBase = import.meta.env.VITE_PDF_URL ? __basePath + import.meta.env.VITE_PDF_URL : svgBase
 export const synopseBase = import.meta.env.VITE_SYNOPSE_URL || "http://localhost:9071"

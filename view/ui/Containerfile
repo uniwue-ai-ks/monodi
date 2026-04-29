@@ -28,6 +28,7 @@ COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /bin/entrypoint.sh
 ENV HTML_TITLE="Monodi viewer"
 ENV BASE_PATH=""
+ENV FUSEKI_HOST="fuseki"
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
 CMD [ "caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile" ]
