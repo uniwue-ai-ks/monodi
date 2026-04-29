@@ -15,7 +15,7 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  <script>window.__BASE_PATH__ = "$BASE_PATH";</script>
+  <script>var __v = "$BASE_PATH"; window.__BASE_PATH__ = (__v.startsWith("$") ? "" : __v);</script>
   <script type="module" src="/src/index.tsx"></script>
 </body>
 
