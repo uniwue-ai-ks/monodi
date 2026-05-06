@@ -6,7 +6,7 @@ import LangContext from '../app/App';
 import { Params, SearchNavParams } from '../view/Params';
 import './SearchNavigation.scss';
 
-const SearchNavigation = ({ onDocumentChange }: { onDocumentChange: (params: Params) => void }) => {
+const SearchNavigation = ({ onDocumentChange, className }: { onDocumentChange: (params: Params) => void, className?: string}) => {
   const [doc] = useUrlData<Params>()('document');
   const langContext = useContext(LangContext);
   const translate = (key: string): string => Translation.getTranslation(key, langContext.lang, langContext.overrides);
@@ -44,7 +44,7 @@ const SearchNavigation = ({ onDocumentChange }: { onDocumentChange: (params: Par
       }
 
       return (
-        <div className="searchNavHeader">
+        <div className={`searchNavHeader ${className ?? ""}`}>
           <div className="searchNavLabel">
             <span>{translate("searchNav") + " : " + (index + 1) + " von " + searchSession.results.length}</span>
             <div className="selected-filters">

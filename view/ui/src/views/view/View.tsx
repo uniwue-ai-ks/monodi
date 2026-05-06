@@ -121,7 +121,7 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
       {getAttributesForPopup(entity.attributes, view, setView, staticRoutes)}
     </Popup>
     <DocumentHeader entity={entity} attributes={headerAttributes} firstImageCollection={firstImageCollection} openViewer={() => openImageViewer(firstImageCollection)} openPopup={() => setPopupState(getOpenPopupState())} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
-    <SearchNavigation onDocumentChange={onDocumentChange} />
+    <SearchNavigation onDocumentChange={onDocumentChange} className="top"/>
     {!loading ?
       <>
         <Allotment separator={true} className={"documentViewer" + (showSidePanel ? " sidebar-active" : " sidebar-Inactive")} defaultSizes={allotmentSizes ?? (showSidePanel ? [85, 15] : [100])} onChange={setAllotmentSizes}>
@@ -141,7 +141,7 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
             <SidePanel entity={entity} sidePanelAttributes={sidePanelAttributes} open={sideBar} setOpen={setSideBar} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
           )}
         </Allotment>
-        <SearchNavigation onDocumentChange={onDocumentChange} />
+        <SearchNavigation onDocumentChange={onDocumentChange} className="bottom" />
       </>
       : <div className="loader"><TailSpin /></div>
     }
