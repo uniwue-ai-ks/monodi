@@ -46,9 +46,20 @@ text:index <#indexLucene> ;
    text:map (
       #RDF label abstracts
       [
-         text:field "text" ;
+         text:field "lemmas" ;
          text:predicate <http://olyro.de/mondiview/lemmas> ;
          text:analyzer [ a text:StandardAnalyzer ]
       ]
+      # Example for indexed full text search
+      # Set text:predicate to the attribute that should be indexed
+      # The GermanCompoundAnalyzer class has to be built, done automatically by
+      # the startup script.
+
+      # [
+      #    text:field "text" ;
+      #    text:predicate <http://monodicum/diwDocument:text> ;
+      #    text:analyzer [ a text:GenericAnalyzer ;
+      #                    text:class "de.olyro.monodi.GermanCompoundAnalyzer" ]
+      # ]
    )
 .

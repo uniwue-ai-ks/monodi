@@ -1,4 +1,5 @@
 #!/bin/sh
+export FUSEKI_BASE=bin/apache-jena-fuseki/
 if ! [ -e bin/apache-jena -a -e bin/apache-jena-fuseki ]; then
 	./00_install_fuseki.sh
 fi

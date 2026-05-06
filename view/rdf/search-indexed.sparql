@@ -1,0 +1,34 @@
+PREFIX : <http://olyro.de/mondiview/>
+PREFIX data: <http://monodicum/>
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * {
+  {
+    select ?obj ?P0 ?P1 ?P2 ?P3 ?P4 WHERE {
+      VALUES ?language {'de'}
+      ?obj text:query (<http://monodicum/diwDocument:text> "Häuser") .
+      ?obj a <http://monodicum/diwDocument> .
+
+        OPTIONAL { ?obj <http://monodicum/diwDocument:issue> ?sorter . }
+
+      OPTIONAL { ?obj <http://monodicum/diwDocument:topics> ?intP0 . BIND(STR(?intP0) as ?P0) FILTER(!isLiteral(?intP0) || LANG(?intP0) = "" || LANGMATCHES(LANG(?intP0), ?language))}
+      OPTIONAL { ?obj <http://monodicum/diwDocument:attachments> ?intP1 . BIND(STR(?intP1) as ?P1) FILTER(!isLiteral(?intP1) || LANG(?intP1) = "" || LANGMATCHES(LANG(?intP1), ?language))}
+      OPTIONAL { ?obj <http://monodicum/diwDocument:text> ?intP2 . BIND(STR(?intP2) as ?P2) FILTER(!isLiteral(?intP2) || LANG(?intP2) = "" || LANGMATCHES(LANG(?intP2), ?language))}
+      OPTIONAL { ?obj <http://monodicum/diwDocument:title> ?intP3 . BIND(STR(?intP3) as ?P3) FILTER(!isLiteral(?intP3) || LANG(?intP3) = "" || LANGMATCHES(LANG(?intP3), ?language))}
+      OPTIONAL { ?obj <http://monodicum/diwDocument:issue> ?intP4 . BIND(STR(?intP4) as ?P4) FILTER(!isLiteral(?intP4) || LANG(?intP4) = "" || LANGMATCHES(LANG(?intP4), ?language))}
+
+    }
+
+    ORDER BY ASC(?sorter) LIMIT 10 OFFSET 0
+
+  }
+  {
+    select (count(*) as ?count) WHERE {
+      ?obj text:query (<http://monodicum/diwDocument:text> "Häuser") .
+      ?obj a <http://monodicum/diwDocument> .
+    }
+
+  }
+}
