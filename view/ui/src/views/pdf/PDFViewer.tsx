@@ -178,7 +178,6 @@ export function PDFViewer({ file, textAttributeUri }: { file: string, textAttrib
             pageNumber={pageNumber} />
         </Document>
       </div>
-      {paginator}
     </>
   );
 }
