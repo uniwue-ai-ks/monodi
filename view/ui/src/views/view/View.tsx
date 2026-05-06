@@ -2,6 +2,7 @@ import { Fragment, ReactElement, useContext, useEffect, useMemo, useState } from
 import { TailSpin } from 'react-loader-spinner';
 import * as Api from "../../api";
 import { pdfBase, svgBase } from "../../api";
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { useRedirect, useUrlData } from '../../hooks/useUrlData';
 import { Attribute, AttributeWithData, CollectionImageHtml, DataOf, DocumentPart, DocumentPosition, HtmlImageCollection, ImageCollection, Kind } from "../../model/attribute";
 import { Entity } from "../../model/entity";
@@ -106,6 +107,8 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
     window.postMessage({ "doc": doc, "entity": entity });
   }, [doc, entity])
 
+  const [allotmentSizes, setAllotmentSizes] = usePersistedState<number[] | null>('allotmentSizes', null);
+
   const hideSidebar = entity ? imageCollectionViewerDisplaysSidebar(entity) : false;
   const showSidePanel = sideBar && !hideSidebar;
 
@@ -121,7 +124,7 @@ export function View({ staticRoutes }: { staticRoutes: StaticRoutes }) {
     <SearchNavigation onDocumentChange={onDocumentChange} />
     {!loading ?
       <>
-        <Allotment separator={true} className={"documentViewer" + (showSidePanel ? " sidebar-active" : " sidebar-Inactive")} defaultSizes={showSidePanel ? [85, 15] : [100]}>
+        <Allotment separator={true} className={"documentViewer" + (showSidePanel ? " sidebar-active" : " sidebar-Inactive")} defaultSizes={allotmentSizes ?? (showSidePanel ? [85, 15] : [100])} onChange={setAllotmentSizes}>
           <Allotment.Pane className={"documentMain" + (showStickyColumn ? " stickyColumn" : "")}>
             <DocumentNavigation entity={entity} attributeData={entity.attributes} onDocumentChange={onDocumentChange} staticRoutes={staticRoutes} />
             {priorityColumns.length > 0

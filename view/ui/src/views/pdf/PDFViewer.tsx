@@ -2,6 +2,7 @@ import { find, findLast, head, indexOf, last, range } from 'lodash';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';
 import { useCallback, useContext, useRef, useState } from 'react';
+import { usePersistedState } from '../../hooks/usePersistedState';
 import { Document, Page } from 'react-pdf';
 import { CustomTextRenderer } from 'react-pdf/dist/cjs/shared/types';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -30,7 +31,7 @@ export function PDFViewer({ file, textAttributeUri }: { file: string, textAttrib
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [matchedPages, setMatchedPages] = useState<number[]>([]);
-  const [zoomLevel, setZoomLevel] = useState<number>(100); // Default zoom level (100%)
+  const [zoomLevel, setZoomLevel] = usePersistedState<number>('pdfZoomLevel', 100);
   const langContext = useContext(LangContext);
   const translate = (key: string): string => Translation.getTranslation(key, langContext.lang, langContext.overrides);
   const ref = useRef<HTMLDivElement>(null);
