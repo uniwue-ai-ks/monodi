@@ -13,11 +13,14 @@ RUN mkdir -p /build/src/main/resources && \
 
 FROM alpine:latest as tmp
 
-ARG JENA_VERSION=6.0.0
+ARG JENA_VERSION=6.1.0
+ARG JENA_BASE_URL=https://dlcdn.apache.org
+# for older versions use JENA_BASE_URL=https://archive.apache.org/dist
 
 RUN apk add curl && \
-	curl -fLo "apache-jena-${JENA_VERSION}.tar.gz" "https://dlcdn.apache.org/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" && \
-	curl -fLo "apache-jena-fuseki-${JENA_VERSION}.tar.gz" "https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${JENA_VERSION}.tar.gz" && \
+	curl -fLo "apache-jena-${JENA_VERSION}.tar.gz" "${JENA_BASE_URL}/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" && \
+	curl -fLo "apache-jena-fuseki-${JENA_VERSION}.tar.gz" \
+	"${JENA_BASE_URL}/jena/binaries/apache-jena-fuseki-${JENA_VERSION}.tar.gz" && \
 	mkdir -p /opt/app && \
 	tar -x -C /opt/app -f "apache-jena-${JENA_VERSION}.tar.gz" && \
 	tar -x -C /opt/app -f "apache-jena-fuseki-${JENA_VERSION}.tar.gz" && \

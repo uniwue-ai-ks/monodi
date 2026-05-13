@@ -41,7 +41,7 @@ text:index <#indexLucene> ;
 .
 
 <#entMap> a text:EntityMap ;
-   text:defaultField "text" ;
+   text:defaultField "lemmas" ;
    text:entityField "uri" ;
    text:map (
       #RDF label abstracts
