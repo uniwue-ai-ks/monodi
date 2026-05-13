@@ -35,14 +35,14 @@ export const useUrlData = <Params>() => <Name extends Keys<Params>>(parameterNam
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const redirect = useCallback((d: Data | null): void => {
-    const newParams = new URLSearchParams(document.location.search);
+    const newParams = new URLSearchParams(location.search);
     if (d === null) {
       newParams.delete(parameterName);
     } else {
       newParams.set(parameterName, JSON.stringify(d));
     }
-    history.push({ ...document.location, search: `?${newParams.toString()}` });
-  }, [history, parameterName]);
+    history.push({ ...location, search: `?${newParams.toString()}` });
+  }, [history, parameterName, location]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const update = useCallback((update: ((data: Params[Name] | null) => (Params[Name] | null))): void => {
@@ -71,9 +71,10 @@ export type ParamInput<Params> = {
 
 export function useRedirect<Params extends object>(component: string): (data: ParamInput<Params>) => void {
   const hist = useHistory();
+  const location = useLocation();
 
   return useCallback((data: ParamInput<Params>): void => {
-    const newParams = new URLSearchParams(document.location.search);
+    const newParams = new URLSearchParams(location.search);
 
     for (const paraName in data!) {
       if (data[paraName] === null) {
@@ -82,6 +83,6 @@ export function useRedirect<Params extends object>(component: string): (data: Pa
         newParams.set(paraName, JSON.stringify(data[paraName]));
       }
     }
-    hist.push({ ...document.location, search: `?${newParams.toString()}`, pathname: `/${component}` });
-  }, [hist, component]);
+    hist.push({ ...location, search: `?${newParams.toString()}`, pathname: `/${component}` });
+  }, [hist, component, location]);
 }
