@@ -38,7 +38,7 @@ export function SearchBar(props: { entity: EntityDescription, search: Attribute[
   }, [urlState])
 
   const addParam = addParameter(props.search, dispatch);
-  
+
   useEffect(() => {
     props.search.filter(a => a.initialSearch && !urlState?.some(qp => qp.uri === a.uri)).forEach(attribute => {
       addParam(attribute.uri);
@@ -244,6 +244,7 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
       case 'http://olyro.de/mondiview/string':
       case 'http://olyro.de/mondiview/copyText':
       case 'http://olyro.de/mondiview/reference':
+      case 'http://olyro.de/mondiview/htmlContent':
         return props.entity.referenceAttribute === attribute?.uri && !userSearchable ?
           <span>{shortenRef(value)}</span> :
           <input value={value} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: e.target.value })} readOnly={!userSearchable} />;
@@ -266,7 +267,6 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
         return <input value={value} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: e.target.value })} readOnly={!userSearchable} />;
       case 'http://olyro.de/mondiview/pdf':
       case 'http://olyro.de/mondiview/imageCollection':
-      case 'http://olyro.de/mondiview/htmlContent':
       case 'http://olyro.de/mondiview/htmlImageCollection':
         return null;
       case 'http://olyro.de/mondiview/boolean': {
@@ -293,13 +293,13 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
 }
 
 const removeIcon = <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-  <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-  <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
 </svg>
 
 const addIcon = <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <line x1="8" y1="3" x2="8" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-  <line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  <line x1="8" y1="3" x2="8" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  <line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
 </svg>
 
 type ChangeEvent = {
