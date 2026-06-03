@@ -1,6 +1,32 @@
 :80 {
+	log
 	handle_path /fuseki/* {
-		reverse_proxy fuseki:3030
+		@allowed {
+			method GET POST
+			path /tdb2-database/query* /tdb2-database/sparql*
+		}
+		handle @allowed {
+			reverse_proxy {$FUSEKI_HOST}:3030
+		}
+		handle {
+			respond 403
+		}
+	}
+
+	redir /admin /admin/ 308
+
+	@adminStripped path /admin/api/* /admin/.well-known/*
+	handle @adminStripped {
+		uri strip_prefix /admin
+		reverse_proxy {$MANAGER_HOST}:3000 {
+			header_up X-Forwarded-Prefix {$BASE_PATH}
+		}
+	}
+
+	handle /admin/* {
+		reverse_proxy {$MANAGER_HOST}:3000 {
+			header_up X-Forwarded-Prefix {$BASE_PATH}
+		}
 	}
 
 	handle {
@@ -9,7 +35,7 @@
 			root /srv
 		}
 		@to-index {
-			not path /fuseki/* /static/* /resources/* /manifest.json /favicon.ico /assets/*
+			not path /static/* /resources/* /manifest.json /favicon.ico /assets/*
 		}
 		rewrite @to-index /index.html
 	}

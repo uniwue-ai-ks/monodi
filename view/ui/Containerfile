@@ -5,19 +5,22 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 # add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
+ENV VITE_FUSEKI_URL=/fuseki/tdb2-database/query
+ENV VITE_PDF_URL=/resources/pdf/
+ENV VITE_SVG_URL=/resources/svg/
 
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm ci && npm install react-scripts@3.4.1 -g
+RUN npm ci
 # add app
 COPY public/ /app/public
 COPY src/ /app/src
 COPY tsconfig.json /app/
 COPY vite.config.ts /app/
 COPY index.html /app/index.html
-RUN VITE_FUSEKI_URL="/fuseki/tdb2-database/query?query=" VITE_PDF_URL="/resources/pdf/" VITE_SVG_URL="/resources/svg/" npm run build
+RUN  tsc && vite build --base ./
 
 FROM caddy:2-alpine
 

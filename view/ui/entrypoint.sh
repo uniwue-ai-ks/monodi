@@ -12,28 +12,9 @@ fi
 
 # FUSEKI_HOST: hostname or IP of the fuseki service (default: fuseki)
 FUSEKI_HOST="${FUSEKI_HOST:-fuseki}"
-
-# The Caddyfile is generated at runtime so FUSEKI_HOST can be overridden.
-# BASE_PATH sets the <base> href and React Router basename (window.__BASE_PATH__).
-# A reverse proxy in front is responsible for stripping the prefix before forwarding to Caddy.
-cat > /etc/caddy/Caddyfile <<CADDYEOF
-:80 {
-	handle_path /fuseki/* {
-		reverse_proxy ${FUSEKI_HOST}:3030
-	}
-
-	handle {
-		file_server {
-			browse
-			root /srv
-		}
-		@to-index {
-			not path /fuseki/* /static/* /resources/* /manifest.json /favicon.ico /assets/*
-		}
-		rewrite @to-index /index.html
-	}
-}
-CADDYEOF
+MANAGER_HOST="${MANAGER_HOST:-manager}"
+export FUSEKI_HOST
+export MANAGER_HOST
 
 echo "Running $@"
 exec "$@"
