@@ -21,7 +21,9 @@ final case class Source(
     manifest: String,
     foliooffset: String,
     publish: String,
-    beschreibung: String
+    beschreibung: String,
+    cantus_siglum: String,
+    cantus_century: String
 )
 
 object Source:

@@ -22,23 +22,16 @@ object TextInitia:
   enum Item derives CanEqual:
     case SignatureChange
 
-    /**
-     * Those are just normal words, like List("Lorem", "ipsum", "dolor")
-     */
-    case Paratext(words: Vector[String])
-
     /** Those are text from syllables in the notes, like List("Lo-", "rem", "ip-", "sum") */
     case Syllables(syllables: Vector[String])
 
     def nonEmpty: Boolean =
       this match
-        case Paratext(words)      => words.nonEmpty
         case Syllables(syllables) => syllables.nonEmpty
         case SignatureChange      => true
 
     def normalWords: Vector[String] =
       this match
-        case Paratext(words)      => words
         case Syllables(syllables) =>
           syllables.mkString(" ").replaceAll("- ", "").split("\\s+").toVector.filter(s => !s.isBlank)
         case SignatureChange      => Vector.empty
@@ -46,10 +39,6 @@ object TextInitia:
   private def getSignaturesChangesAndTexts(c: Container): Vector[Item] =
     def fromFormteil(fc: FormteilContainer): Vector[Item] =
       if hasSignature(fc) then Vector(Item.SignatureChange) else Vector.empty
-
-    def fromParatext(pc: ParatextContainer): Vector[Item] =
-      val words = pc.text.split("\\s+").toVector.filter(s => !s.isBlank)
-      Vector(Item.Paratext(words)).filter(_.nonEmpty)
 
     def fromZeile(zc: ZeileContainer): Vector[Item] =
       val syllables = zc.children.toVector
@@ -62,9 +51,9 @@ object TextInitia:
 
     def extract(c: Container): Vector[Item] =
       c match
-        case pc: ParatextContainer => fromParatext(pc)
         case zc: ZeileContainer    => fromZeile(zc)
         case fc: FormteilContainer => fromFormteil(fc)
+        case _: ParatextContainer  => Vector.empty
         case _: MiscContainer      => Vector.empty
         case _: RootContainer      => Vector.empty
 
@@ -74,16 +63,8 @@ object TextInitia:
     texts.foldLeft(Vector.empty[Item]):
       case (acc, Item.SignatureChange) => acc :+ Item.SignatureChange
 
-      case (acc, Item.Paratext(words)) =>
-        acc.lastOption match
-          case None                           => acc :+ Item.Paratext(words)
-          case Some(Item.SignatureChange)     => acc :+ Item.Paratext(words)
-          case Some(Item.Paratext(prevWords)) => acc.init :+ Item.Paratext(prevWords ++ words)
-          case Some(Item.Syllables(_))        => acc :+ Item.Paratext(words)
-
       case (acc, Item.Syllables(syllables)) =>
         acc.lastOption match
           case None                                => acc :+ Item.Syllables(syllables)
           case Some(Item.SignatureChange)          => acc :+ Item.Syllables(syllables)
-          case Some(Item.Paratext(_))              => acc :+ Item.Syllables(syllables)
           case Some(Item.Syllables(prevSyllables)) => acc.init :+ Item.Syllables(prevSyllables ++ syllables)

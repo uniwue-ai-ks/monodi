@@ -2,3 +2,4 @@ editor/server/.vscode/
 .metals/
 .vscode/
 target
+view/rdf/data.ttl

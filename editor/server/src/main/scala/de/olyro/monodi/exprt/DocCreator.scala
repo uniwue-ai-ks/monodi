@@ -2,6 +2,7 @@ package de.olyro.monodi
 package exprt
 
 import cats.implicits.*
+import de.olyro.monodi.Util
 import de.olyro.monodi.Util.http.HttpClient
 import de.olyro.monodi.Util.Fence
 import de.olyro.monodi.exprt.iiif.Iiif
@@ -25,7 +26,7 @@ import zio.Console.printLine
 import java.util.UUID
 import cats.data.NonEmptyList
 
-class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
+class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExportBaseUrl: Option[String]):
   import Export.DocStage
   import Export.dataUri
   import Export.viewUri
@@ -38,26 +39,31 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
       src: Source
   ): zio.ZIO[Iiif.StoreService & HttpClient & Fence & ContainerEngine, Nothing, DocStage] =
     (for
-      _             <- printLine(s"processing document ${doc.id}/${doc.dokumenten_id}...").orDie
-      (notes, evos) <- parseNotes(doc, rawNotes)
-      pubInfo        = DocPublishInfo.fromDoc(doc)
-      makeNotes      = filter.notesShouldBeExportedFor(pubInfo) && evos.keepInExport
-      makeComments   = makeNotes && filter.apparatusShouldBeExportedFor(pubInfo)
-      warnings       = evos.messages.map(Message(Message.Warning, Message.FromDoc(doc), _))
-      textInitiaList = if doc.gattung1 == "Tropus" then TextInitia.getTextInitia(notes) else Nil
+      _               <- printLine(s"processing document ${doc.id}/${doc.dokumenten_id}...").orDie
+      (notes, evos)   <- parseNotes(doc, rawNotes)
+      pubInfo          = DocPublishInfo.fromDoc(doc)
+      makeNotes        = filter.notesShouldBeExportedFor(pubInfo) && evos.keepInExport
+      makeComments     = makeNotes && filter.apparatusShouldBeExportedFor(pubInfo)
+      warnings         = evos.messages.map(Message(Message.Warning, Message.FromDoc(doc), _))
+      textInitiaList   = if doc.gattung1 == "Tropus" then TextInitia.getTextInitia(notes) else Nil
       textInitiaJoined = textInitiaList.mkString("#")
-      metaTTL       <-
-        mainRdf(doc, getSpielType(doc), textInitiaJoined) |> fullText(doc, List(notes)) |> search(doc, List(notes))
-      notesTTL      <- if makeNotes then svg(doc, src, List(notes)) ||> pdf(doc, notes) else ZIO.succeed(Accu.empty[Turtle])
-      commentsTTL   <- if makeComments then comments(doc, List(notes)) else ZIO.succeed(Accu.empty[Turtle])
-      _             <- ZIO.foreach(warnings ++ metaTTL.log ++ notesTTL.log ++ commentsTTL.log)(msg => printLine(msg.print).orDie)
+      signaturesList   = if doc.gattung1 == "Tropus" then Signatures.getSignatures(notes) else Nil
+      signaturesJoined = signaturesList.mkString("#")
+      metaTTL         <-
+        mainRdf(doc, getSpielType(doc), textInitiaJoined, signaturesJoined) |> fullText(doc, List(notes)) |> search(
+          doc,
+          List(notes)
+        )
+      notesTTL        <- if makeNotes then svg(doc, src, List(notes)) ||> pdf(doc, notes) else ZIO.succeed(Accu.empty[Turtle])
+      commentsTTL     <- if makeComments then comments(doc, List(notes)) else ZIO.succeed(Accu.empty[Turtle])
+      _               <- ZIO.foreach(warnings ++ metaTTL.log ++ notesTTL.log ++ commentsTTL.log)(msg => printLine(msg.print).orDie)
     yield DocStage(
       doc = Some(doc),
       onlyTtl = metaTTL,
       withNotes = metaTTL |+| notesTTL,
       withNotesAndCriticalApparatus = metaTTL |+| notesTTL |+| commentsTTL,
       commonWarnings = warnings,
-      derivedCategoryValues = if textInitiaList.nonEmpty then Map("textInitia" -> textInitiaList) else Map.empty
+      derivedCategoryValues = Map("textInitia" -> textInitiaList, "signatures" -> signaturesList).filter(_._2.nonEmpty)
     ))
       .mapError(err => {
         DocStage(None, Accu.empty, Accu.empty, Accu.empty, err.log.toList, Map.empty)
@@ -79,7 +85,8 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
 
     sortedDocs.headOption match
       case None                     =>
-        printLine(s"not creating spiel for $ref").orDie.as(DocStage(None, Accu.empty, Accu.empty, Accu.empty, Nil, Map.empty))
+        printLine(s"not creating spiel for $ref").orDie
+          .as(DocStage(None, Accu.empty, Accu.empty, Accu.empty, Nil, Map.empty))
       case Some((oldHeadDoc, _, _)) =>
         val headDoc = oldHeadDoc.copy(
           id = UUID.randomUUID().toString,
@@ -163,31 +170,8 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
    */
   private def fullText(doc: Document, notes: List[RootContainer]): URIO[Fence, Accu[Turtle]] =
     Fence.measurePure("docs-full-text")({
-      val texts = notes.flatMap: notes =>
-        Container.fold[List[String]] {
-          case _: RootContainer                    => Nil
-          case _: FormteilContainer                => Nil
-          case _: MiscContainer                    => Nil
-          case ParatextContainer(_, text, _, _, _) => List(text)
-          case ZeileContainer(_, children)         =>
-            children.collect({ case s: Syllable =>
-              s.text
-            })
-        }(notes)
-
-      val text = texts.flatten
-        .mkString(" ")
-        .replace("- ", "")
-        .replaceAll("\\s+", " ")
-        .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
-
-      val normalizedText = texts.flatten
-        .mkString("")
-        .toLowerCase
-        .replace("-", "")
-        .replaceAll("\\s+", "")
-        .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
-        .replaceAll("[^\\p{ASCII}]", "")
+      val text           = DocCreator.extractFullText(notes)
+      val normalizedText = DocCreator.extractNormalizedFullText(notes)
 
       Accu.data(Statement(dataUri(doc.id), dataUri("fullText") -> LString(text))) |+|
         Accu.data(Statement(dataUri(doc.id), dataUri("fullTextNormalized") -> LString(normalizedText)))
@@ -497,7 +481,12 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
     case Spiel
     case NormalDocument
 
-  private def mainRdf(doc: Document, spielType: SpielType, textInitia: String): URIO[Fence, Accu[Turtle]] =
+  private def mainRdf(
+      doc: Document,
+      spielType: SpielType,
+      textInitia: String,
+      signatures: String = ""
+  ): URIO[Fence, Accu[Turtle]] =
     Fence.measurePure("docs-main-rdf")(Accu.data({
 
       /**
@@ -513,6 +502,36 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
       val textInitiaArgs =
         if textInitia.nonEmpty then List(dataUri("textInitia") -> LString(textInitia))
         else Nil
+
+      val signaturesArgs =
+        if signatures.nonEmpty then List(dataUri("signatures") -> LString(signatures))
+        else Nil
+
+      def externalLinkArg(attrName: String, url: String, text: String): (Ref, TObject) =
+        dataUri(attrName) -> Blank(
+          viewUri("url")  -> LString(url),
+          viewUri("text") -> LString(text)
+        )
+
+      def cantusLinkArg(idKey: String, attrName: String, baseUrl: String): List[(Ref, TObject)] =
+        val idValue = doc.additionalData.getOrElse(idKey, "").trim
+        if idValue.isEmpty then Nil
+        else
+          List(externalLinkArg(attrName, s"$baseUrl${Util.urlEncodePath(idValue)}", idValue))
+
+      val cantusChantLinkArgs  = cantusLinkArg("Cantus_ID", "cantusChantLink", "https://cantusindex.org/id/")
+      val cantusMelodyLinkArgs = cantusLinkArg("Cantus_Melody_ID", "cantusMelodyLink", "https://cantusindex.org/melody/")
+
+      val meiLinkArgs: List[(Ref, TObject)] =
+        if spielType == SpielType.Spiel then Nil
+        else
+          meiExportBaseUrl match
+            case None          => Nil
+            case Some(baseUrl) =>
+              val folder   = Util.urlEncodePath(MeiExport.folderFor(doc))
+              val filename = MeiExport.filenameFor(doc)
+              val encoded  = Util.urlEncodePath(filename)
+              List(externalLinkArg("meiLink", s"$baseUrl$folder/$encoded", filename))
 
       val mainArgs = List(
         dataUri("documentQuelle")                   -> dataUri(doc.quelle_id),
@@ -545,7 +564,7 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
       Statement(
         dataUri(doc.id),
         a -> dataUri("document"),
-        (mainArgs ++ additionalArgs ++ textInitiaArgs)*
+        (mainArgs ++ additionalArgs ++ textInitiaArgs ++ signaturesArgs ++ cantusChantLinkArgs ++ cantusMelodyLinkArgs ++ meiLinkArgs)*
       )
     }))
 
@@ -580,3 +599,34 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter):
       case true  => SpielType.Element
       case false => SpielType.NormalDocument
 
+object DocCreator:
+  private def syllableTexts(notes: List[RootContainer]): List[String] =
+    notes.flatMap: notes =>
+      Container
+        .fold[List[String]] {
+          case _: RootContainer                    => Nil
+          case _: FormteilContainer                => Nil
+          case _: MiscContainer                    => Nil
+          case ParatextContainer(_, text, _, _, _) => List(text)
+          case ZeileContainer(_, children)         =>
+            children.collect({ case s: Syllable =>
+              s.text
+            })
+        }(notes)
+        .flatten
+
+  def extractFullText(notes: List[RootContainer]): String =
+    syllableTexts(notes)
+      .mkString(" ")
+      .replace("- ", "")
+      .replaceAll("\\s+", " ")
+      .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
+
+  def extractNormalizedFullText(notes: List[RootContainer]): String =
+    syllableTexts(notes)
+      .mkString("")
+      .toLowerCase
+      .replace("-", "")
+      .replaceAll("\\s+", "")
+      .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
+      .replaceAll("[^\\p{ASCII}]", "")

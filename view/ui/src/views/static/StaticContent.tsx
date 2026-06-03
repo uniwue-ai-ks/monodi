@@ -16,17 +16,25 @@ export function StaticContent({ innerHtml, staticRoutes, tag, ...tagAttrs }: Sta
 
   useEffect(() => {
     const routesLookup = new Set(staticRoutes.fixed.concat(staticRoutes.fixed.map((route) => "/" + route)))
-    if (contentRef.current != null) {
-      const links = Array.from(contentRef.current.getElementsByTagName("a"));
-      links.filter(link => {
+    if (contentRef.current == null) return;
+
+    const handlers: Array<{ link: HTMLAnchorElement, handler: (e: MouseEvent) => void }> = [];
+    Array.from(contentRef.current.getElementsByTagName("a"))
+      .filter(link => {
         const href = link.getAttribute("href") || ""
         return routesLookup.has(href) || staticRoutes.shortUrlTags.some(tag => href.startsWith("/" + tag))
-      }).forEach(link => {
-        link.addEventListener("click", (e) => {
+      })
+      .forEach(link => {
+        const handler = (e: MouseEvent) => {
           history.push(link.getAttribute("href") || "")
           e.preventDefault()
-        })
+        }
+        link.addEventListener("click", handler)
+        handlers.push({ link, handler })
       })
+
+    return () => {
+      handlers.forEach(({ link, handler }) => link.removeEventListener("click", handler))
     }
   }, [contentRef, history, staticRoutes])
 

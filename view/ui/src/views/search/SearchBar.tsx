@@ -268,6 +268,7 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
       case 'http://olyro.de/mondiview/pdf':
       case 'http://olyro.de/mondiview/imageCollection':
       case 'http://olyro.de/mondiview/htmlImageCollection':
+      case 'http://olyro.de/mondiview/externalLink':
         return null;
       case 'http://olyro.de/mondiview/boolean': {
         const nextValue = value === "" ? "true" : value === "true" ? "false" : "";

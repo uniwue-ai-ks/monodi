@@ -14,7 +14,7 @@ import java.net.http.{HttpClient as JHttpClient, *}
 import java.nio.charset.StandardCharsets
 import java.util.regex.*
 import java.util.zip.{ZipEntry, ZipOutputStream}
-import java.util.{List as _, *}
+import java.util.{Map as _, List as _, *}
 import java.nio.file.*
 import scala.annotation.tailrec
 import scala.util.{Try, Using}
@@ -29,6 +29,13 @@ object Util:
     sw.toString
 
   def clamp[T: Ordering](value: T, lower: T, upper: T): T = value.max(lower).min(upper)
+
+  // URL-encode a string for use inside a URI path component. java.net.URLEncoder
+  // uses application/x-www-form-urlencoded rules, which emits '+' for spaces —
+  // correct for query strings, wrong for paths (RFC 3986 wants %20). Everything
+  // else URLEncoder produces is already valid in a path, so we just patch '+'.
+  def urlEncodePath(s: String): String =
+    java.net.URLEncoder.encode(s, StandardCharsets.UTF_8).replace("+", "%20")
 
   def mmToPixel(mm: Double): Double = math.floor(mm * 3.7795275591)
 
@@ -93,9 +100,9 @@ object Util:
 
   extension [A, CC[x] <: scala.collection.IterableOps[x, CC, CC[x]]](xs: CC[A])
     def splitWhen(p: A => Boolean): CC[CC[A]] =
-      val factory = xs.iterableFactory
-      val builder = factory.newBuilder[CC[A]]
-      var current = factory.newBuilder[A]
+      val factory  = xs.iterableFactory
+      val builder  = factory.newBuilder[CC[A]]
+      var current  = factory.newBuilder[A]
       var nonEmpty = false
       for x <- xs do
         if p(x) then
@@ -152,18 +159,46 @@ object Util:
                        params.setProtocols(Array("TLSv1.2"))
                        params
                      }
+        breaker <- CircuitBreaker.make[URI]
         client    <-
           ZIO.attempt(
             JHttpClient.newBuilder().sslParameters(sslParams).followRedirects(JHttpClient.Redirect.ALWAYS).build()
           )
       yield new HttpClient {
         override def get(url: URI): Task[String] =
-          ZIO.fromCompletionStage(
-            client
-              .sendAsync(HttpRequest.newBuilder(url).build(), HttpResponse.BodyHandlers.ofString())
-              .thenApply(_.body())
-          )
+          for
+            _ <- breaker.assertFailuresBelow(url, 2)
+            result <- ZIO.fromCompletionStage(
+              client
+                .sendAsync(
+                  HttpRequest.newBuilder(url).timeout(java.time.Duration.ofSeconds(30)).build(),
+                  HttpResponse.BodyHandlers.ofString()
+                )
+                .thenApply(_.body())
+            ).tapBoth(
+              _ => breaker.recordFailure(url),
+              _ => breaker.recordSuccess(url)
+            )
+          yield result
       })
+
+  class TooManyFailures[A](a: A) extends Exception(s"Too many failed attempts for $a")
+  class CircuitBreaker[A](failureCount: Ref[Map[A, Int]]):
+    def recordFailure(a: A): UIO[Unit] =
+      failureCount.update(m => m.updated(a, m.getOrElse(a, 0) + 1)).unit
+
+    def recordSuccess(a: A): UIO[Unit] =
+      failureCount.update(m => m.updated(a, 0)).unit
+
+    def assertFailuresBelow(a: A, threshold: Int): ZIO[Any, TooManyFailures[?], Unit] =
+      failureCount.get.flatMap: m =>
+        if m.getOrElse(a, 0) >= threshold then ZIO.fail(new TooManyFailures(a))
+        else ZIO.unit
+
+  object CircuitBreaker:
+    def make[A]: UIO[CircuitBreaker[A]] =
+      for ref <- Ref.make(Map.empty[A, Int])
+      yield new CircuitBreaker(ref)
 
   sealed trait Atomic[A]:
     def update[R, E, B](f: A => ZIO[R, E, (A, B)]): ZIO[R, E, B]
@@ -221,6 +256,44 @@ object Util:
       val m   = if raw > 60 then s"${Math.floor(raw / 60).toInt % 60}m" else ""
       val h   = if raw > 3600 then s"${Math.floor(raw / 3600).toInt}h" else ""
       List(h, m, s).filterNot(_.isEmpty).mkString(" ")
+
+  sealed trait JsonArrayWriter:
+    def write[A: Encoder](a: A): Task[Unit]
+
+  object JsonArrayWriter:
+    import io.circe.{Encoder, Printer}
+    import io.circe.syntax.*
+
+    private val printer = Printer.spaces2.copy(dropNullValues = true)
+
+    def make(path: Path): ZIO[Scope, Throwable, JsonArrayWriter] = ZIO
+      .acquireRelease(ZIO.attemptBlocking {
+        if !Files.isRegularFile(path) then Files.createDirectories(path.getParent)
+        val w = new BufferedWriter(
+          new OutputStreamWriter(new FileOutputStream(path.toFile), StandardCharsets.UTF_8)
+        )
+        w.write("[")
+        w
+      })(w =>
+        ZIO.attemptBlocking {
+          w.write("\n]")
+          w.flush()
+          w.close()
+        }.ignore,
+      )
+      .flatMap { w =>
+        Ref.make(true).map { firstRef =>
+          new JsonArrayWriter {
+            override def write[A: Encoder](a: A): Task[Unit] =
+              firstRef.getAndSet(false).flatMap { wasFirst =>
+                ZIO.attemptBlocking {
+                  if wasFirst then w.write("\n") else w.write(",\n")
+                  w.write(printer.print(a.asJson))
+                }
+              }
+          }
+        }
+      }
 
   sealed trait ZipFile:
     def append(blob: Array[Byte], path: String*): UIO[Unit]

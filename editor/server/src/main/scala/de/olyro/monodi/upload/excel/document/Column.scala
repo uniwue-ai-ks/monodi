@@ -37,6 +37,9 @@ object Column:
   case object Publish                     extends Column
   case object IIIFs                       extends Column
   case object FestUndGattung              extends Column
+  case object Cantus_ID                   extends Column
+  case object Cantus_Melody_ID            extends Column
+  case object Cantus_Genre                extends Column
 
   val allColumns: List[Column] = List(
     Dokumenten_ID,
@@ -70,7 +73,10 @@ object Column:
     Quellen_ID,
     Publish,
     IIIFs,
-    FestUndGattung
+    FestUndGattung,
+    Cantus_ID,
+    Cantus_Melody_ID,
+    Cantus_Genre
   )
 
   def parse(s: String): Option[Column] =

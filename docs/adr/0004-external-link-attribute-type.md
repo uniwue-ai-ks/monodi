@@ -1,0 +1,7 @@
+# `:externalLink` is a structured attribute kind, distinct from `:htmlContent`
+
+The `cantusChantLink`, `cantusMelodyLink`, and `meiLink` attributes previously stored pre-rendered HTML `<a>` strings in an `:htmlContent` value. That conflated two different roles: `:htmlContent` had become both "unstructured rich text" (e.g. `sourceBeschreibung`) and "a single hyperlink whose anchor text is buried in the markup". The latter has a clean semantic shape — URL plus anchor text — and consumers should not have to parse HTML to surface it.
+
+We introduced `:externalLink` as a dedicated attribute kind. Each value is a blank node carrying `view:url` and `view:text` (matching the existing `htmlImageCollection`/`metadataEntry` blank-node pattern), and the view renders it through a single component that uniformly applies `target="_blank" rel="noopener noreferrer"`. Presentation concerns (target, rel, link title) deliberately do not live in the data model — if a future link type needs different presentation, that is a sign of a different attribute kind, not an extension of this one.
+
+`sourceBeschreibung` keeps `:htmlContent`: it is genuinely unstructured rich text, which is what `:htmlContent` is now scoped to. The name `:externalLink` describes the expected usage — every current and foreseeable instance points off-site — but does not technically forbid internal targets; if internal-route links ever become a real case, they should be a distinct attribute kind with their own rendering rules (no `target="_blank"`, monodi's own router), not a generalization of this one.

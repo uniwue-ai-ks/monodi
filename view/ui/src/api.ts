@@ -472,6 +472,7 @@ function buildQuery(description: EntityDescription, language: string, params: Qu
       "http://olyro.de/mondiview/category": () => p.value,
       "http://olyro.de/mondiview/htmlContent": () => p.value,
       "http://olyro.de/mondiview/htmlImageCollection": () => { throw new Error("You can not search within a html image collection") },
+      "http://olyro.de/mondiview/externalLink": () => { throw new Error("You can not search within an external link") },
       "http://olyro.de/mondiview/imageCollection": () => { throw new Error("You can not search within a image collection") },
       "http://olyro.de/mondiview/pdf": () => p.value,
       "http://olyro.de/mondiview/number": () => p.value,
@@ -563,11 +564,28 @@ const makeAttributeGraphPattern = (a: Attribute, i: number): string => {
   }
 }
 
+// externalLink values are blank nodes carrying view:url and view:text. The
+// per-entity query (buildEntityQuery) concatenates the two strings into a
+// single ?P variable using this separator; parseAndFetch splits them back
+// apart. The search query never sees externalLink — those attributes have
+// no headerOrder and aren't filterable, so they never reach
+// makeAttributeGraphPattern.
+export const EXTERNAL_LINK_SEPARATOR = "\u0001";
+
+const externalLinkGraphPattern = (subject: string, attrUri: string, i: number): string =>
+  `OPTIONAL {
+    ${subject} <${encodeURI__readme_before_removing(attrUri)}> ?bn${i} .
+    ?bn${i} <http://olyro.de/mondiview/url> ?url${i} .
+    ?bn${i} <http://olyro.de/mondiview/text> ?text${i} .
+    BIND(CONCAT(?text${i}, "${EXTERNAL_LINK_SEPARATOR}", ?url${i}) AS ?P${i})
+  }`;
+
 const translatable = (kind: Kind): boolean =>
   kind !== 'http://olyro.de/mondiview/number' &&
   kind !== "http://olyro.de/mondiview/entity" &&
   kind !== "http://olyro.de/mondiview/imageCollection" &&
   kind !== "http://olyro.de/mondiview/htmlImageCollection" &&
+  kind !== "http://olyro.de/mondiview/externalLink" &&
   kind !== "http://olyro.de/mondiview/boolean"
 
 export async function getEntity(description: EntityDescription, uri: string, language: string): Promise<Entity> {
@@ -681,6 +699,14 @@ async function parseAndFetch(obj: BindingValue, attribute: Attribute, language: 
       attribute: attribute,
       data: obj.value === "true"
     };
+    case "http://olyro.de/mondiview/externalLink": {
+      const [text, url] = obj.value.split(EXTERNAL_LINK_SEPARATOR);
+      return {
+        kind: attribute.kind,
+        attribute: attribute,
+        data: { url: url ?? "", text: text ?? "" }
+      };
+    }
     case "http://olyro.de/mondiview/reference": return null;
     default: return assertNever(attribute);
   }
@@ -934,7 +960,12 @@ async function getCategoryMappingsForAttributes(attributes: Attribute[], languag
 
 function buildEntityQuery(attrsWithoutReferences: Attribute[], uri: string): string {
   const paraList = attrsWithoutReferences.map((_, i) => `?P${i}`).join(" ");
-  const attributes = attrsWithoutReferences.map((a, i) => `OPTIONAL { <${encodeURI__readme_before_removing(uri)}> <${encodeURI__readme_before_removing(a.uri)}> ?P${i} . }`).join("\n");
+  const subject = `<${encodeURI__readme_before_removing(uri)}>`;
+  const attributes = attrsWithoutReferences.map((a, i) =>
+    a.kind === 'http://olyro.de/mondiview/externalLink'
+      ? externalLinkGraphPattern(subject, a.uri, i)
+      : `OPTIONAL { ${subject} <${encodeURI__readme_before_removing(a.uri)}> ?P${i} . }`
+  ).join("\n");
 
   return `
     SELECT ${paraList} WHERE {

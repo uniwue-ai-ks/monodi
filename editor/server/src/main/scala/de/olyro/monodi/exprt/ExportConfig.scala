@@ -19,7 +19,11 @@ final case class ExportConfig(
     mafftPath: Path,
     editorPseudonyms: Map[String, String],
     editorNames: Map[String, String],
-    exportSets: List[ExportSetConfig]
+    exportSets: List[ExportSetConfig],
+    publicViewBaseUrl: Option[String],
+    cantusJsonPath: Option[Path],
+    meiPath: Option[Path],
+    meiExportBaseUrl: Option[String]
 ) derives io.circe.Codec.AsObject
 
 object ExportConfig:

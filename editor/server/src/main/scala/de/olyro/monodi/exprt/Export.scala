@@ -148,7 +148,7 @@ object Export extends ZIOAppDefault:
       sourcePubInfo <- DBRunner.runZ(DBRunner.getSourcePublishInfos).orDie
       globalFilter   = ExportFilter.global(sourcePubInfo, exportArgs)
       _              = println("exporting documents...")
-      docCreator     = DocCreator(exportArgs.editorPseudonyms, globalFilter)
+      docCreator     = DocCreator(exportArgs.editorPseudonyms, globalFilter, exportArgs.meiExportBaseUrl)
       _              = println("loading and processing documents...")
       docs          <- loadDocs(globalFilter, availableProcessors)
                          .mapZIOPar(availableProcessors)(docCreator.createNormalDocument)
@@ -158,7 +158,7 @@ object Export extends ZIOAppDefault:
                          .map(_.toList)
       _              = println(s"processing ${docs.size} documents done.")
       _             <- printLine("processing spiele")
-      spieleDocsAll <- makeSpiele(exportArgs.editorPseudonyms, globalFilter).orDie
+      spieleDocsAll <- makeSpiele(exportArgs.editorPseudonyms, globalFilter, exportArgs.meiExportBaseUrl).orDie
       spieleDocs    <- ZIO.foreach(spieleDocsAll): doc =>
                          writeDocs(exportArgs.svgPath, doc.withNotesAndCriticalApparatus).as(stripDocs(doc))
       allDocs        = docs ++ spieleDocs
@@ -172,8 +172,11 @@ object Export extends ZIOAppDefault:
             mkStage(sc, filter)
           )
           .orDie
-      hadError       = log.flatMap(_.map(_.severity)).maxOption.getOrElse(Message.Warning)
-      _             <- writeLog(exportArgs.logPath, log.flatten).orDie
+      cantusLog     <- CantusExport.run(exportArgs)
+      meiLog        <- MeiExport.run(exportArgs)
+      extraLog       = cantusLog ++ meiLog
+      hadError       = (log.flatMap(_.map(_.severity)) ++ extraLog.map(_.severity)).maxOption.getOrElse(Message.Warning)
+      _             <- writeLog(exportArgs.logPath, log.flatten ++ extraLog).orDie
       _             <- exportFonts(exportArgs.svgPath).ignore
       ret           <-
         printCompletionMessage(hadError, exportArgs.svgPath, exportArgs.exportSets.map(_.ttlPath), exportArgs.logPath)
@@ -190,7 +193,8 @@ object Export extends ZIOAppDefault:
 
   private def makeSpiele(
       pseudonums: Map[String, String],
-      globalFilter: ExportFilter
+      globalFilter: ExportFilter,
+      meiExportBaseUrl: Option[String]
   ): ZIO[Transactor[Task] & Fence & StoreService & HttpClient & ContainerEngine, Throwable, List[DocStage]] =
     def loadDocs(docs: List[String]): ZStream[DBDoobie & Fence, Throwable, (Document, Option[Json], Source)] =
       def loadDoc(id: String) = Fence.measure("docs-load")(DBRunner.runZ(DBRunner.getDocument(id)).someOrFailException)
@@ -209,7 +213,7 @@ object Export extends ZIOAppDefault:
       docStages  <- ZIO.foreach(spieleInfo.toList): (ref, docIds) =>
                       for
                         docs   <- loadDocs(docIds).runCollect
-                        stages <- DocCreator(pseudonums, globalFilter).createSpiel(ref, docs.toList)
+                        stages <- DocCreator(pseudonums, globalFilter, meiExportBaseUrl).createSpiel(ref, docs.toList)
                       yield stages
     yield docStages
 
@@ -252,6 +256,7 @@ object Export extends ZIOAppDefault:
       CategoryDescription("Melodie_Standard",                 isNativeColumn = false, "Melodie_Standard",         DocumentCategoryFilter(whiteList), editionsstatusGuard),
       CategoryDescription("Editor",                           isNativeColumn = false, "Editor",                   DocumentCategoryFilter(whiteList), editionsstatusGuard),
       CategoryDescription("SpielName",                        isNativeColumn = false, "SpielName",                DocumentCategoryFilter(whiteList), editionsstatusGuard),
+      CategoryDescription("FestUndGattung",                   isNativeColumn = false, "FestUndGattung",           DocumentCategoryFilter(whiteList), editionsstatusGuard),
 
       CategoryDescription("sourceQuellensigle",               isNativeColumn = true,  "quellensigle",             SourceCategoryFilter(whiteList), None),
       CategoryDescription("sourceHerkunftsregion",            isNativeColumn = true,  "herkunftsregion",          SourceCategoryFilter(whiteList), None),

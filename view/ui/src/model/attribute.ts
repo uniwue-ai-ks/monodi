@@ -6,11 +6,17 @@ export type Kind =
   "http://olyro.de/mondiview/category" |
   "http://olyro.de/mondiview/htmlContent" |
   "http://olyro.de/mondiview/htmlImageCollection" |
+  "http://olyro.de/mondiview/externalLink" |
   "http://olyro.de/mondiview/substringSearchText" |
   "http://olyro.de/mondiview/entity" |
   "http://olyro.de/mondiview/copyText" |
   "http://olyro.de/mondiview/reference" |
   "http://olyro.de/mondiview/boolean";
+
+export interface ExternalLink {
+  url: string;
+  text: string;
+}
 
 interface AttributeBase<T extends Kind> {
   kind: T;
@@ -176,6 +182,7 @@ export interface CategoryAttribute extends AttributeBase<"http://olyro.de/mondiv
   mapping?: { [key: string]: string };
 }
 export type HtmlImageCollectionAttribute = AttributeBase<"http://olyro.de/mondiview/htmlImageCollection">
+export type ExternalLinkAttribute = AttributeBase<"http://olyro.de/mondiview/externalLink">
 export type SubstringSearchTextAttribute = AttributeBase<"http://olyro.de/mondiview/substringSearchText">
 export type EntityAttribute = AttributeBase<"http://olyro.de/mondiview/entity">
 export type CopyTextAttribute = AttributeBase<"http://olyro.de/mondiview/copyText">
@@ -184,8 +191,8 @@ export interface ReferenceAttribute extends AttributeBase<"http://olyro.de/mondi
 }
 
 export type Attribute = NumberAttribute | StringAttribute | ImageCollectionAttribute | PDFAttribute |
-  CategoryAttribute | HtmlContentAttribute | HtmlImageCollectionAttribute | SubstringSearchTextAttribute |
-  EntityAttribute | CopyTextAttribute | ReferenceAttribute | BooleanAttribute;
+  CategoryAttribute | HtmlContentAttribute | HtmlImageCollectionAttribute | ExternalLinkAttribute |
+  SubstringSearchTextAttribute | EntityAttribute | CopyTextAttribute | ReferenceAttribute | BooleanAttribute;
 
 export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/number" ? number :
@@ -195,6 +202,7 @@ export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/category" ? string :
   T extends "http://olyro.de/mondiview/htmlContent" ? string :
   T extends "http://olyro.de/mondiview/htmlImageCollection" ? HtmlImageCollection :
+  T extends "http://olyro.de/mondiview/externalLink" ? ExternalLink :
   T extends "http://olyro.de/mondiview/substringSearchText" ? string :
   T extends "http://olyro.de/mondiview/entity" ? string :
   T extends "http://olyro.de/mondiview/copyText" ? string :

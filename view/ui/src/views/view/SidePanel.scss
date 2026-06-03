@@ -1,5 +1,6 @@
 @use "../app/App.scss";
 
+
 .documentRight {
   padding-left: 1em;
   height: 100%;
@@ -67,6 +68,18 @@
 
       .name {
         color: #010101;
+      }
+    }
+
+    /* a subtle external linked styled moer for a side-panel, not a big underlined blue blob, but with
+       an external link unicode char at the end
+       */
+    .externalLink {
+      color: black;
+
+      &::after {
+        content: " \2197";
+        font-size: smaller;
       }
     }
   }

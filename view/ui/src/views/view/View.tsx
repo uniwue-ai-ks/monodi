@@ -262,6 +262,11 @@ const AttributeRows = ({ position, attributes, view, setView, className, staticR
       "http://olyro.de/mondiview/htmlContent": (i) =>
         <StaticContent key={a.attribute.uri} className="content" innerHtml={i.data} staticRoutes={staticRoutes} />,
       "http://olyro.de/mondiview/htmlImageCollection": (h) => <div key={a.attribute.uri} className="name"><HtmlImageCollectionComponent collection={h.data} staticRoutes={staticRoutes} /></div>,
+      "http://olyro.de/mondiview/externalLink": (l) =>
+        <p key={a.attribute.uri}>
+          <span className="name">{a.attribute.label}:</span>{" "}
+          <span className="value"><a href={l.data.url} target="_blank" rel="noopener noreferrer">{l.data.text}</a></span>
+        </p>,
       "http://olyro.de/mondiview/substringSearchText": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/entity": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
@@ -295,6 +300,8 @@ const getAttributesForPopup = (attributes: AttributeWithData[], view: viewType, 
       "http://olyro.de/mondiview/htmlContent": (i) =>
         <StaticContent key={a.attribute.uri} innerHtml={i.data} staticRoutes={staticRoutes} />,
       "http://olyro.de/mondiview/htmlImageCollection": (h) => <HtmlImageCollectionComponent key={a.attribute.uri} collection={h.data} staticRoutes={staticRoutes} />,
+      "http://olyro.de/mondiview/externalLink": (l) =>
+        <div key={a.attribute.uri}><a href={l.data.url} target="_blank" rel="noopener noreferrer">{l.data.text}</a></div>,
       "http://olyro.de/mondiview/substringSearchText": () => <div>substring search texts are not supported here</div>,
       "http://olyro.de/mondiview/entity": (s) => <div key={a.attribute.uri}>{s.data}</div>,
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
@@ -357,6 +364,7 @@ export const getInlineAttribute = (attr: AttributeWithData, staticRoutes: Static
     "http://olyro.de/mondiview/category": (s) => text(s.data),
     "http://olyro.de/mondiview/htmlContent": (html) => ({ value: <StaticContent innerHtml={html.data} staticRoutes={staticRoutes} /> }),
     "http://olyro.de/mondiview/htmlImageCollection": () => ({ error: "Html Image Collection content can not be displayed in the header" }),
+    "http://olyro.de/mondiview/externalLink": (l) => ({ value: <a className="externalLink" href={l.data.url} target="_blank" rel="noopener noreferrer">{l.data.text}</a>, label: <>{attr.attribute.label}</> }),
     "http://olyro.de/mondiview/substringSearchText": () => ({ error: "SubstringSearchText content can not be displayed in the header" }),
     "http://olyro.de/mondiview/entity": (e) => {
       if (openDocumentHandler) {

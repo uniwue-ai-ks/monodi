@@ -51,7 +51,10 @@ object TableParser:
         SpielName,
         Editor,
         IIIFs,
-        FestUndGattung
+        FestUndGattung,
+        Cantus_ID,
+        Cantus_Melody_ID,
+        Cantus_Genre
       ).map(column => fixKeyName(column.toString) -> projection.get(column).getOrElse("")).toMap
 
     def fixKeyName(key: String): String =

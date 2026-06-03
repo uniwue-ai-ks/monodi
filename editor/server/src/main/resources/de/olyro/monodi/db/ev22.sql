@@ -1,0 +1,2 @@
+ALTER TABLE quelle ADD COLUMN cantus_siglum TEXT NOT NULL DEFAULT '';
+ALTER TABLE quelle ADD COLUMN cantus_century TEXT NOT NULL DEFAULT '';

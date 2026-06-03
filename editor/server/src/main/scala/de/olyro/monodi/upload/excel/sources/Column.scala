@@ -22,6 +22,8 @@ object Column:
   case object Foliooffset          extends Column
   case object Publish              extends Column
   case object Beschreibung         extends Column
+  case object Cantus_Siglum        extends Column
+  case object Cantus_Century       extends Column
 
   val allColumns: List[Column] = List(
     Quellensigle,
@@ -41,6 +43,8 @@ object Column:
     Foliooffset,
     Publish,
     Beschreibung,
+    Cantus_Siglum,
+    Cantus_Century,
   )
 
   def parse(s: String): Option[Column] =

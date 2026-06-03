@@ -26,7 +26,7 @@ import java.nio.file.{Files, Paths}
 object DBRunner:
   given zioRuntime: zio.Runtime[Any] = zio.Runtime.default
 
-  val currentVersion = 22
+  val currentVersion = 23
 
   val fileCredentials: Option[FileCredentials] =
     try
@@ -106,7 +106,9 @@ object DBRunner:
       ${s.manifest},
       ${s.foliooffset},
       ${s.publish},
-      ${s.beschreibung}
+      ${s.beschreibung},
+      ${s.cantus_siglum},
+      ${s.cantus_century}
       )""".update.run.void
 
   def updateSource(s: Source): ConnectionIO[Boolean] =
@@ -127,7 +129,9 @@ object DBRunner:
       manifest = ${s.manifest},
       foliooffset = ${s.foliooffset},
       publish = ${s.publish},
-      beschreibung = ${s.beschreibung}
+      beschreibung = ${s.beschreibung},
+      cantus_siglum = ${s.cantus_siglum},
+      cantus_century = ${s.cantus_century}
       WHERE id = ${s.id}""".update.run
       .map(i => if i == 0 then false else true)
 
@@ -221,6 +225,28 @@ object DBRunner:
 
   def listDocumentIds: ConnectionIO[List[String]] =
     sql"""SELECT id FROM dokument""".query[String].to[List]
+
+  def listCantusIndexedDocuments: ConnectionIO[List[Document]] =
+    sql"""SELECT
+        id,
+        quelle_id,
+        dokumenten_id,
+        gattung1,
+        gattung2,
+        festtag,
+        feier,
+        textinitium,
+        bibliographischerverweis,
+        druckausgabe,
+        zeilenstart,
+        foliostart,
+        kommentar,
+        editionsstatus,
+        weitereFelder,
+        publish
+      FROM dokument
+      WHERE weiterefelder->>'Cantus_ID' IS NOT NULL
+        AND trim(weiterefelder->>'Cantus_ID') <> ''""".query[Document].to[List]
 
   def getDocument(id: String): ConnectionIO[Option[Document]] =
     sql"""SELECT
@@ -348,7 +374,7 @@ object DBRunner:
       .query[Json]
       .option
       .flatMap(
-        _.traverse(j => {
+        _.traverse(j =>
           Container.parse(j.printWith(jsonPrinter)) match {
             case Right(r) =>
               r.pure[ConnectionIO]
@@ -356,7 +382,7 @@ object DBRunner:
               MonadError[ConnectionIO, Throwable]
                 .raiseError[(RootContainer, Evolutions.EvolutionResult)](new RuntimeException(t))
           }
-        })
+        )
       )
 
   def saveDocumentNotes(sn: SaveNotes): ConnectionIO[Boolean] =

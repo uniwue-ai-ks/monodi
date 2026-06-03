@@ -146,11 +146,14 @@ export function App() {
     )
   }
 
-  const navLinks = contents.contents.filter((c): c is { uri: string, content: string, navLink: ContentNavLink } => c.navLink !== undefined)
-  const staticRoutesInfo = {
-    fixed: navLinks.map(c => c.navLink.route),
-    shortUrlTags: shortUrls.map(u => u.tag)
-  }
+  const navLinks = useMemo(
+    () => contents.contents.filter((c): c is { uri: string, content: string, navLink: ContentNavLink } => c.navLink !== undefined),
+    [contents]
+  )
+  const staticRoutesInfo = useMemo(
+    () => ({ fixed: navLinks.map(c => c.navLink.route), shortUrlTags: shortUrls.map(u => u.tag) }),
+    [navLinks, shortUrls]
+  )
   const navLinksForPosition = (pos: keyof ContentNavPosition) => {
     return navLinks.filter(c => c.navLink.position[pos] !== undefined)
       .sort((a, b) => a.navLink.position[pos]! - b.navLink.position[pos]!)

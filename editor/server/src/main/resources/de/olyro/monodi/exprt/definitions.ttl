@@ -124,7 +124,7 @@ data:sourceJahrhundert
 
 data:spielOrPassus
    a           rdf:Property ;
-   :searchOrder 17 ;
+   :searchOrder 15 ;
    :documentPosition [ ];
    rdfs:label  "Spiele-Elemente"@de,"Parts of plays"@en,"disparue"@fr  ;
    rdfs:domain data:document;
@@ -251,7 +251,7 @@ data:documentQuelle
       
 data:documentQuelle_id
     a           rdf:Property ;
-    :searchOrder 5 ;
+    :searchOrder 6 ;
     :documentRightOrder 2 ;
     rdfs:label  "Quellensigle"@de,"Source siglum"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
@@ -274,7 +274,7 @@ data:documentDokumenten_id
 data:documentGattung1
     a           rdf:Property ;
     :headerOrder 1 ;
-    :searchOrder 1 ;
+    :searchOrder 2 ;
     :documentPosition [
        :right 0 ;
        :header 1
@@ -312,7 +312,7 @@ data:documentGattung2
 data:documentFesttag
     a           rdf:Property ;
     :headerOrder 2 ;
-    :searchOrder 2 ;
+    :searchOrder 3 ;
     rdfs:label  "Festtag"@de,"Feast day"@en,"disparue"@fr  ;
     :documentPosition [
        :right 3 ;
@@ -332,7 +332,7 @@ data:documentFeier
 data:documentTextinitium
     a           rdf:Property ;
     :headerOrder 0 ;
-    :searchOrder 0 ;
+    :searchOrder 1 ;
     :documentPosition [
        :header 0 ;
        :synopsis 0
@@ -344,7 +344,7 @@ data:documentTextinitium
 data:documentBibliographischerverweis
     a           rdf:Property ;
     :headerOrder 3 ;
-    :searchOrder 3 ;
+    :searchOrder 4 ;
     rdfs:label  "Nachweis Text"@de,"Reference, text"@en,"disparue"@fr  ;
     :alternativeSortAttribute data:documentBibliographischerverweisA;
     :documentPosition [
@@ -392,7 +392,7 @@ data:documentEditionsstatus
     rdfs:label        "Status"@de,"Status"@en,"disparue"@fr  ;
     rdfs:domain       data:document  ;
     rdfs:range        :category    ;
-    :searchOrder      5 ;
+    :searchOrder      7 ;
     :headerOrder      11;
     :documentPosition [ ] ;
     :hasPossibleValue
@@ -416,7 +416,7 @@ data:documentCriticalApparatus
 data:fullText
     a              rdf:Property ;
     rdfs:label     "Volltext"@de,"Complete text"@en,"disparue"@fr  ;
-    :searchOrder   6 ;
+    :searchOrder   8 ;
     rdfs:domain    data:document  ;
     :searchPreview [
         :label "Volltext"@de,"Complete text"@en,"disparue"@fr;
@@ -441,7 +441,7 @@ data:fullTextNormalized
 data:pitches
     a                 rdf:Property ;
     rdfs:label        "Tonhöhen"@de,"Pitches"@en,"disparue"@fr  ;
-    :searchOrder      7 ;
+    :searchOrder      9 ;
     rdfs:domain       data:document  ;
     rdfs:range        :substringSearchText.
 
@@ -462,7 +462,7 @@ data:Melodiennummer_Katalog
    a rdf:Property ;
    rdfs:label "Nachweis Melodie"@de,"Reference, melody"@en,"disparue"@fr ;
     :alternativeSortAttribute data:Melodiennummer_KatalogA;
-   :searchOrder 4;
+   :searchOrder 5;
    :headerOrder 4;
     :documentPosition [
        :header 3
@@ -544,7 +544,7 @@ data:Editor
 data:SpielName
   a rdf:Property;
   rdfs:label "Spielname"@de,"Play name"@en,"disparue"@fr;
-  :searchOrder 18;
+  :searchOrder 16;
   :documentPosition [
      :header 1
   ];
@@ -603,10 +603,10 @@ data:rSourceQuellentyp
    rdfs:range :reference ;
    :referenceField data:sourceQuellentyp .
 
-data:rSourceHerkunftsort 
+data:rSourceHerkunftsort
    a rdf:Property ;
    rdfs:label "Herkunftsort"@de,"Place of origin"@en,"disparue"@fr         ;
-   :searchOrder 15 ;
+   :searchOrder 12 ;
    :headerOrder 10;
    :documentPosition [
       :right 10;
@@ -631,7 +631,7 @@ data:rSourceDatierung
    a rdf:Property ;
    rdfs:label "Datierung"@de,"Date"@en,"disparue"@fr ;
    :headerOrder 9;
-   :searchOrder 15 ;
+   :searchOrder 13 ;
    :documentPosition [
       :right 12;
       :synopsis 4
@@ -643,7 +643,7 @@ data:rSourceDatierung
 data:rSourceHerkunftsregion
    a rdf:Property ;
    rdfs:label "Herkunftsregion"@de,"Region of origin"@en,"disparue"@fr ;
-   :searchOrder 16 ;
+   :searchOrder 14 ;
    :documentPosition [
       :right 13
    ] ;
@@ -651,11 +651,52 @@ data:rSourceHerkunftsregion
    rdfs:range :reference ;
    :referenceField data:sourceHerkunftsregion .
 
+data:FestUndGattung
+    a           rdf:Property ;
+    :searchOrder 17 ;
+    rdfs:label  "CT Fest Gattung"@de,"CT Fest Gattung"@en,"CT Fest Gattung"@fr ;
+    rdfs:domain data:document ;
+    rdfs:range  :category .
+
 data:textInitia
     a           rdf:Property ;
-    :searchOrder 8 ;
+    :searchOrder 19 ;
     rdfs:label  "Textinitium Element"@de,"Textinitium Element"@en,"Textinitium Element"@fr ;
     rdfs:domain data:document ;
     rdfs:range  :category .
+
+data:signatures
+    a           rdf:Property ;
+    :searchOrder 18 ;
+    rdfs:label  "CT Signatur"@de,"CT Signature"@en,"CT Signature"@fr ;
+    rdfs:domain data:document ;
+    rdfs:range  :category .
+
+data:cantusChantLink
+    a                 rdf:Property ;
+    rdfs:label        "Cantus Gesang"@de,"Cantus Chant"@en,"Chant Cantus"@fr ;
+    rdfs:domain       data:document ;
+    rdfs:range        :externalLink ;
+    :documentPosition [
+       :right 14
+    ] .
+
+data:cantusMelodyLink
+    a                 rdf:Property ;
+    rdfs:label        "Cantus Melodie"@de,"Cantus Melody"@en,"Mélodie Cantus"@fr ;
+    rdfs:domain       data:document ;
+    rdfs:range        :externalLink ;
+    :documentPosition [
+       :right 15
+    ] .
+
+data:meiLink
+    a                 rdf:Property ;
+    rdfs:label        "MEI"@de,"MEI"@en,"MEI"@fr ;
+    rdfs:domain       data:document ;
+    rdfs:range        :externalLink ;
+    :documentPosition [
+       :right 16
+    ] .
 
 data:version a rdf:Property .

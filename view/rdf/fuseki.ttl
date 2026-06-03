@@ -12,10 +12,11 @@ PREFIX ja:      <http://jena.hpl.hp.com/2005/11/Assembler#>
    ) .
 
 <#service_tdb2> rdf:type fuseki:Service ;
-    rdfs:label                      "TDB2 Service (RO)" ;
+    rdfs:label                      "TDB2 Service" ;
     fuseki:name                     "tdb2-database" ;
     fuseki:serviceQuery             "query" ;
     fuseki:serviceQuery             "sparql" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
     fuseki:dataset                  :text_dataset;
     .
 
