@@ -136,30 +136,34 @@ application context.
 
 *Note: `:customCss` and `:customJavascript` should not use language tagged strings.*
 
-#### Custom pages
+#### Custom pages and navigation links
 
-For including static pages, reachable via the navigation bar or the footer, you can create own subjects with
-a `:hasContent` predicate. The subject node should usually use the `data:` prefix and the object should be a language
-tagged string literal containing HTML.
+The navigation bar and footer can be extended with custom links. These can point to:
 
-To make the page reachable, some additional predicates can be set:
+- **Static subpages** — HTML content stored directly in the RDF, rendered as a page in the viewer
+- **External URLs** — links to arbitrary `http://` / `https://` addresses, opening in a new tab
+- **Internal routes without content** — links to routes that already exist (e.g. a pre-configured search URL)
 
-- `:hasTitle` should contain the title of the page, which is used as the link text
-- `:position` should reference a blank node with any of the following predicates. Each takes a number as its object,
+The following predicates control the link:
+
+- `:hasTitle` (required for the link to appear in the nav/footer) — the link text, as a language-tagged string
+- `:hasRoute` — the URL target:
+  - A plain path segment (e.g. `"impressum"`) creates an internal route at `/<segment>`
+  - An absolute URL starting with `http://` or `https://` creates an external link (opens in a new tab)
+  - Any other internal path (e.g. a search URL) can be used to link to existing routes
+- `:hasContent` (optional) — language-tagged HTML string; if present, the viewer renders it when the internal route is visited
+- `:position` — a blank node with any of the following predicates. Each takes a number as its object,
 	which is used to sort the links in the same location.
 	- `:left` to place the link in the left part of the navigation bar (after the searches)
 	- `:right` to place the link in the right part of the navigation bar
 	- `:footer` to place the link in the footer (after the contents of the [`:footer` node](#footer-information))
-- `:hasRoute` specifies the URL path of the page, which is used to navigate to it. The URL path should be unique and not
-	conflict with any other routes in the application.
 
-For example, a simple imprint page, which will be reachable at `/impressum` under the domain where the viewer is hosted
-(other languages than `@de` for `:hasContent` ommited, but should be specified in real configurations):
+**Example: static subpage** (reachable at `/impressum`; languages other than `@de` for `:hasContent` omitted):
 ```turtle
 data:impressum
 	:position [ :footer 1; ];
 	:hasTitle "Impressum"@de, "Imprint"@en;
-	:hasRoute "impressum",
+	:hasRoute "impressum";
 	:hasContent """<div class=\"impressum\">
 <h2>Impressum</h2>
 
@@ -174,6 +178,23 @@ e-mail anzeigeprojekt(at)uni-wuerzburg.de<br/>
 </p>
 </div>"""@de.
 ```
+
+**Example: external link** (opens in a new tab):
+```turtle
+data:projectWebsite
+	:position [ :right 1; ];
+	:hasTitle "Projektseite"@de, "Project Website"@en;
+	:hasRoute "https://www.example.org/project".
+```
+
+**Example: link to an existing internal route** (e.g. a pre-configured search, no content needed):
+```turtle
+data:sourcesLink
+	:position [ :left 5; ];
+	:hasTitle "Quellen"@de, "Sources"@en;
+	:hasRoute "search/http%3A%2F%2Fexample.org%2FSource/".
+```
+
 It is possible to specify multiple positions for the same link or even no position at all. The latter is useful to
 create pages that will be reachable via `<a>` tags, e.g. in another page or some document attribute.
 

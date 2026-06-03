@@ -147,11 +147,11 @@ export function App() {
   }
 
   const navLinks = useMemo(
-    () => contents.contents.filter((c): c is { uri: string, content: string, navLink: ContentNavLink } => c.navLink !== undefined),
+    () => contents.contents.filter((c): c is { uri: string, content?: string, navLink: ContentNavLink } => c.navLink !== undefined),
     [contents]
   )
   const staticRoutesInfo = useMemo(
-    () => ({ fixed: navLinks.map(c => c.navLink.route), shortUrlTags: shortUrls.map(u => u.tag) }),
+    () => ({ fixed: navLinks.filter(c => !isExternalRoute(c.navLink.route)).map(c => c.navLink.route), shortUrlTags: shortUrls.map(u => u.tag) }),
     [navLinks, shortUrls]
   )
   const navLinksForPosition = (pos: keyof ContentNavPosition) => {
@@ -176,11 +176,17 @@ export function App() {
               <NavLink isActive={navLinkIsActive(s.uri)} key={s.uri} activeClassName="active" to={addNavLinkActiveHint(s.alternativeLink ? s.alternativeLink : searchLink(s), s.uri)}>{s.name}</NavLink>
             )}
             {navLinksForPosition("left")
-              .map(c => <NavLink key={c.uri} activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink>)
+              .map(c => isExternalRoute(c.navLink.route)
+                ? <a key={c.uri} href={c.navLink.route} target="_blank" rel="noopener noreferrer">{c.navLink.title}</a>
+                : <NavLink key={c.uri} activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink>
+              )
             }
             <span className="filler" />
             {navLinksForPosition("right")
-              .map(c => <NavLink key={c.uri} activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink>)
+              .map(c => isExternalRoute(c.navLink.route)
+                ? <a key={c.uri} href={c.navLink.route} target="_blank" rel="noopener noreferrer">{c.navLink.title}</a>
+                : <NavLink key={c.uri} activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink>
+              )
             }
           </>
           {renderInfoButton()}
@@ -213,7 +219,7 @@ export function App() {
             {shortUrls.map(u =>
               <Route key={u.uri} path={"/" + u.tag + "/:id"}><ShortUrl shortEntity={u} /></Route>
             )}
-            {navLinks.map(c =>
+            {navLinks.filter(c => !isExternalRoute(c.navLink.route)).map(c =>
               <Route key={c.uri} path={"/" + c.navLink.route}>
                 <StaticContent className={c.navLink.route + "-main"} innerHtml={getContentByUri(c.uri)} staticRoutes={staticRoutesInfo} />
               </Route>
@@ -232,7 +238,10 @@ export function App() {
                     <Link key={s.uri} to={s.alternativeLink ? s.alternativeLink : searchLink(s)}>{s.name}</Link>
                   )}
                   {navLinksForPosition("left")
-                    .map(c => <Link key={c.uri} to={"/" + c.navLink.route}>{c.navLink.title}</Link>)
+                    .map(c => isExternalRoute(c.navLink.route)
+                      ? <a key={c.uri} href={c.navLink.route} target="_blank" rel="noopener noreferrer">{c.navLink.title}</a>
+                      : <Link key={c.uri} to={"/" + c.navLink.route}>{c.navLink.title}</Link>
+                    )
                   }
                 </div>
                 <StaticContent className="cm-main_post-links" innerHtml={getContentByUri("http://olyro.de/mondiview/mainPagePostSearches")} staticRoutes={staticRoutesInfo} />
@@ -247,7 +256,10 @@ export function App() {
           {getContentByUriOrElse("http://olyro.de/mondiview/copyright", "© 2020-2024 Corpus Monodicum")}
           &nbsp;| {getContentByUriOrElse("http://olyro.de/mondiview/footer", "")}
           {navLinksForPosition("footer")
-            .map(c => <span key={c.uri}> | <NavLink activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink></span>)
+            .map(c => <span key={c.uri}> | {isExternalRoute(c.navLink.route)
+              ? <a href={c.navLink.route} target="_blank" rel="noopener noreferrer">{c.navLink.title}</a>
+              : <NavLink activeClassName="active" to={"/" + c.navLink.route}>{c.navLink.title}</NavLink>
+            }</span>)
           }
         </div>
       </footer>
@@ -255,6 +267,10 @@ export function App() {
   );
 }
 //<NavLink activeClassName="active" to="/foerdervermerk">{translate("funding")}</NavLink> | <NavLink activeClassName="active" to="/datenschutz">{translate("privacy")}</NavLink> | <NavLink activeClassName="active" to="/feedback">{translate("feedback")}</NavLink>
+
+function isExternalRoute(route: string): boolean {
+  return route.startsWith("http://") || route.startsWith("https://");
+}
 
 function compareSearch1(s: EntityName): string {
   return "/searchCompare/" + encodeURIComponent(s.uri) + "/:query/:doc";

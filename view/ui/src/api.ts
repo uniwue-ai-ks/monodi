@@ -17,7 +17,12 @@ import { assertNever, switchOnKind, escapeRegex } from "./util";
 export async function getContentsByLang(language: string): Promise<Contents> {
   const result = await query(`
     SELECT ?entity ?content ?navPositionLeft ?navPositionRight ?navPositionFooter ?title ?route WHERE {
-      ?entity :hasContent ?c.
+      ?entity (:hasContent|:hasTitle|:hasRoute|:position) [] .
+      OPTIONAL {
+        ?entity :hasContent ?c.
+        FILTER (lang(?c) = '${language}')
+        bind(STR(?c) as ?content).
+      }
       OPTIONAL {
         ?entity  :hasTitle  ?t bind(STR(?t) as ?title).
         FILTER (lang(?t) = '${language}')
@@ -26,15 +31,14 @@ export async function getContentsByLang(language: string): Promise<Contents> {
       OPTIONAL { ?entity  :position [ :right ?navPositionRight ] . }
       OPTIONAL { ?entity  :position [ :left ?navPositionLeft ] . }
       OPTIONAL { ?entity  :position [ :footer ?navPositionFooter ] . }
-      bind(STR(?c) as ?content).
-      FILTER (lang(?c) = '${language}')
     }
   `)
 
   const res: Contents = { contents: [] };
   result.results.bindings.forEach((c: any) => {
+    if (!c.entity?.value) return;
     let navLink: ContentNavLink | undefined
-    if (c.title?.value) {
+    if (c.title?.value && c.route?.value) {
       navLink = {
         position: {
           left: c.navPositionLeft ? c.navPositionLeft.value : undefined,
@@ -47,7 +51,7 @@ export async function getContentsByLang(language: string): Promise<Contents> {
     }
     res.contents.push({
       uri: c.entity.value,
-      content: c.content.value,
+      content: c.content?.value,
       navLink: navLink
     })
   })
@@ -1013,7 +1017,7 @@ export interface Contents {
 
 export interface Content {
   uri: string;
-  content: string;
+  content?: string;
   navLink?: ContentNavLink;
 }
 
