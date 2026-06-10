@@ -41,7 +41,9 @@ export const useUrlData = <Params>() => <Name extends Keys<Params>>(parameterNam
     } else {
       newParams.set(parameterName, JSON.stringify(d));
     }
-    history.push({ ...location, search: `?${newParams.toString()}` });
+    const newSearch = `?${newParams.toString()}`;
+    if (document.location.search === newSearch) return;
+    history.push({ ...document.location, search: newSearch });
   }, [history, parameterName, location]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks

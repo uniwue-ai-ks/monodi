@@ -119,11 +119,10 @@ export const RenderTable = ({ ed, onSortClick, sortBy, setPage, showAll, transla
   const [query] = useUrlData<Search.Params>()('query');
   const [intersections] = useUrlData<Search.Params>()('intersection');
 
-  const isFirstRender = useRef(true);
+  const prevQuery = useRef(query);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
+    if (prevQuery.current !== query) {
+      prevQuery.current = query;
       setPage(0);
     }
   }, [query, setPage]);
