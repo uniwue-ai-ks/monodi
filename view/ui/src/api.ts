@@ -17,7 +17,7 @@ import { assertNever, switchOnKind, escapeRegex } from "./util";
 export async function getContentsByLang(language: string): Promise<Contents> {
   const result = await query(`
     SELECT ?entity ?content ?navPositionLeft ?navPositionRight ?navPositionFooter ?title ?route WHERE {
-      ?entity (:hasContent|:hasTitle|:hasRoute|:position) [] .
+      { SELECT DISTINCT ?entity WHERE { ?entity (:hasContent|:hasTitle|:hasRoute|:position) [] } }
       OPTIONAL {
         ?entity :hasContent ?c.
         FILTER (lang(?c) = '${language}')
@@ -785,10 +785,10 @@ async function getPageMetadata(collectionUri: string, language: string): Promise
     BIND(STR(?labelLiteral) as ?metadataLabel)
     FILTER (lang(?labelLiteral) = '${language}')
   }`;
-  
+
   const result = await query(queryToCall);
   const metadataMap = new Map<number, MetadataEntry[]>();
-  
+
   result.results.bindings.forEach(r => {
     const pageNumber: number = +r.page.value;
     const metadataEntry: MetadataEntry = {
@@ -796,18 +796,18 @@ async function getPageMetadata(collectionUri: string, language: string): Promise
       label: r.metadataLabel.value,
       value: r.metadataValue.value
     };
-    
+
     if (!metadataMap.has(pageNumber)) {
       metadataMap.set(pageNumber, []);
     }
-    
+
     metadataMap.get(pageNumber)!.push(metadataEntry);
   });
-  
+
   metadataMap.forEach(entries => {
     entries.sort((a, b) => a.index - b.index);
   });
-  
+
   return metadataMap;
 }
 
@@ -822,9 +822,9 @@ async function getImage(collectionUri: string, language: string): Promise<Docume
         OPTIONAL {<${collectionUri}> data:hasPrintView ?pdf .}
       }`;
   const result = await query(queryToCall);
-  
+
   const metadataMap = await getPageMetadata(collectionUri, language);
-  
+
   const res: DocumentPart[] = [];
   result.results.bindings.forEach(r => {
     const pageNumber: number = +r.page.value;
@@ -837,12 +837,12 @@ async function getImage(collectionUri: string, language: string): Promise<Docume
         pdfUrl: r.pdf ? r.pdf.value : "",
         resolutions: r.width && r.fileName ? [{ width: r.width.value, fileName: r.fileName.value }] : []
       };
-      
+
       const pageMetadata = metadataMap.get(pageNumber);
       if (pageMetadata) {
         newPart.metadata = pageMetadata;
       }
-      
+
       res.push(newPart);
     } else {
       res[index].resolutions.push({ width: r.width.value, fileName: r.fileName.value })
