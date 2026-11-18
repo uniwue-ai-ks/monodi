@@ -112,7 +112,11 @@ object CantusExport:
       val melodyId = doc.additionalData.getOrElse("Cantus_Melody_ID", "").trim
       val genre    = doc.additionalData.getOrElse("Cantus_Genre", "").trim
       val century  = src.cantus_century.trim
-      val fullText = DocCreator.extractFullText(notes)
+      val fullText = FullTextExtractor.extract(
+        notes,
+        FullTextExtractor.Form.Words,
+        FullTextExtractor.Sources(syllables = true, folioChanges = false, paratexts = false)
+      )
 
       Right(
         CantusRecord(

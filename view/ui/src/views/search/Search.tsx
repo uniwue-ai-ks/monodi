@@ -1,7 +1,7 @@
 import { Fragment, ReactElement, useContext, useEffect, useMemo, useState } from 'react';
 import * as Api from '../../api';
 import { QueryParameter } from '../../hooks/useQuery';
-import { useRedirect } from "../../hooks/useUrlData";
+import { useRedirect, useUrlData } from "../../hooks/useUrlData";
 import { EntityDescription } from "../../model/entity-description";
 import LangContext from "../app/App";
 import * as Synopsis from '../synopsis/Synopsis';
@@ -11,7 +11,7 @@ import { SearchBar } from "./SearchBar";
 import { useHistory } from 'react-router-dom';
 import Translation from '../../translation/Translation';
 import { assertNever } from '../../util';
-import { StaticRoutes } from '../static/StaticContent';
+import { StaticContent, StaticRoutes } from '../static/StaticContent';
 import { Table, TableMode } from './Table';
 
 export function Search(props: { uri: string, compare?: string, staticRoutes: StaticRoutes }) {
@@ -20,7 +20,9 @@ export function Search(props: { uri: string, compare?: string, staticRoutes: Sta
 
   const synopsisRedirect = useRedirect<Synopsis.Params>('synopsis');
 
-  const [search, setSearch] = useState<EntityDescription | null>(null);
+  const [searchView, setSearchView] = useState<Api.SearchView | null>(null);
+  const [landingDismissed, setLandingDismissed] = useState(false);
+  const [queryParam] = useUrlData<Params>()('query');
 
   const langContext = useContext(LangContext);
   const translate = (key: string): string => {
@@ -34,26 +36,42 @@ export function Search(props: { uri: string, compare?: string, staticRoutes: Sta
   }
 
   const sortedSearchAttributes = useMemo(() => {
-    if (search === null) {
+    const entity = searchView?.entity;
+    if (!entity) {
       return [];
     } else {
-      const copy = search.attributes.slice();
+      const copy = entity.attributes.slice();
       copy.sort((a1, a2) => (a1.searchOrder || 0) - (a2.searchOrder || 0));
       return copy;
     }
-  }, [search]);
+  }, [searchView]);
 
   useEffect(() => {
     let canceled = false;
-    Api.getEntityDescription(props.uri, langContext.lang).then((s) => {
-      if (!canceled) setSearch(s);
+    setSearchView(null);
+    setLandingDismissed(false);
+    Api.getSearchView(props.uri, langContext.lang).then(v => {
+      if (!canceled) setSearchView(v);
     });
     return () => { canceled = true; }
   }, [props.uri, langContext])
 
+  // Seed a :Search's prefilled filters into the URL once, on fresh arrival (no query
+  // param yet), so they show up in the search form as editable defaults. Once a query
+  // is present — including an empty one the user produced by clearing filters — leave
+  // it alone. `replace` avoids a back-button trap back to the unseeded URL.
+  useEffect(() => {
+    const prefilled = searchView?.search?.prefilledFilters;
+    if (!prefilled || prefilled.length === 0 || queryParam !== null) return;
+    const seeded: QueryParameter[] = prefilled.map(f => ({ uri: f.attribute, value: f.value }));
+    const params = new URLSearchParams(document.location.search);
+    params.set('query', JSON.stringify(seeded));
+    history.replace({ ...document.location, search: `?${params.toString()}` });
+  }, [searchView, queryParam, history])
+
   const gotoSynopsis: () => void =
     () => synopsisRedirect({
-      searchUri: search!.uri,
+      searchUri: searchView!.entity.uri,
       uris: tableMode.kind === 'synopsis' ? tableMode.selected : [],
       itemsPerPage: 5,
       page: 0,
@@ -62,20 +80,35 @@ export function Search(props: { uri: string, compare?: string, staticRoutes: Sta
       textInLastDocOnly: false
     })
 
+  if (searchView === null) {
+    return <div>{renderWaiting()}</div>;
+  }
+
+  const entity = searchView.entity;
+  const config = searchView.search;
+
+  // Optional landing page: rendered in place of the search until dismissed.
+  if (config?.landingHtml && !landingDismissed) {
+    return <div className="search-landing">
+      <StaticContent innerHtml={config.landingHtml} staticRoutes={props.staticRoutes} />
+      <button className="search-landing-button" onClick={() => setLandingDismissed(true)}>
+        {config.landingButtonText || translate("toSearch")}
+      </button>
+    </div>;
+  }
+
   return <div>
-    {
-      search === null ? renderWaiting() : <div>
-        <SearchBar entity={search} search={sortedSearchAttributes} modeButtons={renderModeButton(
-          search,
-          tableMode,
-          setTableMode,
-          gotoSynopsis,
-          () => history.push("/print"),
-          translate
-        )} />
-        <Table search={search} tableMode={tableMode} updateTableMode={setTableMode} staticRoutes={props.staticRoutes} />
-      </div>
-    }
+    {config?.introText &&
+      <StaticContent className="search-intro" innerHtml={config.introText} staticRoutes={props.staticRoutes} />}
+    <SearchBar entity={entity} search={sortedSearchAttributes} fixedFilters={config?.fixedFilters} modeButtons={renderModeButton(
+      entity,
+      tableMode,
+      setTableMode,
+      gotoSynopsis,
+      () => history.push("/print"),
+      translate
+    )} />
+    <Table search={entity} fixedFilters={config?.fixedFilters} tableMode={tableMode} updateTableMode={setTableMode} staticRoutes={props.staticRoutes} />
   </div>;
 }
 

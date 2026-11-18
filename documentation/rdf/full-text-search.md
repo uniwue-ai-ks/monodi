@@ -4,7 +4,7 @@ For string attributes, Monodi provides additional options for searching, that ar
 (i.e. string attributes with long texts).
 
 A **normalization** can be applied to the user input to make search resistant to e.g. different spellings or punctuation.
-For this to work, an additional attribute has to be added, which holds the normalized text in the backend. The
+For this to work, the backend has to hold the normalized text, usually in an additional attribute. The
 normalization has to be provided as a JavaScript function for transforming user input.
 
 A **preview** of the context where the text matched the search can be shown. The amount of shown context can be either
@@ -38,9 +38,10 @@ Here, `data:fullText` is the attribute, which holds the unnormalized full text o
 
 ## Normalization
 
-The predicate `:normalization` takes a node with two required predicates:
+The predicate `:normalization` takes a node with the following predicates:
 
-- `:attribute` contains the IRI of the attribute, that holds the normalized text.
+- `:attribute` contains the IRI of the attribute, that holds the normalized text. It is optional: without it, the
+  normalized search terms are matched against the attribute itself.
 - `:normalizer` contains a JavaScript arrow function, which applies the normalization to the search terms entered by
   the user. Note that all searches in Monodi are case insensitive, so converting to lower case is not required.
   The example function applies a unicode normalization, removes combining characters, whitespace and dashes.

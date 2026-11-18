@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import Select, { components, SingleValue } from 'react-select';
 import * as H from 'history';
@@ -6,8 +6,9 @@ import * as H from 'history';
 import '../../../node_modules/intro.js/introjs.css';
 import * as api from '../../api';
 
-import { ContentNavLink, ContentNavPosition, EntityName, getEntityNames } from "../../api";
+import { ContentNavLink, ContentNavPosition, EntityName, getEntityNames, getMenuTree, getSearchNodes, MenuEntry } from "../../api";
 import { Search } from "../search/Search";
+import { AttributePage } from "../view/AttributePage";
 import { View } from "../view/View";
 import './App.scss';
 
@@ -26,6 +27,8 @@ export default LangContext;
 export function App() {
   type LangOption = { value: string, label: string };
   const [searches, setSearches] = useState<EntityName[]>([]);
+  const [searchNodes, setSearchNodes] = useState<EntityName[]>([]);
+  const [menuTree, setMenuTree] = useState<MenuEntry[]>([]);
   const [shortUrls, setShortUrls] = useState<api.ShortUrlEntitys[]>([]);
   const [language, setLanguage] = useState<string>("de");
   const [allLanguages, setAllLanguages] = useState<string[]>(["de"]);
@@ -47,11 +50,22 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    getEntityNames(language).then(setSearches);
-    api.getContentsByLang(language).then((c) => {
-      setContents(c);
-    });
+    const initialRequests = [
+      getEntityNames(language).then(setSearches),
+      getSearchNodes(language).then(setSearchNodes),
+      getMenuTree(language).then(setMenuTree),
+      api.getContentsByLang(language).then(setContents),
+    ];
+    // Loading the document description takes a while; warm the cache once the
+    // page itself is there, so opening a search doesn't have to wait for it.
+    Promise.allSettled(initialRequests)
+      .then(() => api.getEntityDescription("http://monodicum/document", language))
+      .catch(() => { /* failed prefetch isn't cached; the next caller retries */ });
   }, [language])
+
+  useEffect(() => {
+    api.removeLegacyEntityDescriptionCache();
+  }, [])
 
   useEffect(() => {
     if (allLanguages.length == 1) {
@@ -154,6 +168,9 @@ export function App() {
     () => ({ fixed: navLinks.filter(c => !isExternalRoute(c.navLink.route)).map(c => c.navLink.route), shortUrlTags: shortUrls.map(u => u.tag) }),
     [navLinks, shortUrls]
   )
+  // Everything routable under /search/<uri>: real classes (resolved as plain class
+  // searches) plus :Search nodes (resolved by type in Search.tsx).
+  const routableEntities = [...searches, ...searchNodes]
   const navLinksForPosition = (pos: keyof ContentNavPosition) => {
     return navLinks.filter(c => c.navLink.position[pos] !== undefined)
       .sort((a, b) => a.navLink.position[pos]! - b.navLink.position[pos]!)
@@ -172,6 +189,7 @@ export function App() {
         </NavLink>
         <div className="navigation">
           <>
+            <NavMenu entries={menuTree} />
             {searches.slice().sort((a, b) => (a.orderBy ?? a.name).localeCompare((b.orderBy ?? b.name))).map(s =>
               <NavLink isActive={navLinkIsActive(s.uri)} key={s.uri} activeClassName="active" to={addNavLinkActiveHint(s.alternativeLink ? s.alternativeLink : searchLink(s), s.uri)}>{s.name}</NavLink>
             )}
@@ -196,26 +214,27 @@ export function App() {
       <div id="app-router-outlet">
         <LangContext.Provider value={langContext}>
           <Switch>
-            {searches.map(s =>
+            {routableEntities.map(s =>
               <Route key={s.uri} path={searchLink(s) + ":query?"}>
                 <Search uri={s.uri} staticRoutes={staticRoutesInfo} />
               </Route>
             )}
-            {searches.map(s =>
-              <Route key={s.uri} path={compareSearch1(s)}>
+            {routableEntities.map(s =>
+              <Route key={"c1_" + s.uri} path={compareSearch1(s)}>
                 <Search uri={s.uri} staticRoutes={staticRoutesInfo} />
               </Route>
             )}
-            {searches.map(s =>
-              <Route key={s.uri} path={compareSearch2(s)}>
+            {routableEntities.map(s =>
+              <Route key={"c2_" + s.uri} path={compareSearch2(s)}>
                 <Search uri={s.uri} staticRoutes={staticRoutesInfo} />
               </Route>
             )}
-            {searches.map(s =>
-              <Route key={s.uri} path="/view">
-                <View staticRoutes={staticRoutesInfo} />
-              </Route>
-            )}
+            <Route path="/view">
+              <View staticRoutes={staticRoutesInfo} />
+            </Route>
+            <Route path="/attribute">
+              <AttributePage staticRoutes={staticRoutesInfo} />
+            </Route>
             {shortUrls.map(u =>
               <Route key={u.uri} path={"/" + u.tag + "/:id"}><ShortUrl shortEntity={u} /></Route>
             )}
@@ -234,6 +253,13 @@ export function App() {
               <div className="cm-main">
                 <StaticContent className="cm-main_pre-links" innerHtml={getContentByUri("http://olyro.de/mondiview/mainPagePreSearches")} staticRoutes={staticRoutesInfo} />
                 <div className="cm-main_links">
+                  {flattenTargeted(menuTree).map(e => {
+                    const link = menuEntryLink(e)
+                    if (!link) return null
+                    return link.external
+                      ? <a key={e.uri} href={link.to}>{e.label}</a>
+                      : <Link key={e.uri} to={link.to}>{e.label}</Link>
+                  })}
                   {searches.slice().sort((a, b) => (a.orderBy ?? a.name).localeCompare((b.orderBy ?? b.name))).map(s =>
                     <Link key={s.uri} to={s.alternativeLink ? s.alternativeLink : searchLink(s)}>{s.name}</Link>
                   )}
@@ -295,4 +321,85 @@ function navLinkIsActive(entityUri: string) {
     const search = new URLSearchParams(location.search);
     return search.get("navLinkHint") === entityUri;
   }
+}
+
+// Resolve a menu entry's target to a link. `null` means no target (a pure grouping
+// node). navLinkHint (= the entry uri) drives highlighting, so two entries over the
+// same search stay independently active.
+function menuEntryLink(entry: MenuEntry): { to: string, external: boolean } | null {
+  const t = entry.target;
+  if (!t) return null;
+  switch (t.kind) {
+    case "search":
+      return { to: addNavLinkActiveHint("/search/" + encodeURIComponent(t.uri) + "/", entry.uri), external: false };
+    case "href":
+      return { to: t.url, external: t.url.startsWith("http") };
+  }
+}
+
+function NavMenu({ entries }: { entries: MenuEntry[] }): React.ReactElement {
+  const [openUris, setOpenUris] = useState<Set<string>>(new Set());
+  const ref = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const activeHint = new URLSearchParams(location.search).get("navLinkHint");
+
+  const toggle = (uri: string) => setOpenUris(prev => {
+    const next = new Set(prev);
+    if (next.has(uri)) next.delete(uri); else next.add(uri);
+    return next;
+  });
+  const closeAll = () => setOpenUris(new Set());
+
+  useEffect(() => {
+    if (openUris.size === 0) return;
+    const onDocMouseDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) closeAll();
+    };
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [openUris]);
+
+  return (
+    <div className="nav-menu" ref={ref}>
+      {entries.map(e => <MenuNode key={e.uri} entry={e} activeHint={activeHint} openUris={openUris} toggle={toggle} closeAll={closeAll} />)}
+    </div>
+  );
+}
+
+// True if any descendant of `entry` is the currently-active nav target (its uri
+// matches the active navLinkHint). Used to bold a group whose sub-item is active.
+function hasActiveDescendant(entry: MenuEntry, activeHint: string | null): boolean {
+  if (!activeHint) return false;
+  return entry.children.some(c => c.uri === activeHint || hasActiveDescendant(c, activeHint));
+}
+
+function MenuNode({ entry, activeHint, openUris, toggle, closeAll }: {
+  entry: MenuEntry, activeHint: string | null, openUris: Set<string>, toggle: (uri: string) => void, closeAll: () => void
+}): React.ReactElement {
+  if (entry.children.length === 0) {
+    const link = menuEntryLink(entry);
+    if (link === null) return <span className="menu-label">{entry.label}</span>;
+    return link.external
+      ? <a className="menu-label" href={link.to} onClick={closeAll}>{entry.label}</a>
+      : <NavLink className="menu-label" isActive={navLinkIsActive(entry.uri)} activeClassName="active" to={link.to} onClick={closeAll}>{entry.label}</NavLink>;
+  }
+
+  const open = openUris.has(entry.uri);
+  const childActive = hasActiveDescendant(entry, activeHint);
+  return (
+    <div className={"menu-group" + (open ? " open" : "")}>
+      <button type="button" className={"menu-label menu-toggle" + (childActive ? " active-parent" : "")} aria-expanded={open} onClick={() => toggle(entry.uri)}>
+        {entry.label}
+      </button>
+      <ul className="menu-dropdown">
+        {entry.children.map(child => <li key={child.uri}><MenuNode entry={child} activeHint={activeHint} openUris={openUris} toggle={toggle} closeAll={closeAll} /></li>)}
+      </ul>
+    </div>
+  );
+}
+
+// All entries carrying a target, depth-first — used for the flat link list on the
+// main page (groups are flattened to their targeted descendants).
+function flattenTargeted(entries: MenuEntry[]): MenuEntry[] {
+  return entries.flatMap(e => [...(e.target ? [e] : []), ...flattenTargeted(e.children)]);
 }

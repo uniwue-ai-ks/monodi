@@ -17,7 +17,7 @@ final case class Document(
     zeilenstart: String,
     foliostart: String,
     kommentar: String,
-    editionsstatus: String,
+    subcorpus: String,
     additionalData: Map[String, String],
     publish: String
 )

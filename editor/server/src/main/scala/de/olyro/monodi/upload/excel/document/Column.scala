@@ -28,7 +28,7 @@ object Column:
   case object Druckausgabe                extends Column
   case object Referenz_auf_Spiel          extends Column
   case object SpielName                   extends Column
-  case object Editionsstatus              extends Column
+  case object Subcorpus                   extends Column
   case object Editor                      extends Column
   case object Schreibzugriff              extends Column
   case object Kommentar                   extends Column
@@ -65,7 +65,7 @@ object Column:
     Druckausgabe,
     Referenz_auf_Spiel,
     SpielName,
-    Editionsstatus,
+    Subcorpus,
     Editor,
     Schreibzugriff,
     Kommentar,

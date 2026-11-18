@@ -26,7 +26,7 @@ import java.nio.file.{Files, Paths}
 object DBRunner:
   given zioRuntime: zio.Runtime[Any] = zio.Runtime.default
 
-  val currentVersion = 23
+  val currentVersion = 25
 
   val fileCredentials: Option[FileCredentials] =
     try
@@ -108,7 +108,8 @@ object DBRunner:
       ${s.publish},
       ${s.beschreibung},
       ${s.cantus_siglum},
-      ${s.cantus_century}
+      ${s.cantus_century},
+      ${s.notationsdokumentation}
       )""".update.run.void
 
   def updateSource(s: Source): ConnectionIO[Boolean] =
@@ -131,7 +132,8 @@ object DBRunner:
       publish = ${s.publish},
       beschreibung = ${s.beschreibung},
       cantus_siglum = ${s.cantus_siglum},
-      cantus_century = ${s.cantus_century}
+      cantus_century = ${s.cantus_century},
+      notationsdokumentation = ${s.notationsdokumentation}
       WHERE id = ${s.id}""".update.run
       .map(i => if i == 0 then false else true)
 
@@ -165,7 +167,7 @@ object DBRunner:
       ${d.document.foliostart},
       ${d.document.kommentar},
       ${d.notes},
-      ${d.document.editionsstatus},
+      ${d.document.subcorpus},
       ${d.document.additionalData},
       ${d.document.publish}
       )""".update.run.void
@@ -188,7 +190,7 @@ object DBRunner:
       foliostart = ${d.document.foliostart},
       kommentar = ${d.document.kommentar},
       notes = ${d.notes},
-      editionsstatus = ${d.document.editionsstatus},
+      subcorpus = ${d.document.subcorpus},
       weitereFelder = ${d.document.additionalData},
       publish = ${d.document.publish}
       WHERE id = ${d.document.id}""".update.run
@@ -218,7 +220,7 @@ object DBRunner:
         zeilenstart,
         foliostart,
         kommentar,
-        editionsstatus,
+        subcorpus,
         weitereFelder,
         publish
      FROM dokument""".query[Document].to[List]
@@ -241,7 +243,7 @@ object DBRunner:
         zeilenstart,
         foliostart,
         kommentar,
-        editionsstatus,
+        subcorpus,
         weitereFelder,
         publish
       FROM dokument
@@ -263,13 +265,13 @@ object DBRunner:
         zeilenstart,
         foliostart,
         kommentar,
-        editionsstatus,
+        subcorpus,
         weitereFelder,
         publish
       FROM dokument WHERE id = $id""".query[Document].option
 
-  val getDistinctDocumentEdititionsstatus: ConnectionIO[List[String]] =
-    sql"""SELECT DISTINCT editionsstatus FROM dokument""".query[String].to[List]
+  val getDistinctDocumentSubcorpus: ConnectionIO[List[String]] =
+    sql"""SELECT DISTINCT subcorpus FROM dokument""".query[String].to[List]
 
   val getSourcePublishInfos: ConnectionIO[List[SourcePublishInfo]] =
     sql"""SELECT id, publish FROM quelle""".query[SourcePublishInfo].to[List]

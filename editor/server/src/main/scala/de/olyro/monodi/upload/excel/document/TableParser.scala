@@ -87,7 +87,7 @@ object TableParser:
                 projection.get(Startzeile).getOrElse(""),
                 projection.get(Startseite).getOrElse(""),
                 projection.get(Kommentar).getOrElse(""),
-                projection.get(Editionsstatus).getOrElse(""),
+                projection.get(Subcorpus).getOrElse(""),
                 getAdditional,
                 projection.get(Publish).getOrElse("none"),
               ),

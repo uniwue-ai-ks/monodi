@@ -28,6 +28,8 @@ final case class PrintStage1(
   def registerDoc(docId: String, pageNumber: Int): PrintStage1               = register(TocEntityId.Document(docId), pageNumber)
   def registerSourceDesc(sourceId: String, pageNumber: Int): PrintStage1     =
     register(TocEntityId.SourceDescription(sourceId), pageNumber)
+  def registerNotationDoc(sourceId: String, pageNumber: Int): PrintStage1    =
+    register(TocEntityId.NotationDocumentation(sourceId), pageNumber)
   def registerCriticalApparatus(docId: String, pageNumber: Int): PrintStage1 =
     register(TocEntityId.CriticalApparatus(docId), pageNumber)
 

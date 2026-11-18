@@ -3,3 +3,5 @@ editor/server/.vscode/
 .vscode/
 target
 view/rdf/data.ttl
+
+workspace/

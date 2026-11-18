@@ -104,7 +104,7 @@ export class DocumentComponent implements OnInit {
           zeilenstart: '',
           foliostart: '',
           kommentar: '',
-          editionsstatus: '',
+          subcorpus: '',
         };
         this.cont = VM.emptyRootContainer();
       }

@@ -136,11 +136,23 @@ object Bookbinder:
       case None                                   => None
       case Some(CustomCover.LineItemCover(items)) => Some(BookEntry.Cover(C.Cover.TextCover(items, Nil)))
 
-    val sourceDescriptions: List[BookEntry.SourceDescription] = docs.toList
-      .map(_.source)
-      .distinctBy(_.id)
-      .map[BookEntry.SourceDescription](BookEntry.SourceDescription(_))
-      .filter(_ => request.printSettings.addSourceDescriptions)
+    val sourceDescriptions: List[BookEntry.SourceDescription] =
+      if request.printSettings.addSourceDescriptions then
+        docs.toList
+          .map(_.source)
+          .distinctBy(_.id)
+          .filter(_.beschreibung.trim.nonEmpty)
+          .map(BookEntry.SourceDescription(_))
+      else Nil
+
+    val notationDocumentations: List[BookEntry.NotationDocumentation] =
+      if request.printSettings.addNotationDocumentation then
+        docs.toList
+          .map(_.source)
+          .distinctBy(_.id)
+          .filter(_.notationsdokumentation.trim.nonEmpty)
+          .map(BookEntry.NotationDocumentation(_))
+      else Nil
 
     val criticalApparati: List[BookEntry.CriticalApparatus] =
       if request.printSettings.addCriticalApparatus then
@@ -158,8 +170,9 @@ object Bookbinder:
 
     val numKindOfEntries = List(
       true, // we always render notes
-      request.printSettings.addSourceDescriptions,
-      request.printSettings.addCriticalApparatus
+      sourceDescriptions.nonEmpty,
+      notationDocumentations.nonEmpty,
+      criticalApparati.nonEmpty
     ).count(_ == true)
 
     val docHierarchy = docs.map: d =>
@@ -169,39 +182,31 @@ object Bookbinder:
     val toc         =
       if numKindOfEntries == 1 then BookEntry.TableOfContents(H.TableOfContents(docHierarchy.toList).toView.items)
       else
+        // a group heading is only added when it has entries, so neither a
+        // disabled section nor one whose entries were all skipped for lack of
+        // content leaves a childless heading in the TOC
+        def tocGroup[A](title: String, entries: List[A])(mkItem: A => TableOfContentsItem): List[TableOfContentsItem] =
+          if entries.isEmpty then Nil
+          else List(TableOfContentsItem(title, None, entries.map(mkItem)))
+
         BookEntry.TableOfContents:
           H.TableOfContents(
-            List(
-              TableOfContentsItem("Dokumente", None, docHierarchy.toList),
-              TableOfContentsItem(
-                "Quellenbeschreibungen",
-                None,
-                sourceDescriptions.map(sd =>
-                  TableOfContentsItem(
-                    sd.source.id,
-                    Some(H.TocEntityId.SourceDescription(sd.source.id)),
-                    Nil
-                  )
-                )
-              ),
-              TableOfContentsItem(
-                "Kritischer Apparat",
-                None,
-                criticalApparati.map(c =>
-                  TableOfContentsItem(
-                    c.tocEntryText,
-                    Some(H.TocEntityId.CriticalApparatus(c.documentId)),
-                    Nil
-                  )
-                )
+            List(TableOfContentsItem("Dokumente", None, docHierarchy.toList))
+              ++ tocGroup("Quellenbeschreibungen", sourceDescriptions)(sd =>
+                TableOfContentsItem(sd.source.id, Some(H.TocEntityId.SourceDescription(sd.source.id)), Nil)
               )
-            )
+              ++ tocGroup("Notationsdokumentationen", notationDocumentations)(nd =>
+                TableOfContentsItem(nd.source.id, Some(H.TocEntityId.NotationDocumentation(nd.source.id)), Nil)
+              )
+              ++ tocGroup("Kritischer Apparat", criticalApparati)(c =>
+                TableOfContentsItem(c.tocEntryText, Some(H.TocEntityId.CriticalApparatus(c.documentId)), Nil)
+              )
           ).toView
             .items
 
     cover :: List(toc).filter(_ =>
       request.printSettings.drawTableOfContents
-    ) ++ bookEntries ++ sourceDescriptions ++ criticalApparati
+    ) ++ bookEntries ++ sourceDescriptions ++ notationDocumentations ++ criticalApparati
 
   private def getAutoCover(dd: DefaultDocData): C.Cover =
     val libText         = s"${dd.libLocation}, ${dd.libName}, ${dd.libSig}"
@@ -278,7 +283,7 @@ object Bookbinder:
           val meta      = dropRepeated(lastFullMeta, fullMeta)
           val metaEntry = if meta.isEmpty then Nil else List(BookEntry.MetaData(meta))
           val bookEntry =
-            if docItem.doc.editionsstatus == "zitiert" then notYetSupportedCover
+            if docItem.doc.subcorpus == "graduale-synopticum" then notYetSupportedCover
             else BookEntry.Document(docItem.doc.id, docItem.notes)
 
           go(fullMeta, docs, (bookEntry :: metaEntry) ++ accu)

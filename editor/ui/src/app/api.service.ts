@@ -253,7 +253,7 @@ export interface Document {
   "zeilenstart": string;
   "foliostart": string;
   "kommentar": string;
-  "editionsstatus": string;
+  "subcorpus": string;
 }
 
 export interface UserInfo {

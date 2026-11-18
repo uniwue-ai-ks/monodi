@@ -64,5 +64,6 @@ object CreatePdfRequestOld:
       drawPageNumbers = false,
       drawTableOfContents = false,
       addSourceDescriptions = false,
-      addCriticalApparatus = false
+      addCriticalApparatus = false,
+      addNotationDocumentation = false
     )

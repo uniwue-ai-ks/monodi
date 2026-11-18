@@ -5,6 +5,8 @@ import { QueryParameter } from "../../hooks/useQuery";
 import { useUrlData } from "../../hooks/useUrlData";
 import { Attribute, CategoryEntry, CategoryEntryGuard } from "../../model/attribute";
 import { EntityDescription } from '../../model/entity-description';
+import { escapeIntervalBound, formatIntervalSearchValue, parseIntervalSearchValue, unescapeIntervalBound } from '../../model/interval';
+import { FixedFilter } from '../../api';
 import Translation from '../../translation/Translation';
 import { assertNever, uriToClasName } from "../../util";
 import LangContext from '../app/App';
@@ -24,7 +26,7 @@ const addParameter = (attributes: Attribute[], dispatch: (ce: ChangeEvent) => vo
   }
 }
 
-export function SearchBar(props: { entity: EntityDescription, search: Attribute[], modeButtons: ReactElement }) {
+export function SearchBar(props: { entity: EntityDescription, search: Attribute[], fixedFilters?: FixedFilter[], modeButtons: ReactElement }) {
   const [urlState, setUrlState] = useUrlData<Search.Params>()('query');
   const [hidden,] = useUrlData<Search.Params>()('hideFromSearch');
   const [query, dispatch] = useReducer(reduce, urlState ? urlState : []);
@@ -48,6 +50,7 @@ export function SearchBar(props: { entity: EntityDescription, search: Attribute[
   const search = () => { setUrlState(query); }
 
   const isHidden = (uri: string): boolean => {
+    if (props.fixedFilters?.some(f => f.attribute === uri)) return true;
     return !!hidden && hidden.indexOf(uri) !== -1;
   }
 
@@ -265,6 +268,17 @@ const QueryParamSingle = (props: { attribute: Attribute, entity: EntityDescripti
         return <input value={value} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: e.target.value })} />;
       case 'http://olyro.de/mondiview/entity':
         return <input value={value} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: e.target.value })} readOnly={!userSearchable} />;
+      case 'http://olyro.de/mondiview/interval':
+        if (attribute.searchSpan) {
+          const [lower, upper] = parseIntervalSearchValue(value);
+          return <span className="intervalSpan">
+            <input value={lower} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: formatIntervalSearchValue(e.target.value, upper) })} readOnly={!userSearchable} />
+            {" – "}
+            <input value={upper} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: formatIntervalSearchValue(lower, e.target.value) })} readOnly={!userSearchable} />
+          </span>;
+        } else {
+          return <input value={unescapeIntervalBound(value)} onChange={e => props.dispatch({ kind: "ChangeParameterValue", index: index, newValue: escapeIntervalBound(e.target.value) })} readOnly={!userSearchable} />;
+        }
       case 'http://olyro.de/mondiview/pdf':
       case 'http://olyro.de/mondiview/imageCollection':
       case 'http://olyro.de/mondiview/htmlImageCollection':

@@ -16,9 +16,21 @@ _Avoid_: Chant entry, item, record
 A curated collection of `Document`s for a specific liturgical occasion. Spiele are rendered as a single combined PDF; they are **not** themselves Cantus records.
 _Avoid_: Office, collection, programme
 
+**Subcorpus**:
+A saved, pre-filtered view over the document corpus — currently Edition, Transkription, and Graduale Synopticum. A `Document`'s membership is held in the single-valued `documentSubcorpus` field, so a document belongs to at most one. The unfiltered whole of all documents is the _cumulative corpus_.
+_Avoid_: editionsstatus, Status, edition status, document type/class
+
 **Quellensigle**:
 Monodi's internal identifier for a `Source`. Free-form, set in the Excel import; used as the source's primary key and URL path.
 _Avoid_: Source code, source ID, Sigle
+
+**Quellenbeschreibung**:
+The scholarly descriptive text about a `Source` (provenance, codicology, contents). One per source, though some sources don't have one yet. Shown on the website behind the source table's "Beschreibung" button, and optionally printed as the "Quellenbeschreibungen" section of a print document.
+_Avoid_: Source description (in code identifiers the English form appears, but the domain term is the German one), comment (that is the separate `Kommentar` field)
+
+**Notationsdokumentation**:
+Per-`Source` documentation of that source's notation practice (neume forms and their transcription). Parallel in role to the `Quellenbeschreibung` but a separate document: reachable via its own button in the website's source table, and optionally printed as its own section. Not every source has one.
+_Avoid_: Notation description, notation guide
 
 **Siglum (Cantus)**:
 The source identifier as Cantus Index expects to receive it (often RISM-style, e.g. `A-ABC Fragm. 1`). Stored as `Cantus_Siglum` on the `Source`. May differ in format from `Quellensigle`.
@@ -57,7 +69,7 @@ The Cantus Index identifier for a chant record (e.g. `008060`). Set per `Documen
 _Avoid_: Chant ID (unqualified), CI ID
 
 **Cantus melody ID**:
-The Cantus Index identifier for the melody/neume tradition associated with a chant (e.g. `008060a`). Set per `Document` in the `Cantus_Melody_ID` field. Independent of `Cantus ID` — a document may carry either, both, or neither. Resolves to `https://cantusindex.org/melody/{Cantus_Melody_ID}`.
+The Cantus Index identifier for the melody/neume tradition associated with a chant (e.g. `008060a`). Set per `Document` in the `Cantus_Melody_ID` field. Independent of `Cantus ID` — a document may carry either, both, or neither. The bare ID is what gets stored, displayed as the link label, and sent to Cantus Index in the JSON export. The outbound view hyperlink, however, resolves to `https://cantusindex.org/melody/{Cantus_Melody_ID}-1`: Cantus Index serves the melody page under a trailing `-1` variant suffix that is **not** part of the identifier itself.
 _Avoid_: Melody number (that is the internal `Melodiennummer_Katalog`, a different field)
 
 ## Example dialogue

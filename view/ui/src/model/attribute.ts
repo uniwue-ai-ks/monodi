@@ -11,11 +11,17 @@ export type Kind =
   "http://olyro.de/mondiview/entity" |
   "http://olyro.de/mondiview/copyText" |
   "http://olyro.de/mondiview/reference" |
-  "http://olyro.de/mondiview/boolean";
+  "http://olyro.de/mondiview/boolean" |
+  "http://olyro.de/mondiview/interval";
 
 export interface ExternalLink {
   url: string;
   text: string;
+}
+
+export interface Interval {
+  lowerBound: string;
+  upperBound: string;
 }
 
 interface AttributeBase<T extends Kind> {
@@ -70,6 +76,7 @@ export interface DocumentPosition {
   synopsis?: number;
   download?: number;
   navigation?: number;
+  ownPage?: number;
 }
 
 export interface ShortenPosition {
@@ -186,13 +193,17 @@ export type ExternalLinkAttribute = AttributeBase<"http://olyro.de/mondiview/ext
 export type SubstringSearchTextAttribute = AttributeBase<"http://olyro.de/mondiview/substringSearchText">
 export type EntityAttribute = AttributeBase<"http://olyro.de/mondiview/entity">
 export type CopyTextAttribute = AttributeBase<"http://olyro.de/mondiview/copyText">
+export interface IntervalAttribute extends AttributeBase<"http://olyro.de/mondiview/interval"> {
+  normalization?: Normalization;
+}
 export interface ReferenceAttribute extends AttributeBase<"http://olyro.de/mondiview/reference"> {
   referenceField: string;
 }
 
 export type Attribute = NumberAttribute | StringAttribute | ImageCollectionAttribute | PDFAttribute |
   CategoryAttribute | HtmlContentAttribute | HtmlImageCollectionAttribute | ExternalLinkAttribute |
-  SubstringSearchTextAttribute | EntityAttribute | CopyTextAttribute | ReferenceAttribute | BooleanAttribute;
+  SubstringSearchTextAttribute | EntityAttribute | CopyTextAttribute | ReferenceAttribute | BooleanAttribute |
+  IntervalAttribute;
 
 export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/number" ? number :
@@ -208,6 +219,7 @@ export type DataOf<T extends Kind> =
   T extends "http://olyro.de/mondiview/copyText" ? string :
   T extends "http://olyro.de/mondiview/reference" ? AttributeWithData :
   T extends "http://olyro.de/mondiview/boolean" ? boolean :
+  T extends "http://olyro.de/mondiview/interval" ? Interval :
   never;
 
 type Tmp<X extends Attribute> = X extends any ? { kind: X["kind"]; attribute: X; data: DataOf<X["kind"]> } : never;

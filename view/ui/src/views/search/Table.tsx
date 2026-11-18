@@ -5,6 +5,7 @@ import * as Api from '../../api';
 import { QueryParameter } from '../../hooks/useQuery';
 import { ParamInput, useRedirect, useUrlData } from '../../hooks/useUrlData';
 import { Attribute } from '../../model/attribute';
+import { intervalToString } from '../../model/interval';
 import { EntityDescription } from '../../model/entity-description';
 import * as View from '../view/Params';
 import * as Search from './Search';
@@ -79,7 +80,8 @@ export const Table = (props: Props): ReactElement => {
       translate={translate}
       tableMode={props.tableMode}
       updateTableMode={props.updateTableMode}
-      hidden={hiddenFromTable || []}
+      hidden={[...(hiddenFromTable || []), ...(props.fixedFilters?.map(f => f.attribute) || [])]}
+      fixedFilters={props.fixedFilters}
       staticRoutes={props.staticRoutes}
       language={langContext.lang}
     />
@@ -96,10 +98,11 @@ type RenderTableProps = {
   tableMode: TableMode,
   updateTableMode: (updater: (mode: TableMode) => TableMode) => void,
   hidden: string[],
+  fixedFilters?: Api.FixedFilter[],
   staticRoutes: StaticRoutes,
   language: string,
 }
-export const RenderTable = ({ ed, onSortClick, sortBy, setPage, showAll, translate, tableMode, updateTableMode, hidden, staticRoutes, language }: RenderTableProps): ReactElement => {
+export const RenderTable = ({ ed, onSortClick, sortBy, setPage, showAll, translate, tableMode, updateTableMode, hidden, fixedFilters, staticRoutes, language }: RenderTableProps): ReactElement => {
   const printQueue = usePrintQueue();
   const openDocument = useRedirect<View.Params>('view');
   const toggleSynopsisDoc = useCallback((uri: string) => {
@@ -126,7 +129,7 @@ export const RenderTable = ({ ed, onSortClick, sortBy, setPage, showAll, transla
       setPage(0);
     }
   }, [query, setPage]);
-  const [result, running] = useResult(query, intersections || null, language, ed, sortBy);
+  const [result, running] = useResult(query, intersections || null, language, ed, sortBy, fixedFilters);
 
   if (result === null) {
     return loader(ed, sortBy, translate);
@@ -322,6 +325,17 @@ export const renderBody = (
     return (test.origin + test.pathname + test.search);
   }
 
+  const ownPageLink = (entity: string, attribute: Attribute): string => {
+    const params = new URLSearchParams();
+    params.set("document", JSON.stringify(entity));
+    params.set("attribute", JSON.stringify(attribute.uri));
+    return "/attribute?" + params.toString();
+  }
+
+  const ownPageAttributes = ed.attributes
+    .filter(a => a.documentPosition.ownPage !== undefined)
+    .sort((a, b) => a.documentPosition.ownPage! - b.documentPosition.ownPage!);
+
   const subEntityLink = (entity: string, se: SubEntity, searches: AttributeSearch[]): string => {
     const transferredSearches = searches
       .map(({ attr, search }) => ({ uri: se.description.attributes.find(a => a.referenceSearch === attr.uri)?.uri, value: search }))
@@ -350,6 +364,9 @@ export const renderBody = (
               {getOpenText(ed, r, translation)}
             </a>
           </li>
+          {ownPageAttributes.map(a =>
+            <li key={r.uri + "/ownPage/" + a.uri}><Link to={ownPageLink(r.uri, a)}>{a.label}</Link></li>
+          )}
           {ed.subEntities ? ed.subEntities.map(se =>
             <li key={r.uri + se.uri}><Link to={subEntityLink(r.uri, se, searches)}>{se.label}</Link></li>
           ) : null}
@@ -366,6 +383,8 @@ export const renderBody = (
       return <td key={header.uri}>{val === "true" ? "✔" : val === "false" ? "✘" : ""}</td>;
     } else if (header.kind === "http://olyro.de/mondiview/category" && header.mapping && row.data[header.uri] !== undefined) {
       return <td key={header.uri}>{header.mapping[row.data[header.uri]] || showOrShorten(row, header)}</td>
+    } else if (header.kind === "http://olyro.de/mondiview/interval" && row.data[header.uri] !== undefined) {
+      return <td key={header.uri}>{intervalToString(Api.parseIntervalBinding(row.data[header.uri]))}</td>;
     } else if (header.kind === "http://olyro.de/mondiview/htmlContent") {
       return <StaticContent tag="td" key={header.uri} innerHtml={row.data[header.uri]} staticRoutes={staticRoutes} />
     } else if (header.documentPosition.download) {
@@ -425,6 +444,7 @@ export const PrintToggle = ({ result, printQueue: { docs, addOrRemove } }: Print
 
 export interface Props {
   search: EntityDescription;
+  fixedFilters?: Api.FixedFilter[];
   tableMode: TableMode;
   updateTableMode: (updater: (mode: TableMode) => TableMode) => void;
   staticRoutes: StaticRoutes;
@@ -436,6 +456,7 @@ const useResult = (
   language: string,
   search: EntityDescription,
   pagination: Api.Pagination,
+  fixedFilters: Api.FixedFilter[] | undefined,
 ): [(Api.QueryResult | null), boolean] => {
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<Api.QueryResult | null>(null);
@@ -446,7 +467,7 @@ const useResult = (
     if (search !== null) {
       (async () => {
         const substituted = subsituteQueryLabelsByValues(search, query || []);
-        const q = applyImplicitQueryValues(search, substituted);
+        const q = applyFixedFilters(fixedFilters, applyImplicitQueryValues(search, substituted));
         const results = await Api.doQuery(search, language, q, pagination, intersections);
         if (!canceled) {
           setResult(results);
@@ -455,7 +476,7 @@ const useResult = (
       })();
     }
     return () => { canceled = true }
-  }, [query, search, pagination, intersections, language])
+  }, [query, search, pagination, intersections, language, fixedFilters])
 
   return [result, running];
 }
@@ -471,6 +492,18 @@ const subsituteQueryLabelsByValues = (search: EntityDescription, query: QueryPar
     }
     return param;
   });
+}
+
+// :Search fixed filters are non-overridable: any user-supplied value for the same
+// attribute is dropped (the field is hidden anyway) and the fixed value is enforced.
+const applyFixedFilters = (fixedFilters: Api.FixedFilter[] | undefined, query: QueryParameter[]): QueryParameter[] => {
+  if (!fixedFilters || fixedFilters.length === 0) return query;
+  const fixedAttrs = new Set(fixedFilters.map(f => f.attribute));
+  const result = query.filter(q => !fixedAttrs.has(q.uri));
+  for (const f of fixedFilters) {
+    result.push({ uri: f.attribute, value: f.value });
+  }
+  return result;
 }
 
 const applyImplicitQueryValues = (search: EntityDescription, query: QueryParameter[]): QueryParameter[] => {

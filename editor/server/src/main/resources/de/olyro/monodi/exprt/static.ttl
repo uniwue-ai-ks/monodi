@@ -1,4 +1,4 @@
-@prefix :     <http://olyro.de/mondiview/>
+@prefix :     <http://olyro.de/mondiview/> .
 @prefix data: <http://monodicum/> .
 @prefix text: <http://jena.apache.org/text#>.
 
@@ -24,7 +24,7 @@
         <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
         <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
         <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
-        <h3 class="cm-main_h3">Digitale Ausgabe | Beta-Version | 2025</h3>
+        <h3 class="cm-main_h3">Digitale Ausgabe | Beta-Version | 2026</h3>
         <p class="cm-main_herausgeber">
                 Im Auftrag der Akademie der Wissenschaften und der Literatur | Mainz<br>
                 am Zentrum für Philologie und Digitalität der Universität Würzburg<br>
@@ -39,7 +39,7 @@
         <h1 class="cm-main_prestage">PRESTAGE (Digitaler Raum)</h1>
         <h1 class="cm-main_h1">CORPUS MONODICUM</h1>
         <h2 class="cm-main_h2">Die einstimmige Musik des lateinischen Mittelalters</h2>
-        <h3 class="cm-main_h3">Digital Edition | Beta version | 2025</h3>
+        <h3 class="cm-main_h3">Digital Edition | Beta version | 2026</h3>
         <p class="cm-main_herausgeber">
                 Commissioned by the Akademie der Wissenschaften und der Literatur | Mainz<br>
                 at the Center for Philology and Digitality of the University of Würzburg<br>

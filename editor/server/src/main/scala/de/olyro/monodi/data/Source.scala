@@ -3,6 +3,8 @@ package data
 
 import io.circe.*, io.circe.generic.semiauto.*
 
+// field order must match the quelle table's column order (i.e. ALTER TABLE
+// order): the SELECT * and INSERT VALUES queries map fields positionally
 final case class Source(
     id: String,
     quellensigle: String,
@@ -23,7 +25,8 @@ final case class Source(
     publish: String,
     beschreibung: String,
     cantus_siglum: String,
-    cantus_century: String
+    cantus_century: String,
+    notationsdokumentation: String
 )
 
 object Source:

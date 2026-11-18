@@ -2,7 +2,13 @@ package de.olyro.monodi.exprt.print.bookbinding
 
 import de.olyro.monodi.exprt.CanvasConfig
 import de.olyro.monodi.Util
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 
+// A default value on a field means "wire default": when an old client sends
+// its print settings, the field is missing from the JSON, and decoding fills
+// in the default. Old clients are not hypothetical — the testing UI and the
+// published UI share this backend, so one of the two always runs the older
+// bundle. Don't add defaults for convenience.
 final case class PrintSettings(
     paperWidthInMm: Double,
     paperHeightInMm: Double,
@@ -31,8 +37,9 @@ final case class PrintSettings(
     drawPageNumbers: Boolean,
     drawTableOfContents: Boolean,
     addSourceDescriptions: Boolean,
-    addCriticalApparatus: Boolean
-) derives io.circe.Codec.AsObject:
+    addCriticalApparatus: Boolean,
+    addNotationDocumentation: Boolean = false
+):
   lazy val canvasSettings: CanvasConfig =
     val unclampedWidth  = (paperWidthInMm - marginLeftInMm - marginRightInMm) * Util.mmToSvgUnitsConstant / zoomFactor
     val unclampedHeight = (paperHeightInMm - marginTopInMm - marginBottomInMm) * Util.mmToSvgUnitsConstant / zoomFactor
@@ -68,3 +75,9 @@ final case class PrintSettings(
   lazy val printSettings = de.olyro.monodi.exprt.print.Settings(
     pageNumberPrefix = Some("").filter(_ => drawPageNumbers)
   )
+
+object PrintSettings:
+  // scoped here so it cannot leak into other ConfiguredCodec derivations in
+  // this package, which use the package-wide discriminator Configuration
+  private given Configuration                         = Configuration.default.withDefaults
+  given codec: io.circe.Codec.AsObject[PrintSettings] = ConfiguredCodec.derived

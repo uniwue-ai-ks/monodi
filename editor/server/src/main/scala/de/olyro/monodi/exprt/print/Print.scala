@@ -54,6 +54,8 @@ final case class Print(
               case BookEntry.Cover(cover)                                         => makeStage1Cover(accu, partialPage, todo, cover)
               case BookEntry.TableOfContents(toc)                                 => makeStage1Toc(accu, partialPage, todo, toc)
               case BookEntry.SourceDescription(source)                            => makeStage1SourceDescription(accu, partialPage, todo, source)
+              case BookEntry.NotationDocumentation(source)                        =>
+                makeStage1NotationDocumentation(accu, partialPage, todo, source)
               case BookEntry.CriticalApparatus(documentId, dokumentenId, content) =>
                 makeStage1CriticalApparatus(accu, partialPage, todo, documentId, dokumentenId, content)
 
@@ -173,6 +175,37 @@ final case class Print(
         .addPages(closed.toList)
         .addPages(Markdown.render(svg, source.beschreibung, contentStartY, sectionTitle))
         .registerSourceDesc(source.id, pageNr),
+      Nil,
+      todo
+    )
+
+  private def makeStage1NotationDocumentation(
+      accu: PrintStage1,
+      partialPage: List[BoundingBox],
+      todo: List[BookEntry],
+      source: Source
+  ): URIO[ProgressNotifier, PrintStage1] =
+    val isFirstNotationDocumentation = !accu.tocInfo.keys.exists:
+      case TocEntityId.NotationDocumentation(_) => true
+      case _                                    => false
+
+    val sectionTitle =
+      if isFirstNotationDocumentation then
+        Some(
+          normalText("Notationsdokumentationen", 1.5.ofSFS)
+            .centerX(config.width / 2)
+            .widenX(config.width)
+            .widenY(normalText("X", 1.5.ofSFS).height * 1)
+        )
+      else None
+
+    val closed = if partialPage.isEmpty then None else Some(makePage(partialPage))
+    val pageNr = accu.pageCount + 1 + closed.toList.size
+    makeStage1(
+      accu
+        .addPages(closed.toList)
+        .addPages(Markdown.render(svg, source.notationsdokumentation, contentStartY, sectionTitle))
+        .registerNotationDoc(source.id, pageNr),
       Nil,
       todo
     )

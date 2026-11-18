@@ -64,8 +64,9 @@ bar). Example:
 #### Main Page
 
 The start page is separated into three parts. The middle part is a list of the available searches, defined by the
-classes, while the parts above and below are configurable via the nodes `:mainPagePreSearches` and
-`:mainPagePostSearches`, which both may contain HTML. Example:
+classes (plus any [configured searches and navigation menu entries](searches-and-menus.md)), while the parts above and
+below are configurable via the nodes `:mainPagePreSearches` and `:mainPagePostSearches`, which both may contain HTML.
+Example:
 
 ```turtle
 :mainPagePreSearches :hasContent
@@ -275,6 +276,9 @@ for the search in the navigation bar and on the start page. It can be used to pr
 data:book :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fbook/?query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FbookGenre"%2C"value"%3A"fantasy"}]"""
 ```
 
+For a cleaner way to pre-fill (and lock) filters without hand-encoding a URL, define a
+[configured search](searches-and-menus.md) with `:fixedFilter` predicates instead.
+
 #### Class ordering
 
 By default, classes are ordered by their label in the navigation bar. If an `:orderBy` predicate is given for a class,
@@ -417,6 +421,55 @@ data:bookReleaseYear
   :searchSpan true.
   ```
 
+#### Interval attributes
+
+An interval attribute, specified as `rdfs:range :interval`, describes a range that an entity covers, e.g. the pages of
+a book chapter. Its value is a node with the two predicates `:lowerBound` and `:upperBound`, each holding a plain string
+literal (no language tag). Bounds are compared as strings, character by character, so the export has to write them in a
+form that sorts correctly. Use a `:normalization` (see below) to bring the search input into the same form.
+
+How a search value is matched depends on `:searchSpan`:
+
+- Without `:searchSpan`, the search value is a single value `v`. An entity matches if its interval contains it:
+  `lowerBound <= v <= upperBound`.
+- With `:searchSpan true`, the search value is a range `a-b`. An entity matches if its interval overlaps the range:
+  `upperBound >= a` and `lowerBound <= b`. Either side may be left empty to leave the range open on that side. A single
+  value without `-` matches like a range from that value to itself. The search bar shows two input fields.
+
+Because `-` separates the two sides of a range, a `-` inside a bound has to be written as `%2D`, and a `%` as `%25`. So
+the range from `281v-a` to `282` is written as `281v%2Da-282`. The search bar does this escaping itself. You only need
+it when you write such a search value by hand, e.g. in a link.
+
+If the attribute has a `:normalization`, its `:normalizer` is applied to each bound of the search value separately,
+after splitting the range and removing the escaping. As for other attributes, `:attribute` optionally redirects the
+search to another attribute, which then has to be an interval attribute too. The normalizer has to produce exactly the
+same keys as the export does, otherwise searches will silently miss entities.
+
+An example from Corpus Monodicum, where each document covers the pages from `documentFoliostart` to `Endseite` of its
+source:
+
+```turtle
+data:documentFolioInterval
+    a           rdf:Property ;
+    rdfs:label  "Seitenbereich"@de,"Page range"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    :searchSpan true ;
+    :normalization [
+        :normalizer """value => (value.match(/\\p{L}+|\\p{Nd}+/gu) || []).map(segment => /^\\p{Nd}/u.test(segment) ? "0".repeat(String(Number(segment)).length) + "/" + Number(segment) : segment).join("-")"""
+    ];
+    rdfs:range  :interval    .
+
+# a document from folio 12v to folio 15
+data:someDocument
+    data:documentFolioInterval [ :lowerBound "00/12-v" ; :upperBound "00/15" ] .
+```
+
+The normalizer splits the input into runs of letters and runs of digits and joins them with `-`. Each number is
+prefixed with as many zeros as it has digits, followed by a `/`. A longer number thus gets more leading zeros and
+sorts after a shorter one: `9` becomes `0/9`, which sorts before `10`, which becomes `00/10`. Since `r` (recto) sorts
+before `v` (verso), `12`, `12r` and `12v` keep their order. The export computes the bounds with
+`LexicographicMapper.makeLexicographicallySortable`, of which this normalizer is a port.
+
 #### Entity links
 
 Attributes may point to another entity, i.e. another instance of some class. For example, you could have a book series
@@ -469,6 +522,12 @@ position, this number determines the order.  The following positions are recogni
 - `:right`: shown in the collapsible sidebar.
 - `:popup`: shown in the popup (see above for [customizing the popupbutton](#button-texts).
 - `:download`: shown as a download button in the sidebar.
+- `:ownPage`: adds an extra button to the action column of the class's result
+  table, next to the main open button. The button is labeled with the
+  attribute's `rdfs:label` and opens a dedicated page showing only this
+  attribute's content. For example, Corpus Monodicum's sources get their
+  "Notationsdokumentation" button next to the "Beschreibung" button this way.
+  The number orders the buttons if several attributes use `:ownPage`.
 - `:docNavigation`: shown above the central space. `:entity` attributes are rendered as buttons here.
 - `:synopsis` and `:synopsisId`: Corpus Monodicum specific, for the synopsis view
 

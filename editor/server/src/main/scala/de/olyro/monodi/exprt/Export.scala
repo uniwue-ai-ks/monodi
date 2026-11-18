@@ -69,10 +69,11 @@ object Export extends ZIOAppDefault:
       defs <- definitions(rawDefinitions, stage.turtleDefinitionLineReplacements)
       cats <- categories(config.editorPseudonyms, stage.statusWhiteList, docStages)
       cc   <- customContent(stage.extraCss, contentRoot)
+      cttl <- customTtl(contentRoot)
       mkDoc = stageDocs(stageFilter)
       docs  = docStages.map(mkDoc).foldK
       srcs <- sources(stageFilter.sourceShouldBeExported, contentRoot)
-      ttl   = defs |+| cats |+| cc |+| srcs |+| docs |+| more
+      ttl   = defs |+| cats |+| cc |+| cttl |+| srcs |+| docs |+| more
       _    <- writeRdf(stage.ttlPath, ttl.data)
       _    <- exportJson(stage.jsonPath, stageFilter)
     yield ttl.log
@@ -244,19 +245,19 @@ object Export extends ZIOAppDefault:
       whiteList: List[String],
       docStages: List[DocStage]
   ): URIO[Fence & DBDoobie, Accu[Turtle]] =
-    val editionsstatusGuard = Some(CategoryDescription.Guard("editionsstatus", dataUri("documentEditionsstatus")))
+    val subcorpusGuard = Some(CategoryDescription.Guard("subcorpus", dataUri("documentSubcorpus")))
 
     val categories = List(
       // format: off
-      CategoryDescription("documentBibliographischerverweis", isNativeColumn = true,  "bibliographischerverweis", DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("documentQuelle_id",                isNativeColumn = true,  "quelle_id",                DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("documentFesttag",                  isNativeColumn = true,  "festtag",                  DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("documentTextinitium",              isNativeColumn = true,  "textinitium",              DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("Melodiennummer_Katalog",           isNativeColumn = false, "Melodiennummer_Katalog",   DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("Melodie_Standard",                 isNativeColumn = false, "Melodie_Standard",         DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("Editor",                           isNativeColumn = false, "Editor",                   DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("SpielName",                        isNativeColumn = false, "SpielName",                DocumentCategoryFilter(whiteList), editionsstatusGuard),
-      CategoryDescription("FestUndGattung",                   isNativeColumn = false, "FestUndGattung",           DocumentCategoryFilter(whiteList), editionsstatusGuard),
+      CategoryDescription("documentBibliographischerverweis", isNativeColumn = true,  "bibliographischerverweis", DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("documentQuelle_id",                isNativeColumn = true,  "quelle_id",                DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("documentFesttag",                  isNativeColumn = true,  "festtag",                  DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("documentTextinitium",              isNativeColumn = true,  "textinitium",              DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("Melodiennummer_Katalog",           isNativeColumn = false, "Melodiennummer_Katalog",   DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("Melodie_Standard",                 isNativeColumn = false, "Melodie_Standard",         DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("Editor",                           isNativeColumn = false, "Editor",                   DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("SpielName",                        isNativeColumn = false, "SpielName",                DocumentCategoryFilter(whiteList), subcorpusGuard),
+      CategoryDescription("FestUndGattung",                   isNativeColumn = false, "FestUndGattung",           DocumentCategoryFilter(whiteList), subcorpusGuard),
 
       CategoryDescription("sourceQuellensigle",               isNativeColumn = true,  "quellensigle",             SourceCategoryFilter(whiteList), None),
       CategoryDescription("sourceHerkunftsregion",            isNativeColumn = true,  "herkunftsregion",          SourceCategoryFilter(whiteList), None),
@@ -363,6 +364,22 @@ object Export extends ZIOAppDefault:
 
     Fence.measure("make-custom-content")(ZIO.foreach(files(extraCss))(makeOne).map(_.foldK))
 
+  // Hand-authored raw TTL dropped into the data repo as `custom.ttl`. Its triples
+  // (e.g. :MenuEntry / :Search nodes) are merged verbatim into the export output,
+  // like the bundled definitions. The file is optional: absent is not an error.
+  def customTtl(contentRoot: Path): URIO[Fence, Accu[Turtle]] =
+    val path = contentRoot `resolve` "custom.ttl"
+    Fence.measure("make-custom-ttl"):
+      ZIO
+        .attempt(new String(Files.readAllBytes(path), StandardCharsets.UTF_8))
+        .fold(
+          _ => Accu.empty,
+          content => Accu.data(Raw(content))
+        )
+        .tap(a =>
+          ZIO.succeed(println(if a.data.isEmpty then s"No custom.ttl at $path (optional)" else s"Merging $path"))
+        )
+
   def sources(
       sourceFilter: String => Boolean,
       contentRoot: Path
@@ -370,31 +387,42 @@ object Export extends ZIOAppDefault:
     def getGattung1String(id: String) =
       db.DBRunner.runZ(db.DBRunner.getDistinctGattung1ForQuelle(id)).map(_.sorted.mkString(", ")).orDie
 
+    def getSourceHtmlString(folder: String, id: String, fallback: String): UIO[String] =
+      val path = contentRoot `resolve` folder `resolve` s"${id.replaceAll("(?U)\\P{Alnum}", "_")}.html"
+      attemptBlocking(Files.readString(path, StandardCharsets.UTF_8)).orElseSucceed(fallback)
+
     def getDescriptionString(id: String): UIO[String] =
-      val path = contentRoot `resolve` "quellenbeschreibungen" `resolve` s"${id.replaceAll("(?U)\\P{Alnum}", "_")}.html"
-      attemptBlocking(Files.readString(path, StandardCharsets.UTF_8))
-        .orElseSucceed("Zu dieser Quelle existiert noch keine Beschreibung.")
+      getSourceHtmlString("quellenbeschreibungen", id, "Zu dieser Quelle existiert noch keine Beschreibung.")
+
+    def getNotationDocumentationString(id: String): UIO[String] =
+      getSourceHtmlString(
+        "notationsdokumentationen",
+        id,
+        "Zu dieser Quelle existiert noch keine Notationsdokumentation."
+      )
 
     def mkRdf(s: Source) = for
-      editierteGattung <- getGattung1String(s.id)
-      description      <- getDescriptionString(s.id)
+      editierteGattung      <- getGattung1String(s.id)
+      description           <- getDescriptionString(s.id)
+      notationDocumentation <- getNotationDocumentationString(s.id)
     yield Statement(
       dataUri(s.id),
-      a                                     -> dataUri("source"),
-      dataUri("sourceQuellensigle")         -> LString(s.quellensigle),
-      dataUri("sourceHerkunftsregion")      -> LString(s.herkunftsregion),
-      dataUri("sourceHerkunftsort")         -> LString(s.herkunftsort),
-      dataUri("sourceHerkunftsinstitution") -> LString(s.herkunftsinstitution),
-      dataUri("sourceOrdenstradition")      -> LString(s.ordenstradition),
-      dataUri("sourceQuellentyp")           -> LString(s.quellentyp),
-      dataUri("sourceBibliotheksort")       -> LString(s.bibliotheksort),
-      dataUri("sourceBibliothek")           -> LString(s.bibliothek),
-      dataUri("sourceBibliothessignatur")   -> LString(s.bibliothekssignatur),
-      dataUri("sourceDatierung")            -> LString(s.datierung),
-      dataUri("sourceKommentar")            -> LString(s.kommentar),
-      dataUri("sourceEditierteGattungen")   -> LString(editierteGattung),
-      dataUri("sourceBeschreibung")         -> LString(description),
-      dataUri("sourceJahrhundert")          -> LString(s.jahrhundert)
+      a                                       -> dataUri("source"),
+      dataUri("sourceQuellensigle")           -> LString(s.quellensigle),
+      dataUri("sourceHerkunftsregion")        -> LString(s.herkunftsregion),
+      dataUri("sourceHerkunftsort")           -> LString(s.herkunftsort),
+      dataUri("sourceHerkunftsinstitution")   -> LString(s.herkunftsinstitution),
+      dataUri("sourceOrdenstradition")        -> LString(s.ordenstradition),
+      dataUri("sourceQuellentyp")             -> LString(s.quellentyp),
+      dataUri("sourceBibliotheksort")         -> LString(s.bibliotheksort),
+      dataUri("sourceBibliothek")             -> LString(s.bibliothek),
+      dataUri("sourceBibliothessignatur")     -> LString(s.bibliothekssignatur),
+      dataUri("sourceDatierung")              -> LString(s.datierung),
+      dataUri("sourceKommentar")              -> LString(s.kommentar),
+      dataUri("sourceEditierteGattungen")     -> LString(editierteGattung),
+      dataUri("sourceBeschreibung")           -> LString(description),
+      dataUri("sourceNotationsdokumentation") -> LString(notationDocumentation),
+      dataUri("sourceJahrhundert")            -> LString(s.jahrhundert)
     )
 
     Fence.measure("make-sources")(for

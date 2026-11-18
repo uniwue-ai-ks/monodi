@@ -2,6 +2,7 @@ import { QueryParameter } from "./hooks/useQuery";
 import {
   Attribute,
   AttributeWithData, CategoryEntryGuard, CollectionImageHtml, DocumentPart, DocumentPosition, HtmlImageCollection,
+  Interval,
   Kind,
   MetadataEntry,
   ReferenceAttribute,
@@ -13,11 +14,23 @@ import { EntityDescription } from "./model/entity-description";
 import { SubEntity } from "./model/subentity";
 import { LangOverrides } from "./translation/Translation";
 import { assertNever, switchOnKind, escapeRegex } from "./util";
+import { formatIntervalSearchValue, parseIntervalSearchValue } from "./model/interval";
 
 export async function getContentsByLang(language: string): Promise<Contents> {
   const result = await query(`
     SELECT ?entity ?content ?navPositionLeft ?navPositionRight ?navPositionFooter ?title ?route WHERE {
-      { SELECT DISTINCT ?entity WHERE { ?entity (:hasContent|:hasTitle|:hasRoute|:position) [] } }
+      {
+        SELECT DISTINCT ?entity
+        WHERE {
+          { ?entity :hasContent [] }
+          UNION
+          { ?entity :hasTitle [] }
+          UNION
+          { ?entity :hasRoute [] }
+          UNION
+          { ?entity :position [] }
+        }
+      }
       OPTIONAL {
         ?entity :hasContent ?c.
         FILTER (lang(?c) = '${language}')
@@ -121,24 +134,188 @@ export async function getEntityNames(language: string): Promise<EntityName[]> {
   }));
 }
 
-export async function getEntityDescription(uri: string, language: string): Promise<EntityDescription> {
-  const version = await getExportVersion();
-  if (version) {
-    const ls = window.localStorage;
-    //const mdRdfVersion: string | null = localStorage.getItem(uri + "_version");
-    //console.log(mdRdfVersion)
-    //const jsonString: string | null = ls.getItem(uri);
-    //if (mdRdfVersion !== null && mdRdfVersion === version && jsonString !== null) {
-    //  let newEntityDesc: EntityDescription = JSON.parse(jsonString);
-    //  return newEntityDesc;
-    //} else {
-    const result = await getByQueryEntityDescription(uri, language);
-    ls.setItem(`${uri}_version`, version);
-    ls.setItem(uri, JSON.stringify(result));
-    return result;
-    //}
+// --- Navigation menu (:MenuEntry) and configured searches (:Search) ---------
+
+export type MenuTarget =
+  | { kind: "search"; uri: string }
+  | { kind: "href"; url: string };
+
+export interface MenuEntry {
+  uri: string;
+  label: string;
+  target?: MenuTarget;
+  topLevelOrder?: number;
+  children: MenuEntry[];
+}
+
+// Fetch every :MenuEntry plus its child/order edges in ONE query, then assemble
+// the hierarchy in code: roots are the entries carrying :topLevelOrder (ordered by
+// it), children sorted by their placement :order. A visited-set guards against
+// cycles from malformed TTL;
+export async function getMenuTree(language: string): Promise<MenuEntry[]> {
+  const result = await query(`
+    SELECT ?entry ?label ?topOrder ?search ?href ?childEntry ?childOrder WHERE {
+      ?entry a :MenuEntry .
+      OPTIONAL { ?entry rdfs:label ?l . FILTER(lang(?l) = '${language}') BIND(STR(?l) AS ?label) }
+      OPTIONAL { ?entry :topLevelOrder ?topOrder }
+      OPTIONAL { ?entry :search ?search }
+      OPTIONAL { ?entry :href ?href }
+      OPTIONAL { ?entry :child [ :entry ?childEntry ; :order ?childOrder ] }
+    }
+  `);
+
+  interface Raw { uri: string; label: string; target?: MenuTarget; topLevelOrder?: number; edges: { child: string; order: number }[] }
+  const raw = new Map<string, Raw>();
+  const getRaw = (uri: string): Raw => {
+    let r = raw.get(uri);
+    if (!r) { r = { uri, label: uri, edges: [] }; raw.set(uri, r); }
+    return r;
+  };
+
+  for (const b of result.results.bindings as any[]) {
+    const r = getRaw(b.entry.value);
+    if (b.label) r.label = b.label.value;
+    if (b.topOrder) r.topLevelOrder = parseInt(b.topOrder.value, 10);
+    if (b.search) r.target = { kind: "search", uri: b.search.value };
+    else if (b.href) r.target = { kind: "href", url: b.href.value };
+    if (b.childEntry && b.childOrder) {
+      const child = b.childEntry.value;
+      const order = parseInt(b.childOrder.value, 10);
+      if (!r.edges.some(e => e.child === child && e.order === order)) r.edges.push({ child, order });
+    }
   }
-  return await getByQueryEntityDescription(uri, language);
+
+  const build = (uri: string, visited: Set<string>): MenuEntry | null => {
+    if (visited.has(uri)) return null; // cycle guard
+    const r = raw.get(uri);
+    if (!r) return null;
+    const nextVisited = new Set(visited).add(uri);
+    const children = r.edges
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .map(e => build(e.child, nextVisited))
+      .filter((c): c is MenuEntry => c !== null);
+    return { uri: r.uri, label: r.label, target: r.target, topLevelOrder: r.topLevelOrder, children };
+  };
+
+  return [...raw.values()]
+    .filter(r => r.topLevelOrder !== undefined)
+    .sort((a, b) => a.topLevelOrder! - b.topLevelOrder!)
+    .map(r => build(r.uri, new Set<string>()))
+    .filter((e): e is MenuEntry => e !== null);
+}
+
+// :Search nodes are routable like classes (resolved by type in Search.tsx). Only
+// uri is needed for route generation; name falls back to the uri.
+export async function getSearchNodes(language: string): Promise<EntityName[]> {
+  const result = await query(`
+    SELECT ?entity ?name WHERE {
+      ?entity a :Search .
+      OPTIONAL { ?entity rdfs:label ?literal . FILTER(lang(?literal) = '${language}') BIND(STR(?literal) AS ?name) }
+    }
+  `);
+  return result.results.bindings.map((b: any) => ({
+    uri: b.entity.value,
+    name: b.name ? b.name.value : b.entity.value,
+  }));
+}
+
+export interface FixedFilter {
+  attribute: string;
+  value: string;
+}
+
+// A configuration for a search page
+export interface SearchConfig {
+  introText?: string;
+  landingHtml?: string;
+  landingButtonText?: string;
+  // Applied as hidden, non-overridable filters (the field is removed from the form).
+  fixedFilters: FixedFilter[];
+  // Seeded into the search form as editable defaults on first arrival; the user can
+  // change or remove them. An empty value just pre-opens the filter row.
+  prefilledFilters: FixedFilter[];
+}
+
+// An entity to search over, plus optional search config. `entity` is always the base
+// class; `search` is present only when the routed uri was a :Search node.
+export interface SearchView {
+  entity: EntityDescription;
+  search?: SearchConfig;
+}
+
+export async function getSearchView(uri: string, language: string): Promise<SearchView> {
+  const type = await getEntityType(uri);
+  if (type !== "http://olyro.de/mondiview/Search") {
+    return { entity: await getEntityDescription(uri, language) };
+  }
+
+  const result = await query(`
+    SELECT ?baseClass ?introText ?landingHtml ?landingButtonText ?fAttr ?fValue ?pAttr ?pValue WHERE {
+      <${uri}> :baseClass ?baseClass .
+      OPTIONAL { <${uri}> :introText ?it . FILTER(lang(?it) = '${language}') BIND(STR(?it) AS ?introText) }
+      OPTIONAL { <${uri}> :landingHtml ?lh . FILTER(lang(?lh) = '${language}') BIND(STR(?lh) AS ?landingHtml) }
+      OPTIONAL { <${uri}> :landingButtonText ?lb . FILTER(lang(?lb) = '${language}') BIND(STR(?lb) AS ?landingButtonText) }
+      OPTIONAL { <${uri}> :fixedFilter [ :attribute ?fAttr ; :value ?fValue ] }
+      OPTIONAL { <${uri}> :prefilledFilter [ :attribute ?pAttr ; :value ?pValue ] }
+    }
+  `);
+
+  const bindings = result.results.bindings as any[];
+  const first = bindings[0];
+  if (!first || !first.baseClass) {
+    throw new Error(`:Search ${uri} has no :baseClass`);
+  }
+  const entity = await getEntityDescription(first.baseClass.value, language);
+
+  const collectFilters = (attrKey: string, valueKey: string): FixedFilter[] => bindings
+    .filter(b => b[attrKey] && b[valueKey])
+    .map(b => ({ attribute: b[attrKey].value, value: b[valueKey].value as string }))
+    .filter((f, i, arr) => arr.findIndex(g => g.attribute === f.attribute && g.value === f.value) === i);
+
+  return {
+    entity,
+    search: {
+      introText: valueOrUndefined(first.introText),
+      landingHtml: valueOrUndefined(first.landingHtml),
+      landingButtonText: valueOrUndefined(first.landingButtonText),
+      fixedFilters: collectFilters("fAttr", "fValue"),
+      prefilledFilters: collectFilters("pAttr", "pValue"),
+    },
+  };
+}
+
+// Entity descriptions only change with a new export, so they are cached for the
+// lifetime of the page. The promise is cached, so concurrent callers (e.g. the
+// prefetch in App and a user opening a search) share one request.
+const entityDescriptionCache = new Map<string, Promise<EntityDescription>>();
+
+export function getEntityDescription(uri: string, language: string): Promise<EntityDescription> {
+  const key = `${language}|${uri}`;
+  let description = entityDescriptionCache.get(key);
+  if (!description) {
+    description = getByQueryEntityDescription(uri, language);
+    description.catch(() => entityDescriptionCache.delete(key));
+    entityDescriptionCache.set(key, description);
+  }
+  return description;
+}
+
+// Entity descriptions used to be written to localStorage under their uri (plus
+// `${uri}_version`). Those entries are several MB and would crowd out the
+// storage we still use, so drop them.
+export function removeLegacyEntityDescriptionCache(): void {
+  try {
+    const ls = window.localStorage;
+    const legacyKeys: string[] = [];
+    for (let i = 0; i < ls.length; i++) {
+      const key = ls.key(i);
+      if (key && (key.startsWith("http://") || key.startsWith("https://"))) legacyKeys.push(key);
+    }
+    legacyKeys.forEach(key => ls.removeItem(key));
+  } catch {
+    // localStorage unavailable, nothing to clean up
+  }
 }
 
 const valueOrUndefined = (val: BindingValue) => val ? val.value : undefined
@@ -161,6 +338,7 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
       ?documentPositionRight ?documentPositionPopup
       ?documentPositionSynopsisId ?documentPositionSynopsis
       ?documentPositionDownload ?documentPositionNavigation
+      ?documentPositionOwnPage
       ?referenceField ?alternativeSortAttribute ?searchSpan
       ?searchPreviewLabel ?searchPreviewContextKind ?searchPreviewContextCount ?searchPreviewMaxDistanceRatio
       ?referenceSearch ?pdfTextAttribute ?downloadIcon ?initialSearch
@@ -189,8 +367,13 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
     OPTIONAL { ?property  :documentPosition [ :synopsis ?documentPositionSynopsis ] . }
     OPTIONAL { ?property  :documentPosition [ :download ?documentPositionDownload ] . }
     OPTIONAL { ?property  :documentPosition [ :docNavigation ?documentPositionNavigation ] . }
+    OPTIONAL { ?property  :documentPosition [ :ownPage ?documentPositionOwnPage ] . }
     OPTIONAL { ?property  :shorten ?shortenPosition . }
-    OPTIONAL { ?property  :normalization    [ :attribute ?normalizationAttribute; :normalizer ?normalizationNormalizer ] . }
+    OPTIONAL {
+      ?property  :normalization ?normalization .
+      ?normalization :normalizer ?normalizationNormalizer .
+      OPTIONAL { ?normalization :attribute ?normalizationAttribute . }
+    }
     OPTIONAL { ?property  :referenceField ?referenceField . }
     OPTIONAL { ?property  :alternativeSortAttribute ?alternativeSortAttribute . }
     OPTIONAL { ?property  :referenceSearch ?referenceSearch . }
@@ -228,6 +411,7 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
     synopsis: valueOrUndefined(b.documentPositionSynopsis),
     download: valueOrUndefined(b.documentPositionDownload),
     navigation: valueOrUndefined(b.documentPositionNavigation),
+    ownPage: valueOrUndefined(b.documentPositionOwnPage),
   });
 
   const getShortenPosition = (b: BindingRow): ShortenPosition => {
@@ -289,9 +473,10 @@ async function getEntityAttributes(uri: string, language: string): Promise<Attri
       }
     }
 
-    if (a.kind === 'http://olyro.de/mondiview/string' && b.normalizationAttribute && b.normalizationNormalizer) {
+    if ((a.kind === 'http://olyro.de/mondiview/string' || a.kind === 'http://olyro.de/mondiview/interval') && b.normalizationNormalizer) {
       a.normalization = {
-        attribute: b.normalizationAttribute.value,
+        // without an explicit target attribute, the normalized value queries the attribute itself
+        attribute: b.normalizationAttribute?.value ?? a.uri,
         normalizer: b.normalizationNormalizer.value
       }
     }
@@ -384,6 +569,15 @@ const remapNormalizedAttributes = (entityDescription: EntityDescription, params:
         uri: attribute.normalization.attribute,
         value: normalizer(p.value)
       }
+    } else if (attribute.kind === "http://olyro.de/mondiview/interval" && attribute.normalization) {
+      // evaluated javascript comes from the readonly database.
+      const normalizer = eval(attribute.normalization.normalizer);
+      const normalize = (bound: string): string => bound === "" ? "" : normalizer(bound);
+      const [lower, upper] = parseIntervalSearchValue(p.value);
+      return {
+        uri: attribute.normalization.attribute,
+        value: formatIntervalSearchValue(normalize(lower), normalize(upper))
+      }
     } else {
       return p;
     }
@@ -456,7 +650,7 @@ function buildQuery(description: EntityDescription, language: string, params: Qu
   const sparqlSelectVariables = description.attributes.map((_, i) => `?P${i}`);
   const uriToSparqlVariable: { [key: string]: string } = description.attributes.reduce((acc, a, i) => ({ ...acc, [a.uri]: sparqlSelectVariables[i] }), {});
   const sorterGraphPattern = !pagination ? "" : getSorterGraphPattern(description, pagination.attribute);
-  const uriToGraphPattern: { [key: string]: string } = description.attributes.reduce((acc, a, i) => ({ ...acc, [a.uri]: makeAttributeGraphPattern(a, i) }), {});
+  const uriToGraphPattern: { [key: string]: string } = description.attributes.reduce((acc, a, i) => ({ ...acc, [a.uri]: makeAttributeGraphPattern(a, i, language) }), {});
   const refGraphPattern = getRefGraphPattern(description);
   const urisThatHaveAFilter = description.attributes.map(a => a.uri).filter(uri => params.some(p => p.uri === uri));
 
@@ -468,6 +662,16 @@ function buildQuery(description: EntityDescription, language: string, params: Qu
     const attribute = description.attributes.find(a => a.uri === p.uri)!;
     if (attribute.kind === "http://olyro.de/mondiview/boolean") {
       return `(str(${sparqlVariable}) = "${p.value}")`;
+    }
+    if (attribute.kind === "http://olyro.de/mondiview/interval") {
+      // matches every interval that overlaps the searched range, which for a single value means containing it
+      const [lower, upper] = parseIntervalSearchValue(p.value);
+      const bounds = intervalBoundVariables(sparqlVariable);
+      const conditions = [
+        lower !== "" ? `${bounds.upper} >= ${sparqlStringLiteral(lower)}` : null,
+        upper !== "" ? `${bounds.lower} <= ${sparqlStringLiteral(upper)}` : null,
+      ].filter((c): c is string => c !== null);
+      return conditions.length > 0 ? `(${conditions.join(" && ")})` : "true";
     }
     const value: string = switchOnKind(attribute, {
       "http://olyro.de/mondiview/reference": () => p.value, // this is not completely correct,
@@ -509,25 +713,37 @@ function buildQuery(description: EntityDescription, language: string, params: Qu
       const operator = intersections?.includes(a.uri) ? "&&" : "||";
       return makeFilter(queryParamsGrouped[a.uri], uriToSparqlVariable[a.uri], operator)
     }).join("\n");
-  const sorter = !pagination ? "" : `ORDER BY ${pagination.asc ? "ASC" : "DESC"}(?sorter) LIMIT ${pagination.limit} OFFSET ${pagination.offset}`;
+  const order = !pagination ? "" : `ORDER BY ${pagination.asc ? "ASC" : "DESC"}(?sorter)`;
+  const orderWithLimitAndOffset = !pagination ? "" : `${order} LIMIT ${pagination.limit} OFFSET ${pagination.offset}`;
+  const filteredVariables = urisThatHaveAFilter.map(uri => uriToSparqlVariable[uri]);
+  const unfilteredGraphPatterns = description.attributes
+    .filter(a => !urisThatHaveAFilter.includes(a.uri))
+    .map(a => uriToGraphPattern[a.uri]);
 
   return `
     SELECT * {
       {
         select ?obj ${sparqlSelectVariables.join(" ")} WHERE {
-          VALUES ?language {'${language}'}
-          ?obj a <${description.uri}> .
+          {
+            select ?obj ?ref ?sorter ${filteredVariables.join(" ")} WHERE {
+              ?obj a <${description.uri}> .
 
-          ${refGraphPattern}
+              ${refGraphPattern}
 
-          ${sorterGraphPattern}
+              ${sorterGraphPattern}
 
-          ${description.attributes.map(a => uriToGraphPattern[a.uri]).join("\n")}
+              ${urisThatHaveAFilter.map(uri => uriToGraphPattern[uri]).join("\n")}
 
-          ${filters}
+              ${filters}
+            }
+
+            ${orderWithLimitAndOffset}
+          }
+
+          ${unfilteredGraphPatterns.join("\n")}
         }
 
-        ${sorter}
+        ${order}
 
       }
       {
@@ -554,15 +770,18 @@ const getRefGraphPattern = (e: EntityDescription): string => {
 const getSorterGraphPattern = (description: EntityDescription, sortAttribute: string): string => {
   const attr = description.attributes.find(a => a.uri === sortAttribute);
   const defaultString = `OPTIONAL { ?obj <${sortAttribute}> ?sorter . }`;
+  if (attr?.kind === 'http://olyro.de/mondiview/interval') return `OPTIONAL { ?obj <${sortAttribute}> [ <http://olyro.de/mondiview/lowerBound> ?sorter ] . }`;
   if (!attr || attr.kind !== 'http://olyro.de/mondiview/reference') return defaultString;
   else return `OPTIONAL { ?ref <${attr.referenceField}> ?sorter . }`;
 }
 
-const makeAttributeGraphPattern = (a: Attribute, i: number): string => {
+const makeAttributeGraphPattern = (a: Attribute, i: number, language: string): string => {
   if (a.kind === 'http://olyro.de/mondiview/reference') {
-    return `OPTIONAL { ?ref <${encodeURI__readme_before_removing(a.referenceField)}> ?intP${i} . ${optLangOrUntagged(`?intP${i}`, `?P${i}`, "?language")}}`;
+    return `OPTIONAL { ?ref <${encodeURI__readme_before_removing(a.referenceField)}> ?intP${i} . ${optLangOrUntagged(`?intP${i}`, `?P${i}`, `'${language}'`)}}`;
+  } else if (a.kind === 'http://olyro.de/mondiview/interval') {
+    return intervalGraphPattern("?obj", a.uri, `?P${i}`);
   } else if (translatable(a.kind)) {
-    return `OPTIONAL { ?obj <${encodeURI__readme_before_removing(a.uri)}> ?intP${i} . ${optLangOrUntagged(`?intP${i}`, `?P${i}`, "?language")}}`;
+    return `OPTIONAL { ?obj <${encodeURI__readme_before_removing(a.uri)}> ?intP${i} . ${optLangOrUntagged(`?intP${i}`, `?P${i}`, `'${language}'`)}}`;
   } else {
     return `OPTIONAL { ?obj <${encodeURI__readme_before_removing(a.uri)}> ?P${i} . }`;
   }
@@ -575,6 +794,32 @@ const makeAttributeGraphPattern = (a: Attribute, i: number): string => {
 // no headerOrder and aren't filterable, so they never reach
 // makeAttributeGraphPattern.
 export const EXTERNAL_LINK_SEPARATOR = "\u0001";
+
+// interval values are blank nodes carrying view:lowerBound and view:upperBound.
+// Like externalLink, both are concatenated into the attribute's variable for
+// displaying, see parseIntervalBinding. Filters compare against the separate
+// bound variables instead.
+const INTERVAL_SEPARATOR = "\u0001";
+
+const intervalBoundVariables = (variable: string) => ({ lower: `${variable}Lower`, upper: `${variable}Upper` });
+
+const intervalGraphPattern = (subject: string, attrUri: string, variable: string): string => {
+  const bounds = intervalBoundVariables(variable);
+  return `OPTIONAL {
+    ${subject} <${encodeURI__readme_before_removing(attrUri)}> ${variable}Node .
+    ${variable}Node <http://olyro.de/mondiview/lowerBound> ${bounds.lower} .
+    ${variable}Node <http://olyro.de/mondiview/upperBound> ${bounds.upper} .
+    BIND(CONCAT(${bounds.lower}, "${INTERVAL_SEPARATOR}", ${bounds.upper}) AS ${variable})
+  }`;
+}
+
+export const parseIntervalBinding = (value: string): Interval => {
+  const [lowerBound, upperBound] = value.split(INTERVAL_SEPARATOR);
+  return { lowerBound: lowerBound ?? "", upperBound: upperBound ?? "" };
+}
+
+const sparqlStringLiteral = (s: string): string =>
+  `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r")}"`;
 
 const externalLinkGraphPattern = (subject: string, attrUri: string, i: number): string =>
   `OPTIONAL {
@@ -711,6 +956,11 @@ async function parseAndFetch(obj: BindingValue, attribute: Attribute, language: 
         data: { url: url ?? "", text: text ?? "" }
       };
     }
+    case "http://olyro.de/mondiview/interval": return {
+      kind: attribute.kind,
+      attribute: attribute,
+      data: parseIntervalBinding(obj.value)
+    };
     case "http://olyro.de/mondiview/reference": return null;
     default: return assertNever(attribute);
   }
@@ -851,15 +1101,6 @@ async function getImage(collectionUri: string, language: string): Promise<Docume
   return res.sort((a, b) => a.page - b.page);
 }
 
-async function getExportVersion(): Promise<string | undefined> {
-  const versionResult = await query(`
-  SELECT ?version WHERE {
-    data:version rdfs:label ?version .
-  }`)
-  const version: string = versionResult.results.bindings[0].version ? versionResult.results.bindings[0].version.value : undefined
-  return version;
-}
-
 async function getCategoryValuesForAttributes(attributes: Attribute[], language: string): Promise<Attribute[]> {
 
   const newAttributes: Attribute[] = JSON.parse(JSON.stringify(attributes));
@@ -968,7 +1209,9 @@ function buildEntityQuery(attrsWithoutReferences: Attribute[], uri: string): str
   const attributes = attrsWithoutReferences.map((a, i) =>
     a.kind === 'http://olyro.de/mondiview/externalLink'
       ? externalLinkGraphPattern(subject, a.uri, i)
-      : `OPTIONAL { ${subject} <${encodeURI__readme_before_removing(a.uri)}> ?P${i} . }`
+      : a.kind === 'http://olyro.de/mondiview/interval'
+        ? intervalGraphPattern(subject, a.uri, `?P${i}`)
+        : `OPTIONAL { ${subject} <${encodeURI__readme_before_removing(a.uri)}> ?P${i} . }`
   ).join("\n");
 
   return `

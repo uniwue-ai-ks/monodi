@@ -8,7 +8,19 @@ import zio.{IO as _, *}
 import scala.jdk.CollectionConverters.*
 
 import scala.math.Ordering.Implicits.*
-import java.io.{Console as _, IO as _, *}
+// explicit imports instead of a wildcard: java.io.IO exists only on JDK 23/24
+// (JEP 512 moved it to java.lang in 25), so both including and excluding it
+// breaks on one JDK or the other
+import java.io.{
+  BufferedOutputStream,
+  BufferedWriter,
+  FileOutputStream,
+  FileWriter,
+  InputStream,
+  OutputStreamWriter,
+  PrintWriter,
+  StringWriter
+}
 import java.net.URI
 import java.net.http.{HttpClient as JHttpClient, *}
 import java.nio.charset.StandardCharsets
@@ -159,7 +171,7 @@ object Util:
                        params.setProtocols(Array("TLSv1.2"))
                        params
                      }
-        breaker <- CircuitBreaker.make[URI]
+        breaker   <- CircuitBreaker.make[URI]
         client    <-
           ZIO.attempt(
             JHttpClient.newBuilder().sslParameters(sslParams).followRedirects(JHttpClient.Redirect.ALWAYS).build()
@@ -167,18 +179,20 @@ object Util:
       yield new HttpClient {
         override def get(url: URI): Task[String] =
           for
-            _ <- breaker.assertFailuresBelow(url, 2)
-            result <- ZIO.fromCompletionStage(
-              client
-                .sendAsync(
-                  HttpRequest.newBuilder(url).timeout(java.time.Duration.ofSeconds(30)).build(),
-                  HttpResponse.BodyHandlers.ofString()
-                )
-                .thenApply(_.body())
-            ).tapBoth(
-              _ => breaker.recordFailure(url),
-              _ => breaker.recordSuccess(url)
-            )
+            _      <- breaker.assertFailuresBelow(url, 2)
+            result <- ZIO
+                        .fromCompletionStage(
+                          client
+                            .sendAsync(
+                              HttpRequest.newBuilder(url).timeout(java.time.Duration.ofSeconds(30)).build(),
+                              HttpResponse.BodyHandlers.ofString()
+                            )
+                            .thenApply(_.body())
+                        )
+                        .tapBoth(
+                          _ => breaker.recordFailure(url),
+                          _ => breaker.recordSuccess(url)
+                        )
           yield result
       })
 

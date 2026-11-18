@@ -218,6 +218,7 @@ export const getDefaultPrintSettings = (): PrintSettings => {
     drawTableOfContents: true,
     addSourceDescriptions: true,
     addCriticalApparatus: true,
+    addNotationDocumentation: false,
   };
 }
 

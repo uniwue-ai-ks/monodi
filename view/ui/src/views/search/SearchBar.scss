@@ -74,6 +74,10 @@
         text-overflow: ellipsis;
       }
 
+      .intervalSpan input {
+        width: 5em;
+      }
+
       input:read-only {
         color: var(--textDisabledGrey);
         border-bottom: none;

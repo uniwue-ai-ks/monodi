@@ -44,6 +44,7 @@ export interface PrintSettings {
   drawTableOfContents: boolean;
   addSourceDescriptions: boolean;
   addCriticalApparatus: boolean;
+  addNotationDocumentation: boolean;
 }
 
 interface PageOption {
@@ -268,6 +269,7 @@ const areas: Area[] = [
       idProp("drawTableOfContents").zoom("drawTableOfContents").asBooleanProp(),
       idProp("addSourceDescriptions").zoom("addSourceDescriptions").asBooleanProp(),
       idProp("addCriticalApparatus").zoom("addCriticalApparatus").asBooleanProp(),
+      idProp("addNotationDocumentation").zoom("addNotationDocumentation").asBooleanProp(),
     ]
   }
 ]

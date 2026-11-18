@@ -1,0 +1,7 @@
+# Subcorpora are configured searches over the single `Document` class
+
+Edition, Transkription, and Graduale Synopticum were previously modelled as separate RDF shim classes (`documentEdiert`, `documentTranskribiert`, `documentZitiert`), each carrying a pre-baked `:alternativeLink` search URL. Adding or re-clustering a subcorpus meant a new class plus retyping documents.
+
+We replaced that with a single `data:document` class plus two plain-TTL vocabularies: `:Search` (a named, pre-filtered view over a base class — intro text, optional landing page, fixed filters) and `:MenuEntry` (the navigation tree). A subcorpus is now a `:MenuEntry` → `:Search` whose fixed filter pins a `documentSubcorpus` value. `/search/<uri>` is resolved by type, so a plain class and a `:Search` share one routing path; the base classes (cumulative corpus = `data:document`, sources = `data:source`) keep their own class-driven nav and a `:Search` is purely additive. Editors add or reorganise subcorpora by dropping triples into the data repo's `custom.ttl` (merged at export) with no code change.
+
+Membership lives in the **single-valued** `documentSubcorpus` attribute (renamed from `editionsstatus`; values `edition` / `transkription` / `graduale-synopticum`). A document belongs to at most one subcorpus, matching prior behaviour; moving to multi-membership later is a deliberate, separate migration (text column → join table, guard fan-out) and was intentionally not done now.

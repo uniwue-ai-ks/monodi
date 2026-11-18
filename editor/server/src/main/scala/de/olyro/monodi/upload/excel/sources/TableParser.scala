@@ -7,7 +7,7 @@ import cats.implicits.*, cats.data.*
 import data.*
 
 object TableParser:
-  def parse(table: Vector[Vector[String]]): Either[String, (List[RowError], List[ParsedSource])]    =
+  def parse(table: Vector[Vector[String]]): Either[String, (List[RowError], List[ParsedSource])] =
     for
       (firstRow, rest) <- splitHead(table)
       _                 = println(firstRow)
@@ -49,11 +49,12 @@ object TableParser:
                       projection.getOrElse(Column.Beschreibung, ""),
                       projection.getOrElse(Column.Cantus_Siglum, ""),
                       projection.getOrElse(Column.Cantus_Century, ""),
-                    ),
+                      projection.getOrElse(Column.Notationsdokumentation, "")
+                    )
                   ),
-                  Nil,
-                ),
-              ),
+                  Nil
+                )
+              )
             )
 
   def project(header: Map[Column, Int], row: Vector[String]): Map[Column, String] =
@@ -77,11 +78,12 @@ object TableParser:
   def findColumns(firstRow: Vector[String]): Either[String, Map[Column, Int]] =
     def findColumn(c: Column): ValidatedNel[Column, List[Int]] =
       (c, firstRow.zipWithIndex.find({ case (s, _) => Column.parse(s) == Some(c) }).map(_._2)) match
-        case (_, Some(i))                  => Validated.valid(List(i))
-        case (Column.Jahrhundert, None)    => Validated.valid(Nil)
-        case (Column.Cantus_Siglum, None)  => Validated.valid(Nil)
-        case (Column.Cantus_Century, None) => Validated.valid(Nil)
-        case (_, None)                     => Validated.invalidNel(c)
+        case (_, Some(i))                          => Validated.valid(List(i))
+        case (Column.Jahrhundert, None)            => Validated.valid(Nil)
+        case (Column.Cantus_Siglum, None)          => Validated.valid(Nil)
+        case (Column.Cantus_Century, None)         => Validated.valid(Nil)
+        case (Column.Notationsdokumentation, None) => Validated.valid(Nil)
+        case (_, None)                             => Validated.invalidNel(c)
 
     Column.allColumns
       .flatTraverse(c => findColumn(c).map(_.map(i => c -> i)))

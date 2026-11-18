@@ -12,6 +12,7 @@ enum BookEntry derives CanEqual:
   case Cover(cover: C.Cover)
   case TableOfContents(toc: List[H.TableOfContentsViewItem])
   case SourceDescription(source: Source)
+  case NotationDocumentation(source: Source)
   case CriticalApparatus(documentId: String, tocEntryText: String, content: RootContainer)
 
 object BookEntry:

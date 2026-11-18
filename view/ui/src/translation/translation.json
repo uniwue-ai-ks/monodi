@@ -1,6 +1,23 @@
 {
   "items": [
     {
+      "key": "toSearch",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Zur Suche"
+        },
+        {
+          "language": "en",
+          "translation": "Go to search"
+        },
+        {
+          "language": "fr",
+          "translation": "Aller à la recherche"
+        }
+      ]
+    },
+    {
       "key": "search",
       "langItems": [
         {
@@ -2107,6 +2124,19 @@
         {
           "language": "en",
           "translation": "Add source descriptions"
+        }
+      ]
+    },
+    {
+      "key": "addNotationDocumentation",
+      "langItems": [
+        {
+          "language": "de",
+          "translation": "Notationsdokumentationen hinzufügen"
+        },
+        {
+          "language": "en",
+          "translation": "Add notation documentation"
         }
       ]
     },

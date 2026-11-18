@@ -19,8 +19,6 @@ import filter.DocPublishInfo
 
 import zio.{Ref as _, *}
 
-import java.text.Normalizer
-import scala.util.chaining.*
 import de.olyro.monodi.exprt.print.Print
 import zio.Console.printLine
 import java.util.UUID
@@ -170,8 +168,8 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
    */
   private def fullText(doc: Document, notes: List[RootContainer]): URIO[Fence, Accu[Turtle]] =
     Fence.measurePure("docs-full-text")({
-      val text           = DocCreator.extractFullText(notes)
-      val normalizedText = DocCreator.extractNormalizedFullText(notes)
+      val text           = FullTextExtractor.extract(notes, FullTextExtractor.Form.Words)
+      val normalizedText = FullTextExtractor.extract(notes, FullTextExtractor.Form.Normalized)
 
       Accu.data(Statement(dataUri(doc.id), dataUri("fullText") -> LString(text))) |+|
         Accu.data(Statement(dataUri(doc.id), dataUri("fullTextNormalized") -> LString(normalizedText)))
@@ -513,14 +511,17 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
           viewUri("text") -> LString(text)
         )
 
-      def cantusLinkArg(idKey: String, attrName: String, baseUrl: String): List[(Ref, TObject)] =
+      // urlSuffix is appended to the href only, not the visible text. Cantus Index melody pages
+      // resolve under a "-1" variant suffix that is not part of the stored Cantus_Melody_ID.
+      def cantusLinkArg(idKey: String, attrName: String, baseUrl: String, urlSuffix: String = ""): List[(Ref, TObject)] =
         val idValue = doc.additionalData.getOrElse(idKey, "").trim
         if idValue.isEmpty then Nil
         else
-          List(externalLinkArg(attrName, s"$baseUrl${Util.urlEncodePath(idValue)}", idValue))
+          List(externalLinkArg(attrName, s"$baseUrl${Util.urlEncodePath(idValue)}$urlSuffix", idValue))
 
       val cantusChantLinkArgs  = cantusLinkArg("Cantus_ID", "cantusChantLink", "https://cantusindex.org/id/")
-      val cantusMelodyLinkArgs = cantusLinkArg("Cantus_Melody_ID", "cantusMelodyLink", "https://cantusindex.org/melody/")
+      val cantusMelodyLinkArgs =
+        cantusLinkArg("Cantus_Melody_ID", "cantusMelodyLink", "https://cantusindex.org/melody/", urlSuffix = "-1")
 
       val meiLinkArgs: List[(Ref, TObject)] =
         if spielType == SpielType.Spiel then Nil
@@ -532,6 +533,23 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
               val filename = MeiExport.filenameFor(doc)
               val encoded  = Util.urlEncodePath(filename)
               List(externalLinkArg("meiLink", s"$baseUrl$folder/$encoded", filename))
+
+      // The bounds are only comparable within one source, which is all the viewer needs.
+      // Sources number their pages differently (pages or folios), so the same key can mean different pages.
+      // The viewer normalizes its search input with the JS port of
+      // makeLexicographicallySortable in the definition of documentFolioInterval.
+      val folioIntervalArgs: List[(Ref, TObject)] =
+        val lowerBound = LexicographicMapper.makeLexicographicallySortable(doc.foliostart)
+        val upperBound =
+          LexicographicMapper.makeLexicographicallySortable(doc.additionalData.getOrElse("Endseite", ""))
+        if lowerBound.isEmpty || upperBound.isEmpty then Nil
+        else
+          List(
+            dataUri("documentFolioInterval") -> Blank(
+              viewUri("lowerBound") -> LString(lowerBound),
+              viewUri("upperBound") -> LString(upperBound)
+            )
+          )
 
       val mainArgs = List(
         dataUri("documentQuelle")                   -> dataUri(doc.quelle_id),
@@ -547,7 +565,7 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
         dataUri("documentZeilenstart")              -> LString(doc.zeilenstart),
         dataUri("documentFoliostart")               -> LString(doc.foliostart),
         dataUri("documentKommentar")                -> LString(doc.kommentar),
-        dataUri("documentEditionsstatus")           -> LString(doc.editionsstatus),
+        dataUri("documentSubcorpus")                -> LString(doc.subcorpus),
         dataUri("spielOrPassus")                    -> LString(spielTypeString),
         dataUri("spielOrPassus")                    -> LString(spielTypeString)
       ) ++ List[(Document => String, String)](
@@ -564,7 +582,7 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
       Statement(
         dataUri(doc.id),
         a -> dataUri("document"),
-        (mainArgs ++ additionalArgs ++ textInitiaArgs ++ signaturesArgs ++ cantusChantLinkArgs ++ cantusMelodyLinkArgs ++ meiLinkArgs)*
+        (mainArgs ++ additionalArgs ++ textInitiaArgs ++ signaturesArgs ++ folioIntervalArgs ++ cantusChantLinkArgs ++ cantusMelodyLinkArgs ++ meiLinkArgs)*
       )
     }))
 
@@ -598,35 +616,3 @@ class DocCreator(pseudonyms: Map[String, String], filter: ExportFilter, meiExpor
     doc.additionalData.get("Referenz_auf_Spiel").exists(!_.isBlank) match
       case true  => SpielType.Element
       case false => SpielType.NormalDocument
-
-object DocCreator:
-  private def syllableTexts(notes: List[RootContainer]): List[String] =
-    notes.flatMap: notes =>
-      Container
-        .fold[List[String]] {
-          case _: RootContainer                    => Nil
-          case _: FormteilContainer                => Nil
-          case _: MiscContainer                    => Nil
-          case ParatextContainer(_, text, _, _, _) => List(text)
-          case ZeileContainer(_, children)         =>
-            children.collect({ case s: Syllable =>
-              s.text
-            })
-        }(notes)
-        .flatten
-
-  def extractFullText(notes: List[RootContainer]): String =
-    syllableTexts(notes)
-      .mkString(" ")
-      .replace("- ", "")
-      .replaceAll("\\s+", " ")
-      .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
-
-  def extractNormalizedFullText(notes: List[RootContainer]): String =
-    syllableTexts(notes)
-      .mkString("")
-      .toLowerCase
-      .replace("-", "")
-      .replaceAll("\\s+", "")
-      .pipe(Normalizer.normalize(_, Normalizer.Form.NFD))
-      .replaceAll("[^\\p{ASCII}]", "")

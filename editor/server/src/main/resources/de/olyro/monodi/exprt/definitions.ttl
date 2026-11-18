@@ -161,6 +161,13 @@ data:sourceBeschreibung
    rdfs:domain       data:source         ;
    rdfs:range        :htmlContent        .
 
+data:sourceNotationsdokumentation
+   a                 rdf:Property        ;
+   :documentPosition [ :ownPage 1]       ;
+   rdfs:label        "Notationsdokumentation"@de,"Notation documentation"@en,"disparue"@fr ;
+   rdfs:domain       data:source         ;
+   rdfs:range        :htmlContent        .
+
 data:document
    a          rdfs:Class ;
    rdfs:label "Kumulatives Korpus"@de,"Cumulative Corpus"@en,"Corpus cumulatif"@fr ;
@@ -171,68 +178,8 @@ data:document
    :comparableInSynopsis [];
    :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
    :openIIIFText "Faksimile"@de,"Faksimile"@en,"disparue"@fr ;
-   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
+   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentSubcorpus"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
    :orderBy "3";
-   :conditionalOpenText [
-        :property data:publish;
-        :check [
-                :order 0;
-                :value "meta-only";
-                :result "anzeigen"
-        ];
-        :defaultResult "anzeigen"
-   ].
-
-data:documentEdiert
-   a          rdfs:Class ;
-   rdfs:label "Edition (ED)"@de,"Edition (ED)"@en,"Edition (ED)"@fr ;
-   :referenceAttribute data:documentQuelle;
-   :referenceClass     data:source;
-   :comparableInSynopsis [];
-   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
-   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
-   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"ediert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
-   :orderBy "0";
-   :conditionalOpenText [
-        :property data:publish;
-        :check [
-                :order 0;
-                :value "meta-only";
-                :result "anzeigen"
-        ];
-        :defaultResult "anzeigen"
-   ].
-
-data:documentTranskribiert
-   a          rdfs:Class ;
-   rdfs:label "Transkriptionen (TR)"@de,"Transcriptions (TR)"@en,"Transcriptions (TR)"@fr ;
-   :referenceAttribute data:documentQuelle;
-   :referenceClass     data:source;
-   :comparableInSynopsis [];
-   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
-   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
-   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"transkribiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
-   :orderBy "1";
-   :conditionalOpenText [
-        :property data:publish;
-        :check [
-                :order 0;
-                :value "meta-only";
-                :result "anzeigen"
-        ];
-        :defaultResult "anzeigen"
-   ].
-
-data:documentZitiert
-   a          rdfs:Class ;
-   rdfs:label "Graduale Synopticum (GS)"@de,"Graduale Synopticum (GS)"@en,"Graduale Synopticum (GS)"@fr ;
-   :referenceAttribute data:documentQuelle;
-   :referenceClass     data:source;
-   :comparableInSynopsis [];
-   :openPopupText "Apparat"@de,"Apparatus"@en,"disparue"@fr ;
-   :openIIIFText "Handschriftenscan anzeigen"@de,"Show scan of manuscript"@en,"disparue"@fr ;
-   :alternativeLink """/search/http%3A%2F%2Fmonodicum%2Fdocument/?hideFromSearch=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&hideFromTable=["http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"]&query=[{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentEditionsstatus"%2C"value"%3A"zitiert"}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentTextinitium"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentGattung1"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentFesttag"%2C"value"%3A""}%2C{"uri"%3A"http%3A%2F%2Fmonodicum%2FdocumentQuelle_id"%2C"value"%3A""}]&pagination={"asc"%3Atrue%2C"limit"%3A10%2C"offset"%3A0%2C"attribute"%3A"http%3A%2F%2Fmonodicum%2FdocumentDokumenten_idA"}""";
-   :orderBy "2";
    :conditionalOpenText [
         :property data:publish;
         :check [
@@ -247,7 +194,7 @@ data:documentQuelle
     a           rdf:Property ;
     rdfs:label  "Aus Quelle"@de,"From Source"@en,"De la source"@fr  ;
     rdfs:domain data:document  ;
-    rdfs:range  :string      .
+    rdfs:range  :entity      .
       
 data:documentQuelle_id
     a           rdf:Property ;
@@ -371,6 +318,18 @@ data:documentFoliostart
     rdfs:label  "Folio"@de,"Folio"@en,"disparue"@fr  ;
     rdfs:domain data:document  ;
     rdfs:range  :string      .
+
+# Pages from documentFoliostart to Endseite. The normalizer is a port of
+# LexicographicMapper.makeLexicographicallySortable and must stay in sync with it.
+data:documentFolioInterval
+    a           rdf:Property ;
+    rdfs:label  "Seitenbereich"@de,"Page range"@en,"disparue"@fr  ;
+    rdfs:domain data:document  ;
+    :searchSpan true ;
+    :normalization [
+        :normalizer """value => (value.match(/\\p{L}+|\\p{Nd}+/gu) || []).map(segment => /^\\p{Nd}/u.test(segment) ? "0".repeat(String(Number(segment)).length) + "/" + Number(segment) : segment).join("-")"""
+    ];
+    rdfs:range  :interval    .
       
 data:documentKommentar
     a           rdf:Property ;
@@ -387,22 +346,22 @@ data:documentNotes
     rdfs:domain data:document  ;
     rdfs:range  :imageCollection.
 
-data:documentEditionsstatus
+data:documentSubcorpus
     a                 rdf:Property ;
-    rdfs:label        "Status"@de,"Status"@en,"disparue"@fr  ;
+    rdfs:label        "Korpus"@de,"Corpus"@en,"disparue"@fr  ;
     rdfs:domain       data:document  ;
     rdfs:range        :category    ;
     :searchOrder      7 ;
     :headerOrder      11;
     :documentPosition [ ] ;
     :hasPossibleValue
-       [ :value "ediert"; rdfs:label "Edition"@de,"Edition"@en,"disparue"@fr],
-       [ :value "zitiert"; rdfs:label "Graduale Synopticum"@de,"Graduale Synopticum"@en,"Graduale Synopticum"@fr],
-       [ :value "transkribiert"; rdfs:label "Transkription"@de,"Transcription"@en,"transcribed"@fr];
-    :mapValues 
-       [ :value "ediert"; rdfs:label "ED"@de,"ED"@en,"ED"@fr],
-       [ :value "zitiert"; rdfs:label "GS"@de,"GS"@en,"GS"@fr],
-       [ :value "transkribiert"; rdfs:label "TR"@de,"TR"@en,"TR"@fr].
+       [ :value "edition"; rdfs:label "Edition"@de,"Edition"@en,"disparue"@fr],
+       [ :value "graduale-synopticum"; rdfs:label "Graduale Synopticum"@de,"Graduale Synopticum"@en,"Graduale Synopticum"@fr],
+       [ :value "transkription"; rdfs:label "Transkription"@de,"Transcription"@en,"transcribed"@fr];
+    :mapValues
+       [ :value "edition"; rdfs:label "ED"@de,"ED"@en,"ED"@fr],
+       [ :value "graduale-synopticum"; rdfs:label "GS"@de,"GS"@en,"GS"@fr],
+       [ :value "transkription"; rdfs:label "TR"@de,"TR"@en,"TR"@fr].
 
 data:documentCriticalApparatus
     a                 rdf:Property ;

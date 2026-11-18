@@ -7,6 +7,7 @@ import { useRedirect, useUrlData } from '../../hooks/useUrlData';
 import { Attribute, AttributeWithData, CollectionImageHtml, DataOf, DocumentPart, DocumentPosition, HtmlImageCollection, ImageCollection, Kind } from "../../model/attribute";
 import { Entity } from "../../model/entity";
 import { assertNever, switchOnKind } from "../../util";
+import { intervalToString } from "../../model/interval";
 import LangContext from '../app/App';
 import { PDFViewer } from '../pdf/PDFViewer';
 import { StaticContent, StaticRoutes } from '../static/StaticContent';
@@ -271,6 +272,7 @@ const AttributeRows = ({ position, attributes, view, setView, className, staticR
       "http://olyro.de/mondiview/entity": (s) => simpleAttributeRow(a, s.data),
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
       "http://olyro.de/mondiview/boolean": (b) => simpleAttributeRow(a, b.data ? "✔" : "✘"),
+      "http://olyro.de/mondiview/interval": (i) => simpleAttributeRow(a, intervalToString(i.data)),
       "http://olyro.de/mondiview/reference": (a) => getAttributeRow(a.data),
     })
   }
@@ -306,6 +308,7 @@ const getAttributesForPopup = (attributes: AttributeWithData[], view: viewType, 
       "http://olyro.de/mondiview/entity": (s) => <div key={a.attribute.uri}>{s.data}</div>,
       "http://olyro.de/mondiview/copyText": (s) => <CopyableTextField label={s.attribute.label} text={s.data} />,
       "http://olyro.de/mondiview/boolean": (b) => <div key={a.attribute.uri}>{b.data ? "✔" : "✘"}</div>,
+      "http://olyro.de/mondiview/interval": (i) => <div key={a.attribute.uri}>{intervalToString(i.data)}</div>,
       "http://olyro.de/mondiview/reference": (a) => getAttributeRow(a.data)
     })
   }
@@ -375,6 +378,7 @@ export const getInlineAttribute = (attr: AttributeWithData, staticRoutes: Static
     },
     "http://olyro.de/mondiview/copyText": (s) => ({ value: <CopyableTextField label={s.attribute.label} text={s.data} /> }),
     "http://olyro.de/mondiview/boolean": (b) => text(b.data ? "✔" : "✘"),
+    "http://olyro.de/mondiview/interval": (i) => text(intervalToString(i.data)),
     "http://olyro.de/mondiview/reference": (a) => a.data ? getInlineAttribute(a.data, staticRoutes, openDocumentHandler) : { value: <></> },
   })
 }
